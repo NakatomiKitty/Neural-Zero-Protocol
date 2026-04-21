@@ -1,7 +1,4 @@
-using Godot;
-using System;
-
-public partial class NewScript : Node
+namespace NeuralZeroProtocol.Stats
 {
 	public enum Stat
 	{
@@ -13,3 +10,5 @@ public partial class NewScript : Node
 		NRG
 	}
 }
+
+
