@@ -1,3 +1,8 @@
+# Godot temporary files
+*.tmp
+*~
+*.temp
+
 # Godot 4+ specific ignores
 .godot/
 /android/
