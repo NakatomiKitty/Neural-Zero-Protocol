@@ -3,20 +3,26 @@ using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 using System;
 using System.Collections.Generic;
 
-// StatsComponent handles a character's 6 stats (ATK, DEF, DEX, INT, LCK, NRG).
-// It stores current values in a dictionary emits signals when stats hit 0 (DeadZone) or recover above 0.
+
 
 namespace NeuralZeroProtocol.Scripts.Characters
 {
+	/// <summary>
+	/// StatsComponent handles a Character's 7 Stats (HP, ATK, DEF, DEX, INT, LCK, NRG) and a Character's Rarity.
+	/// Then applies the Rarity's Multiplier on 5 of the Stats (HP, ATK, DEF, DEX, INT)
+	/// LCK is constant and NRG's value (5 or 10) is dependent on the Character's Rarity Tier
+	/// It stores current values in a dictionary then emits signals when stats (except HP) hit 0 (DeadZone) or recover above 0.
+	/// </summary>
+
 	[GlobalClass]
 	public partial class StatsComponent : Node
 	{
 		// Declaration of Signals
-		[Signal] public delegate void StatChangedEventHandler(int stat, int newValue);
+		[Signal] public delegate void StatChangedEventHandler(int stat, int currentValue);
 		[Signal] public delegate void StatZeroedEventHandler(int stat);
 		[Signal] public delegate void StatRecoveredEventHandler(int stat);
 
-		[Export] private CharacterStatsResources _characterStatsResources;
+		[Export] private CharacterStatResource _characterStatsResources;
 
 		private Dictionary<StatTypes, int> _currentStats = new Dictionary<StatTypes, int>();
 
@@ -32,20 +38,37 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			DebugPrintAllStats();
 
             // if you want to debug, put ModifyStat(StatTypes.Key, value)
-			ModifyStat(StatTypes.Nrg, -25);
+
 		}
 
-		private void InitializeFromResource(CharacterStatsResources resource)
+		private void InitializeFromResource(CharacterStatResource resource)
 		{
 			_currentStats.Clear(); // clear just in case of re-initialization
+			float mult = resource.GetStatMultiplier(resource.SelectedRarity); // Get the Rarity Multipliers
+			
 			foreach (StatTypes stat in Enum.GetValues<StatTypes>()) // loop through every StatType Values
 			{
-				// Get the basevalues from the resource then add it to the dictionary
+				// Get the Base Values from the resource
 				int baseValue = resource.GetBaseValues(stat); 
-				_currentStats[stat] = baseValue;
+
+				if (stat == StatTypes.Lck || stat == StatTypes.Nrg) // Makes Lck's value constant (2) AND makes Nrg either 5 or 10 depending on it's tier of rarity
+				{
+					if (stat == StatTypes.Nrg && resource.IsHighTierRarity())
+					{
+						_currentStats[stat] = 10;
+						continue;
+					}
+
+					_currentStats[stat] = baseValue;
+					continue;
+				}
+				
+				float finalValue = MathF.Ceiling(baseValue * mult); // Applies the Rarity Multiplier
+				_currentStats[stat] = (int)finalValue;
 			}
 
 			// Debug Print
+			GD.Print(resource.GetStatMultiplier(resource.SelectedRarity));
 			GD.Print($"Stats initialized for {Owner.Name}: ATK={GetStat(StatTypes.Atk)}, DEF={GetStat(StatTypes.Def)}, NRG={GetStat(StatTypes.Nrg)}");
 		}
 
@@ -75,7 +98,8 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 			// If the stat was positive and now becomes exactly zero, it means the character just entered the "DeadZone".
 			// Example: ATK drops from 5 to 0 → character becomes "Fragile". etc. etc. etc.
-			if (oldValue > 0 && currentValue == 0) 
+			
+			if (stat != StatTypes.Hp && oldValue > 0 && currentValue == 0) 
 			{   
 				GD.Print($"{stat} reached zero! Activating disability!");
 				EmitSignal(SignalName.StatZeroed, (int)stat);

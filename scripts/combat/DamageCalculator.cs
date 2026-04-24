@@ -5,6 +5,7 @@ using System;
 
 namespace NeuralZeroProtocol.Scripts.Combat
 {
+
     /// <summary>
     /// Handles all combat math: Evasion, Damage, CritDamage, CritChance, and Blocking
     /// All methods are static, this means THIS IS STRICTLY A MATH FUNCTION CLASS!
@@ -14,11 +15,8 @@ namespace NeuralZeroProtocol.Scripts.Combat
     {
         private static Random _random = new Random();
 
-        public static bool EvasionCheck(Character attacker, Character defender)
-        {
-            // if Atk > Dex + Lck, dodge the attack
-            return GetStatValue(defender, StatTypes.Dex) + GetStatValue(defender, StatTypes.Lck) < GetStatValue(attacker, StatTypes.Atk);
-        }
+        // if Atk > Dex + Lck, dodge the attack
+        public static bool EvasionCheck(Character attacker, Character defender) => GetStatValue(defender, StatTypes.Dex) + GetStatValue(defender, StatTypes.Lck) < GetStatValue(attacker, StatTypes.Atk);
 
         public static int CalculateDamage(Character attacker, Character defender, MoveResource move)
         {
@@ -29,6 +27,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
 
             // if CalculateEvasionCheck is true, miss the attack
             if (EvasionCheck(attacker, defender)) return 0;
+
             int baseDamage = move.Power + GetStatValue(attacker, StatTypes.Atk) - (int)(GetStatValue(defender, StatTypes.Def) * 0.75f);
 
             // if it's a CriticalChance is true, apply Critical hit bonus.
@@ -45,6 +44,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
         {
             // TODO: This is for Shield Gauge
             var totalAttack = move.Power + GetStatValue(attacker, StatTypes.Atk) - GetStatValue(defender, StatTypes.Def);
+
             return totalAttack;
         }
 
@@ -63,6 +63,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
             critChance = Math.Clamp(critChance, 0, 100); //Clamp so the percentage doesn't go below zero or past 100
 
             int roll = _random.Next(0,100);
+            
             return roll < critChance;
         }
 

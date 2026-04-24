@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 namespace NeuralZeroProtocol.Scripts.Characters
 {
+
+	// DisabilityComponent handles the Disability logic after a stat reached it's DeadZone
 	public enum DisabilityTypes
 	{
 		Fragile,
@@ -49,6 +51,8 @@ namespace NeuralZeroProtocol.Scripts.Characters
         };
 
 
+		public bool HasDisability(DisabilityTypes disability) => _currentDisabilities.Contains(disability);
+
 		private void OnStatZeroed(int statInt)
 		{
 			var disability = ToDisability((StatTypes)statInt);
@@ -63,10 +67,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			_currentDisabilities.Remove(disability);
 		}
 		
-		public bool HasDisability(DisabilityTypes disability)
-		{
-			return _currentDisabilities.Contains(disability);
-		}
+		
 		
 	}
 }
