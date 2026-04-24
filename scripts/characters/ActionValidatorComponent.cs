@@ -1,7 +1,6 @@
 using Godot;
 using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 using System;
-using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 
 namespace NeuralZeroProtocol.Scripts.Characters
 {
