@@ -15,11 +15,11 @@ namespace NeuralZeroProtocol.Scripts.Characters
             _disabilityComponent = GetNode<DisabilityComponent>("../DisabilityComponent");
         }
 
-        // public bool CanAttack()
-        // public bool CanDodge()
-        // public bool CanCrit()
-        // public bool CanTriggerRandomActions()
-        // public bool CanBlock()
-        // public bool CanSkip()
+        // public bool CanAttack() fail if HasDisability(Fragile)
+        // public bool CanDodge() fail if HasDisability(Stiff)
+        // public bool CanCrit() fail if HasDisability(Mindless)
+        // public bool CanTriggerRandomActions() fail if GetStat(NRG) == 0
+        // public bool CanBlock() always true, forced to block if HasDisability(Exhausted)
+        // public bool CanSkip() always true
     }
 }
