@@ -32,20 +32,21 @@ namespace NeuralZeroProtocol.Scripts.Characters
 				GD.PushWarning("StatsComponent not loaded lmao");
 			}
 
-			_statsComponent.StatZeroed += OnStatZeroed;
-			_statsComponent.StatRecovered += OnStatRecovered;
-		}
+            _statsComponent.StatZeroed += OnStatZeroed;
+            _statsComponent.StatRecovered += OnStatRecovered;
+        }   
 
-		private DisabilityTypes ToDisability(StatTypes statTypes) => statTypes switch
-		{
-			StatTypes.Atk => DisabilityTypes.Fragile,
-			StatTypes.Def => DisabilityTypes.Broken,
-			StatTypes.Dex => DisabilityTypes.Stiff,
-			StatTypes.Int => DisabilityTypes.Mindless,
-			StatTypes.Lck => DisabilityTypes.Cursed,
-			StatTypes.Nrg => DisabilityTypes.Exhausted,
-			_ => 0,
-		};
+        // Links StatTypes to DisabilityTypes
+        private DisabilityTypes ToDisability(StatTypes statTypes) => statTypes switch
+        {
+            StatTypes.Atk => DisabilityTypes.Fragile,
+            StatTypes.Def => DisabilityTypes.Broken,
+            StatTypes.Dex => DisabilityTypes.Stiff,
+            StatTypes.Int => DisabilityTypes.Mindless,
+            StatTypes.Lck => DisabilityTypes.Cursed,
+            StatTypes.Nrg => DisabilityTypes.Exhausted,
+            _ => 0,
+        };
 
 
 		private void OnStatZeroed(int statInt)
