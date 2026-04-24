@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dbps1gpio43vl"]
+
+[ext_resource type="Script" uid="uid://lobapgwhjhex" path="res://scripts/characters/StatsComponent.cs" id="1_f35ln"]
+[ext_resource type="Resource" uid="uid://b5qdo4spmy8m1" path="res://scripts/resources/character_data/Test.tres" id="2_joe4t"]
+[ext_resource type="Script" uid="uid://dggm8b1rcjwqv" path="res://scripts/characters/DisabilityComponent.cs" id="3_n5hut"]
+[ext_resource type="Script" uid="uid://w8ed3ntf0int" path="res://scripts/characters/ActionValidatorComponent.cs" id="4_q64yt"]
+
+[node name="CharacterBase" type="Node2D" unique_id=1055098450]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1771156218]
+
+[node name="StatsComponent" type="Node" parent="." unique_id=721521337]
+script = ExtResource("1_f35ln")
+_characterStatsResources = ExtResource("2_joe4t")
+
+[node name="DisabilityComponent" type="Node" parent="." unique_id=1661562304]
+script = ExtResource("3_n5hut")
+
+[node name="ActionValidatorComponent" type="Node" parent="." unique_id=215280842]
+script = ExtResource("4_q64yt")
