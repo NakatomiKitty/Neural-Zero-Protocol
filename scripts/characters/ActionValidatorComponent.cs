@@ -1,4 +1,5 @@
 using Godot;
+using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 using System;
 
 namespace NeuralZeroProtocol.Scripts.Characters
@@ -15,11 +16,12 @@ namespace NeuralZeroProtocol.Scripts.Characters
             _disabilityComponent = GetNode<DisabilityComponent>("../DisabilityComponent");
         }
 
-        // public bool CanAttack() fail if HasDisability(Fragile)
-        // public bool CanDodge() fail if HasDisability(Stiff)
-        // public bool CanCrit() fail if HasDisability(Mindless)
-        // public bool CanTriggerRandomActions() fail if GetStat(NRG) == 0
-        // public bool CanBlock() always true, forced to block if HasDisability(Exhausted)
-        // public bool CanSkip() always true
+        public bool IsExhausted() => !_disabilityComponent.HasDisability(DisabilityTypes.Exhausted); // If not Exhausted, return true
+        public bool CanAttack() => IsExhausted() && !_disabilityComponent.HasDisability(DisabilityTypes.Fragile); // If not Exhausted and is not Fragile, CanAttack
+        public bool CanDodge() => IsExhausted() && !_disabilityComponent.HasDisability(DisabilityTypes.Stiff); // if not Exhausted and is not Stiff, CanDodge
+        public bool CanCrit() => IsExhausted() && !_disabilityComponent.HasDisability(DisabilityTypes.Mindless); // if not Exhausted and is not Mindless, Dodge
+        // Can always dodge or block, regardless if Exhausted
+        public bool CanBlock() => true;
+        public bool CanSkip() => true;
     }
 }

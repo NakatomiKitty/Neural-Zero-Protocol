@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 // StatsComponent handles a character's 6 stats (ATK, DEF, DEX, INT, LCK, NRG).
-// It stores current values in a dictionaryemits signals when stats hit 0 (DeadZone) or recover above 0.
+// It stores current values in a dictionary emits signals when stats hit 0 (DeadZone) or recover above 0.
 
 namespace NeuralZeroProtocol.Scripts.Characters
 {
@@ -31,7 +31,8 @@ namespace NeuralZeroProtocol.Scripts.Characters
             InitializeFromResource(_characterStatsResources);
             DebugPrintAllStats();
 
-            ModifyStat(StatTypes.Atk, -25);
+            // if you want to debug, put ModifyStat(StatTypes.Key, value)
+            ModifyStat(StatTypes.Nrg, -25);
         }
 
         private void InitializeFromResource(CharacterStatsResources resource)
