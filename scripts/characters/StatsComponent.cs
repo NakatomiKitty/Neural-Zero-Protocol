@@ -4,8 +4,7 @@ using System;
 using System.Collections.Generic;
 
 // StatsComponent handles a character's 6 stats (ATK, DEF, DEX, INT, LCK, NRG).
-// It stores current values in a dictionary, allows modification with delta,
-// and emits signals when stats hit 0 (DeadZone) or recover above 0.
+// It stores current values in a dictionaryemits signals when stats hit 0 (DeadZone) or recover above 0.
 
 namespace NeuralZeroProtocol.Scripts.Characters
 {
@@ -22,7 +21,17 @@ namespace NeuralZeroProtocol.Scripts.Characters
         private Dictionary<StatTypes, int> _currentStats = new Dictionary<StatTypes, int>();
 
         public override void _Ready() {
+            // If you forget to assign a CharacterStatsResources in the editor, the game would crash when a character uses this component.
+            // Adding this here will atleast notifies us early :)
+            if (_characterStatsResources == null)
+            {
+                GD.PushWarning("CharacterStatsResources not loaded lmao");
+            }
+
             InitializeFromResource(_characterStatsResources);
+            DebugPrintAllStats();
+
+            ModifyStat(StatTypes.Atk, -25);
         }
 
         private void InitializeFromResource(CharacterStatsResources resource)
@@ -34,6 +43,9 @@ namespace NeuralZeroProtocol.Scripts.Characters
                 int baseValue = resource.GetBaseValues(stat); 
                 _currentStats[stat] = baseValue;
             }
+
+            // Debug Print
+            GD.Print($"Stats initialized for {Owner.Name}: ATK={GetStat(StatTypes.Atk)}, DEF={GetStat(StatTypes.Def)}, NRG={GetStat(StatTypes.Nrg)}");
         }
 
         public int GetStat(StatTypes stat) // this retrieves the old value
@@ -45,17 +57,14 @@ namespace NeuralZeroProtocol.Scripts.Characters
             return 0;
         }
 
-        public void ModifyStat(StatTypes stat, int delta)
+        public void ModifyStat(StatTypes stat, int changeValue)
         {
-            // If you forget to assign a CharacterStatsResources in the editor, the game would crash when a character uses this component.
-            // Adding this here will atleast notifies us early :)
-            if (_characterStatsResources == null)
-            {
-                GD.PushWarning("NO CHARACTERSTATSRESOURCE SELECTED");
-            }
 
             var oldValue = GetStat(stat);
-            var currentValue = Math.Max(0, oldValue + delta); // Clamp to prevent going past below zero
+            var currentValue = Math.Max(0, oldValue + changeValue); // Clamp to prevent going past below zero
+
+            // Debug print
+            GD.Print($"Stat changed: {stat} ({oldValue} → {currentValue}) [changeValue: {changeValue}]");
 
             _currentStats[stat] = currentValue;
 
@@ -66,7 +75,8 @@ namespace NeuralZeroProtocol.Scripts.Characters
             // If the stat was positive and now becomes exactly zero, it means the character just entered the "DeadZone".
             // Example: ATK drops from 5 to 0 → character becomes "Fragile". etc. etc. etc.
             if (oldValue > 0 && currentValue == 0) 
-            {
+            {   
+                GD.Print($"{stat} reached zero! Activating disability!");
                 EmitSignal(SignalName.StatZeroed, (int)stat);
             }
 
@@ -74,7 +84,17 @@ namespace NeuralZeroProtocol.Scripts.Characters
             // Character is no more fragile YIPPIEEE
             else if (oldValue == 0 && currentValue > 0) 
             {
+                GD.Print($"{stat} recovered! Deactivating disability!");
                 EmitSignal(SignalName.StatRecovered, (int)stat);
+            }
+        }
+
+        public void DebugPrintAllStats()
+        {   
+            GD.Print($"{Owner.Name} stats");
+            foreach (StatTypes stat in Enum.GetValues<StatTypes>()) // loop through every StatType Values
+            {
+                GD.Print($"{stat}: {GetStat(stat)}");
             }
         }
     }

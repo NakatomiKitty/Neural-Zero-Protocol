@@ -6,12 +6,12 @@ namespace NeuralZeroProtocol.Scripts.Resources.CharacterData
 {   
     public enum StatTypes
     {
-        ATK,
-        DEF,
-        DEX,
-        INT,
-        LCK,
-        NRG,
+        Atk,
+        Def,
+        Dex,
+        Int,
+        Lck,
+        Nrg,
     }
     
     [GlobalClass]
@@ -29,17 +29,17 @@ namespace NeuralZeroProtocol.Scripts.Resources.CharacterData
         {
             switch (stat)
             {
-                case StatTypes.ATK:
+                case StatTypes.Atk:
                     return atkBase;
-                case StatTypes.DEF:
+                case StatTypes.Def:
                     return defBase;
-                case StatTypes.DEX:
+                case StatTypes.Dex:
                     return dexBase;
-                case StatTypes.INT:
+                case StatTypes.Int:
                     return intBase;
-                case StatTypes.LCK:
+                case StatTypes.Lck:
                     return lckBase;
-                case StatTypes.NRG:
+                case StatTypes.Nrg:
                     return nrgBase;
                 default:
                     return 0;

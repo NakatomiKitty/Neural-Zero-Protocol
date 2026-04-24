@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cews5tnkglhib"]
+
+[ext_resource type="Script" uid="uid://lobapgwhjhex" path="res://scripts/characters/StatsComponent.cs" id="1_mp5qy"]
+[ext_resource type="Resource" uid="uid://b5qdo4spmy8m1" path="res://scripts/resources/character_data/Test.tres" id="2_3gp55"]
+
+[node name="StatsComponent" type="Node" unique_id=1494422534]
+script = ExtResource("1_mp5qy")
+_characterStatsResources = ExtResource("2_3gp55")

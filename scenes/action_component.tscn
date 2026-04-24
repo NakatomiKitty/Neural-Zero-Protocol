@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dtukkkjtf20no"]
+
+[ext_resource type="Script" uid="uid://w8ed3ntf0int" path="res://scripts/characters/ActionValidatorComponent.cs" id="1_iyu1f"]
+
+[node name="ActionComponent" type="Node" unique_id=1305398855]
+script = ExtResource("1_iyu1f")
