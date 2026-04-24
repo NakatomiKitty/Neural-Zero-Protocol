@@ -18,29 +18,29 @@ namespace NeuralZeroProtocol.Scripts.Resources.CharacterData
     public partial class CharacterStatsResources : Resource
     {
 
-        [Export] public int atkBase = 20;
-        [Export] public int defBase = 20;
-        [Export] public int dexBase = 5;
-        [Export] public int intBase = 5;
-        [Export] public int lckBase = 5;
-        [Export] public int nrgBase = 5;
+        [Export] public int AtkBase = 20;
+        [Export] public int DefBase = 20;
+        [Export] public int DexBase = 5;
+        [Export] public int IntBase = 5;
+        [Export] public int LckBase = 5;
+        [Export] public int NrgBase = 5;
 
         public int GetBaseValues(StatTypes stat)
         {
             switch (stat)
             {
                 case StatTypes.Atk:
-                    return atkBase;
+                    return AtkBase;
                 case StatTypes.Def:
-                    return defBase;
+                    return DefBase;
                 case StatTypes.Dex:
-                    return dexBase;
+                    return DexBase;
                 case StatTypes.Int:
-                    return intBase;
+                    return IntBase;
                 case StatTypes.Lck:
-                    return lckBase;
+                    return LckBase;
                 case StatTypes.Nrg:
-                    return nrgBase;
+                    return NrgBase;
                 default:
                     return 0;
             }

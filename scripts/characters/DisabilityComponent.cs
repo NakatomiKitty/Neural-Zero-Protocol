@@ -34,8 +34,9 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
             _statsComponent.StatZeroed += OnStatZeroed;
             _statsComponent.StatRecovered += OnStatRecovered;
-        }
+        }   
 
+        // Links StatTypes to DisabilityTypes
         private DisabilityTypes ToDisability(StatTypes statTypes) => statTypes switch
         {
             StatTypes.Atk => DisabilityTypes.Fragile,
