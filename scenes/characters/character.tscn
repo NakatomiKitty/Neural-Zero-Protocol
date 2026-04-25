@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://cews5tnkglhib" path="res://scenes/stats_component.tscn" id="2_lrhn5"]
 [ext_resource type="PackedScene" uid="uid://dtukkkjtf20no" path="res://scenes/action_validator_component.tscn" id="3_lrhn5"]
 [ext_resource type="PackedScene" uid="uid://8ynpcmop3vxi" path="res://scenes/health_component.tscn" id="5_ma1fs"]
-[ext_resource type="Resource" uid="uid://b5qdo4spmy8m1" path="res://scripts/resources/character_data/Test.tres" id="6_yscb1"]
 
 [node name="Character" type="Node2D" unique_id=674946849]
 script = ExtResource("1_2qjml")
@@ -17,4 +16,3 @@ script = ExtResource("1_2qjml")
 [node name="ActionValidatorComponent" parent="." unique_id=1305398855 instance=ExtResource("3_lrhn5")]
 
 [node name="HealthComponent" parent="." unique_id=2007377075 instance=ExtResource("5_ma1fs")]
-_characterStatsResources = ExtResource("6_yscb1")

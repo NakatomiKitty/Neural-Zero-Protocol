@@ -119,6 +119,11 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			GD.Print($"{Owner.Name} stats");
 			foreach (StatTypes stat in Enum.GetValues<StatTypes>()) // loop through every StatType Values
 			{
+				if (stat == StatTypes.Lck)
+				{
+					GD.Print($"{stat}: {_currentStats[StatTypes.Lck] * 1.25f}");
+					continue;
+				}
 				GD.Print($"{stat}: {GetStat(stat)}");
 			}
 		}

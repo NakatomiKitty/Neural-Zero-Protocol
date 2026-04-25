@@ -22,7 +22,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 				GD.PushWarning("StatsComponent not loaded lmao");
 			}
 
-            _currentHealth = _statsComponent.GetStat(StatTypes.Hp);
+            _currentHealth = (int)_statsComponent.GetStat(StatTypes.Hp);
         }
 
         public void TakeDamage(int damage)
@@ -48,7 +48,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
         {
             if (_currentHealth <= 0) return;
 
-            var maxHealth = _statsComponent.GetStat(StatTypes.Hp);
+            var maxHealth = (int)_statsComponent.GetStat(StatTypes.Hp);
             int oldHealth = _currentHealth;
 
             _currentHealth = Math.Min(maxHealth, _currentHealth + heal);

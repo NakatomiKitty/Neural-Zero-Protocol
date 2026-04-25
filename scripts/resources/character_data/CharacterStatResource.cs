@@ -43,7 +43,7 @@ namespace NeuralZeroProtocol.Scripts.Resources.CharacterData
         [Export] private int DefBase = 20;
         [Export] private int DexBase = 10;
         [Export] private int IntBase = 10;
-        [Export] private int LckBase = 2;
+        [Export] private int LckBase = 1;
         [Export] private int NrgBase = 5;
 
         public float GetStatMultiplier(Rarity rarityName)
