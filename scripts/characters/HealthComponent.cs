@@ -8,7 +8,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
     public partial class HealthComponent : Node
     {
         [Signal] public delegate void HealthChangedEventHandler(int currentHealth, int maxHealth);
-		[Signal] public delegate void DiedEventHandler();
+		[Signal] public delegate void DiedEventHandler(Character parent);
 
         private StatsComponent _statsComponent;
         private int _currentHealth;
@@ -32,7 +32,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 			_currentHealth = Math.Max(0, _currentHealth - damage);
 
-            GD.Print($"You got hit! ({oldHealth} → {_currentHealth}) [Received: {damage} damage!]");
+            GD.Print($"{GetParent().Name} got hit! ({oldHealth} → {_currentHealth}) [Received: {damage} damage!]");
 
             EmitSignal(SignalName.HealthChanged, _currentHealth, maxHealth);
 
@@ -40,7 +40,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
             {
                 GD.Print("Health reached zero! You died!");
 
-				EmitSignal(SignalName.Died);
+				EmitSignal(SignalName.Died, GetParent());
             }
         }
 

@@ -4,20 +4,32 @@ using System.Collections.Generic;
 using System.Linq;
 using NeuralZeroProtocol.Scripts.Characters;
 using NeuralZeroProtocol.Scripts.Resources.CharacterData;
+using Godot.Collections;
 
 namespace NeuralZeroProtocol.Scripts.Characters
 {
 	public partial class TurnManager : Node
 	{
-		[Export] public Node PlayerPosition;
-		[Export] public Node EnemyPosition;
+		[Export] public Node PlayerTeam;
+		[Export] public Node EnemyTeam;
 		[Export] public Timer TurnTimer;
 
-		private List<Node> _turnOrder = new List<Node>();
-		private int _currentUnitIndex = 0;
+		public List<Character> TurnOrder = new List<Character>();
+
+		private Array<Node> playerCharacters;
+		private Array<Node> enemyCharacters;
+		public List<Character> AllUnits;
+
+		public int CurrentUnitIndex = 0;
+
 
 		public override void _Ready()
 		{
+			// Combine all units from the containers
+			playerCharacters = PlayerTeam.GetChildren();
+			enemyCharacters = EnemyTeam.GetChildren();
+			AllUnits = playerCharacters.Concat(enemyCharacters).Cast<Character>().ToList();
+
 			// This ensures the SDK is working. Check your Output tab!
 			GD.Print("TurnManager Base System: ONLINE.");
 		}
@@ -25,46 +37,24 @@ namespace NeuralZeroProtocol.Scripts.Characters
 		// Call this to start
 		public void StartBattle()
 		{
-			GD.Print("Battle Initializing...");
 			GenerateTurnOrder();
-			ExecuteTurn();
 		}
 
 		private void GenerateTurnOrder()
 		{
-			_turnOrder.Clear();
+			TurnOrder.Clear();
 			
-			// Combine all units from the containers
-			var players = PlayerPosition.GetChildren().Cast<Node>();
-			var enemies = EnemyPosition.GetChildren().Cast<Node>();
-			var allUnits = players.Concat(enemies).ToList();
-
-			// Sort by DEX (High to Low). 
-			_turnOrder = allUnits.OrderByDescending(u => u.Name).ToList(); // Temporary sort by name to test
+			// Sort by DEX (High to Low). -
+			TurnOrder = AllUnits.OrderByDescending(unit => unit.StatsComponent.GetStat(StatTypes.Dex)).ToList();
 			
-			_currentUnitIndex = 0;
-			GD.Print($"Turn Order Generated. First up: {_turnOrder[0].Name}");
+			CurrentUnitIndex = 0;
+			GD.Print($"Turn Order Generated. First up: {TurnOrder[0].Name}");
 		}
 
-		private async void ExecuteTurn()
+		public Character GetCurrentUnit()
 		{
-			if (_currentUnitIndex >= _turnOrder.Count)
-			{
-				GD.Print("Round Over. Refreshing...");
-				GenerateTurnOrder();
-				return;
-			}
-
-			Node activeUnit = _turnOrder[_currentUnitIndex];
-			
-			// --- Friend code here for the execution part lol ---
-			
-			TurnTimer.Start();
-			await ToSignal(TurnTimer, "timeout");
-
-			GD.Print($"{activeUnit.Name} finished their turn.");
-			_currentUnitIndex++;
-			ExecuteTurn();
+			Character activeUnit = TurnOrder[CurrentUnitIndex];
+			return activeUnit;
 		}
 	}
 }

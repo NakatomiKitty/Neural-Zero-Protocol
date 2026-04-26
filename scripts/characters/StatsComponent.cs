@@ -68,8 +68,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			}
 
 			// Debug Print
-			GD.Print(resource.GetStatMultiplier(resource.SelectedRarity));
-			GD.Print($"Stats initialized for {Owner.Name}: ATK={GetStat(StatTypes.Atk)}, DEF={GetStat(StatTypes.Def)}, NRG={GetStat(StatTypes.Nrg)}");
+			GD.Print(resource.SelectedRarity);
 		}
 
 		public int GetStat(StatTypes stat) // this retrieves the old value
@@ -116,7 +115,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 		public void DebugPrintAllStats()
 		{   
-			GD.Print($"{Owner.Name} stats");
+			GD.Print($"{GetParent().Name} stats");
 			foreach (StatTypes stat in Enum.GetValues<StatTypes>()) // loop through every StatType Values
 			{
 				if (stat == StatTypes.Lck)

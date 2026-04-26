@@ -8,14 +8,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
     {
         public StatsComponent StatsComponent;
         public DisabilityComponent DisabilityComponent;
-        public ActionValidatorComponent ActionValidatorComponent;
+        public HealthComponent HealthComponent;
 
-        public override void _Ready() 
-        {
-            StatsComponent = GetNode<StatsComponent>("StatsComponent");
-            DisabilityComponent = GetNode<DisabilityComponent>("DisabilityComponent");
-            ActionValidatorComponent = GetNode<ActionValidatorComponent>("ActionValidatorComponent");
-        }
     }
 }
-
