@@ -1,15 +1,9 @@
-[gd_scene format=3 uid="uid://rm2nqvvkd1i4"]
+[gd_scene format=3 uid="uid://cyo4fis4ap8an"]
 
-[ext_resource type="Script" uid="uid://dfur3ehlk00sa" path="res://scripts/characters/TurnManager.cs" id="1_3c2a3"]
+[ext_resource type="Script" uid="uid://dfur3ehlk00sa" path="res://scripts/combat/TurnManager.cs" id="1_3c2a3"]
 
-[node name="TurnManager" type="Node" unique_id=344082282 node_paths=PackedStringArray("PlayerPosition", "EnemyPosition", "TurnTimer")]
+[node name="TurnManager" type="Node" unique_id=344082282 node_paths=PackedStringArray("TurnTimer")]
 script = ExtResource("1_3c2a3")
-PlayerPosition = NodePath("PlayerPosition")
-EnemyPosition = NodePath("EnemyPosition")
 TurnTimer = NodePath("Timer")
-
-[node name="PlayerPosition" type="Node2D" parent="." unique_id=2136435450]
-
-[node name="EnemyPosition" type="Node2D" parent="." unique_id=1306700860]
 
 [node name="Timer" type="Timer" parent="." unique_id=1629306400]

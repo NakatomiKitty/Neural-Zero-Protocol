@@ -1,8 +1,23 @@
 [gd_scene format=3 uid="uid://csskkm0o5fsuy"]
 
 [ext_resource type="PackedScene" uid="uid://eob2rikglte3" path="res://scenes/characters/character.tscn" id="1_idkgt"]
+[ext_resource type="PackedScene" uid="uid://cyo4fis4ap8an" path="res://scenes/turn_manager.tscn" id="1_kinr6"]
+[ext_resource type="PackedScene" uid="uid://cews5tnkglhib" path="res://scenes/stats_component.tscn" id="3_rca61"]
+[ext_resource type="Resource" uid="uid://dfyxl621tlai5" path="res://scripts/resources/character_data/TestEnemy.tres" id="4_8qdv8"]
 
 [node name="BattleScene" type="Node2D" unique_id=354502011]
 
-[node name="Character" parent="." unique_id=674946849 instance=ExtResource("1_idkgt")]
+[node name="TurnManager" parent="." unique_id=344082282 node_paths=PackedStringArray("PlayerPosition", "EnemyPosition") instance=ExtResource("1_kinr6")]
+PlayerPosition = NodePath("Character")
+EnemyPosition = NodePath("EnemyCharacter")
+
+[node name="Character" parent="TurnManager" unique_id=674946849 instance=ExtResource("1_idkgt")]
 position = Vector2(0, 1)
+
+[node name="StatsComponent" parent="TurnManager/Character" unique_id=1494422534 instance=ExtResource("3_rca61")]
+
+[node name="EnemyCharacter" parent="TurnManager" unique_id=1919238931 instance=ExtResource("1_idkgt")]
+position = Vector2(-278, 25)
+
+[node name="StatsComponent" parent="TurnManager/EnemyCharacter" unique_id=1018275734 instance=ExtResource("3_rca61")]
+_characterStatsResources = ExtResource("4_8qdv8")

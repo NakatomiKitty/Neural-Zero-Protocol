@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="CharacterStatResource" format=3 uid="uid://dfyxl621tlai5"]
+
+[ext_resource type="Script" uid="uid://qhh2gclbele1" path="res://scripts/resources/character_data/CharacterStatResource.cs" id="1_etngy"]
+
+[resource]
+script = ExtResource("1_etngy")
+SelectedRarity = 5
+metadata/_custom_type_script = "uid://qhh2gclbele1"
