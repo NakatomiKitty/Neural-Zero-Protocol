@@ -148,19 +148,31 @@ namespace NeuralZeroProtocol.Scripts.Combat
         {
             GD.Print($"{_currentCharacter.Name} ended it's turn!");
 
-            _turnManager.AdvanceToNextUnit();
+            _currentCharacter = _turnManager.AdvanceToNextUnit();
 
-            await CurrentCharacterTurn(_turnManager.AdvanceToNextUnit());
+            await CurrentCharacterTurn(_currentCharacter);
         }
 
         private void Victory()
         {
             GD.Print("Victory");
+
+            foreach (Character character in _turnManager.AllUnits)
+			{
+                // Delinks every Character's HealthComponent's Died signal in the battle
+				character.HealthComponent.Died -= OnCharacterDied;
+			}
         }
 
         private void Defeat()
         {
             GD.Print("Defeat");
+
+            foreach (Character character in _turnManager.AllUnits)
+			{
+                // Delinks every Character's HealthComponent's Died signal in the battle
+				character.HealthComponent.Died -= OnCharacterDied;
+			}
         }
 
         private void OnCharacterDied(Character deadCharacter)
