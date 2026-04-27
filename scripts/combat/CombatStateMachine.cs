@@ -32,7 +32,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
             _turnManager = GetNode<TurnManager>("../TurnManager");
             _actionPanel = GetNode<ActionPanel>("../ActionPanel");
 
-            _ = ChangeState(BattleState.Initializing);
+            await ChangeState(BattleState.Initializing);
         }
 
         public async Task ChangeState(BattleState newState)
@@ -43,7 +43,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
             switch (_currentState)
             {
                 case BattleState.Initializing:
-                    Initializing();
+                    await Initializing();
                     break;
                 case BattleState.PlayerTurn:
                     await PlayerTurn();
@@ -63,7 +63,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
             }
         }
 
-        private void Initializing()
+        private async Task Initializing()
         {
             GD.Print("Battle Initializing...");
 
@@ -77,55 +77,60 @@ namespace NeuralZeroProtocol.Scripts.Combat
 
             _currentCharacter = _turnManager.GetCurrentUnit();
 
-            CurrentCharacterTurn(_currentCharacter);
+            await CurrentCharacterTurn(_currentCharacter);
         }
 
         private async Task PlayerTurn()
         {
             PlayerCharacter playerCharacter = (PlayerCharacter)_turnManager.GetCurrentUnit();
-
             ActionValidatorComponent actionValidator = playerCharacter.ActionValidatorComponent;
 
-            GD.Print($"{playerCharacter.Name}'s turn");
-            GD.Print("Press an action");
-
-            SignalAwaiter awaiter = ToSignal(_actionPanel, ActionPanel.SignalName.ActionSelected);
-            await awaiter;
-
-            ActionType action = (ActionType)awaiter.GetResult()[0].AsInt32();
-
-            // PLACEHOLDER! MIGHT CHANGE LOGIC
-            switch (action)
+            bool isActionValid = false;
+            while (!isActionValid)
             {
-                case ActionType.Attack:
-                    if (actionValidator.CanAttack())
-                    {
-                        GD.Print("Attacked!");
-                    }
+                GD.Print($"{playerCharacter.Name}'s turn");
+                GD.Print("Press an action");
 
-                    else
-                    {
-                        GD.Print("Cant Attack, try again");
-                        await PlayerTurn();
-                    }
-                    break;
-                case ActionType.Defend:
-                    if (actionValidator.CanDefend())
-                    {
-                        GD.Print("Defended!");
-                    }
-                    break;
-                case ActionType.Skip:
-                    if (actionValidator.CanSkip())
-                    {
-                        GD.Print("Skipped!");
-                    }
-                    break;
+                SignalAwaiter awaiter = ToSignal(_actionPanel, ActionPanel.SignalName.ActionSelected);
+                await awaiter;
+
+                ActionType action = (ActionType)awaiter.GetResult()[0].AsInt32();
+
+                // PLACEHOLDER! MIGHT CHANGE LOGIC
+                switch (action)
+                {
+                    case ActionType.Attack:
+                        if (actionValidator.CanAttack())
+                        {
+                            GD.Print("Attacked!");
+                            isActionValid = true;
+                        }
+
+                        else
+                        {
+                            GD.Print("Cant Attack, try again");
+                        }
+                        break;
+                    case ActionType.Defend:
+                        if (actionValidator.CanDefend())
+                        {
+                            GD.Print("Defended!");
+                            isActionValid = true;
+                        }
+                        break;
+                    case ActionType.Skip:
+                        if (actionValidator.CanSkip())
+                        {
+                            GD.Print("Skipped!");
+                            isActionValid = true;
+                        }
+                        break;
+                }
             }
 
+            // After a valid action, check battle outcome and end turn
             if (BattleOutcomeState()) return;
- 
-            _ = ChangeState(BattleState.TurnEnd);
+            await ChangeState(BattleState.TurnEnd);
         }
 
         // PLACEHOLDER CODE HERE! WILL PROBABLY CONTAIN CALLING TO THE ENEMY'S AI
@@ -134,33 +139,18 @@ namespace NeuralZeroProtocol.Scripts.Combat
             EnemyCharacter enemyCharacter = (EnemyCharacter)_turnManager.GetCurrentUnit();
             GD.Print($"{enemyCharacter.Name}'s turn");
 
-            _turnManager.TurnTimer.Start();
-			await ToSignal(_turnManager.TurnTimer, "timeout");
-
             GD.Print("Enemy did something!");
 
-            _turnManager.TurnTimer.Start();
-			await ToSignal(_turnManager.TurnTimer, "timeout");
-            _ = ChangeState(BattleState.TurnEnd);
+            await ChangeState(BattleState.TurnEnd);
         }
 
         private async Task TurnEnd()
         {
             GD.Print($"{_currentCharacter.Name} ended it's turn!");
 
-            _turnManager.CurrentUnitIndex++;
+            _turnManager.AdvanceToNextUnit();
 
-            if (_turnManager.CurrentUnitIndex >= _turnManager.TurnOrder.Count)
-			{
-				_turnManager.GenerateTurnOrder();
-			}
-
-            _turnManager.TurnTimer.Start();
-			await ToSignal(_turnManager.TurnTimer, "timeout");
-
-            _currentCharacter = _turnManager.GetCurrentUnit();
-
-            CurrentCharacterTurn(_currentCharacter);
+            await CurrentCharacterTurn(_turnManager.AdvanceToNextUnit());
         }
 
         private void Victory()
@@ -198,8 +188,6 @@ namespace NeuralZeroProtocol.Scripts.Combat
                 if (deadCharacter is PlayerCharacter) _turnManager.PlayerCharacters.Remove(deadCharacter);
 
                 if (deadCharacter is EnemyCharacter) _turnManager.EnemyCharacters.Remove(deadCharacter);
-
-                _turnManager.AllUnits.Remove(deadCharacter);
             } 
 
             if (BattleOutcomeState()) return;
@@ -225,10 +213,10 @@ namespace NeuralZeroProtocol.Scripts.Combat
             return false;
         }
 
-        private void CurrentCharacterTurn(Character character)
+        private async Task CurrentCharacterTurn(Character character)
         {
-            if (character is PlayerCharacter) _ = ChangeState(BattleState.PlayerTurn);
-            else if (character is EnemyCharacter) _ = ChangeState(BattleState.EnemyTurn);
+            if (character is PlayerCharacter) await ChangeState(BattleState.PlayerTurn);
+            else if (character is EnemyCharacter) await ChangeState(BattleState.EnemyTurn);
         }
     }
 }
