@@ -16,8 +16,8 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 		public List<Character> TurnOrder = new List<Character>();
 
-		private Array<Node> playerCharacters;
-		private Array<Node> enemyCharacters;
+		public Array<Node> PlayerCharacters;
+		public Array<Node> EnemyCharacters;
 		public List<Character> AllUnits;
 
 		public int CurrentUnitIndex = 0;
@@ -26,9 +26,9 @@ namespace NeuralZeroProtocol.Scripts.Characters
 		public override void _Ready()
 		{
 			// Combine all units from the containers
-			playerCharacters = PlayerTeam.GetChildren();
-			enemyCharacters = EnemyTeam.GetChildren();
-			AllUnits = playerCharacters.Concat(enemyCharacters).Cast<Character>().ToList();
+			PlayerCharacters = PlayerTeam.GetChildren();
+			EnemyCharacters = EnemyTeam.GetChildren();
+			AllUnits = PlayerCharacters.Concat(EnemyCharacters).Cast<Character>().ToList();
 
 			// This ensures the SDK is working. Check your Output tab!
 			GD.Print("TurnManager Base System: ONLINE.");
@@ -40,7 +40,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			GenerateTurnOrder();
 		}
 
-		private void GenerateTurnOrder()
+		public void GenerateTurnOrder()
 		{
 			TurnOrder.Clear();
 			
@@ -48,7 +48,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			TurnOrder = AllUnits.OrderByDescending(unit => unit.StatsComponent.GetStat(StatTypes.Dex)).ToList();
 			
 			CurrentUnitIndex = 0;
-			GD.Print($"Turn Order Generated. First up: {TurnOrder[0].Name}");
+			GD.Print($"Turn Order Generated. Next up: {TurnOrder[0].Name}");
 		}
 
 		public Character GetCurrentUnit()

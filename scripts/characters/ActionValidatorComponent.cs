@@ -17,11 +17,16 @@ namespace NeuralZeroProtocol.Scripts.Characters
 		}
 
         public bool IsExhausted() => !_disabilityComponent.HasDisability(DisabilityTypes.Exhausted); // If not Exhausted, return true
-        public bool CanAttack() => IsExhausted() && !_disabilityComponent.HasDisability(DisabilityTypes.Fragile); // If not Exhausted and is not Fragile, CanAttack
-        public bool CanDodge() => IsExhausted() && !_disabilityComponent.HasDisability(DisabilityTypes.Stiff); // if not Exhausted and is not Stiff, CanDodge
-        public bool CanCrit() => IsExhausted() && !_disabilityComponent.HasDisability(DisabilityTypes.Mindless); // if not Exhausted and is not Mindless, Dodge
+
+        public bool CanAttack() => IsExhausted() && !_disabilityComponent.HasDisability(DisabilityTypes.Fragile); // If not Exhausted and is not Fragile, return true
+
+        public bool CanDodge() => IsExhausted() && !_disabilityComponent.HasDisability(DisabilityTypes.Stiff); // if not Exhausted and is not Stiff, return true
+
+        public bool CanCrit() => IsExhausted() && !_disabilityComponent.HasDisability(DisabilityTypes.Mindless); // if not Exhausted and is not Mindless, return true
+
         // Can always dodge or block, regardless if Exhausted
-        public bool CanBlock() => true;
+        public bool CanDefend() => true;
+
         public bool CanSkip() => true;
     }
 }

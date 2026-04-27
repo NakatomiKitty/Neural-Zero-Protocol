@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://eob2rikglte3" path="res://scenes/characters/character.tscn" id="1_idkgt"]
 [ext_resource type="PackedScene" uid="uid://cyo4fis4ap8an" path="res://scenes/turn_manager.tscn" id="1_kinr6"]
+[ext_resource type="PackedScene" uid="uid://cchbd2v466eod" path="res://scenes/ui/action_panel.tscn" id="1_rum4d"]
 [ext_resource type="PackedScene" uid="uid://cews5tnkglhib" path="res://scenes/stats_component.tscn" id="3_rca61"]
 [ext_resource type="Resource" uid="uid://cg0dae1f5t3k0" path="res://scripts/resources/character_data/TestPlayer02.tres" id="4_pxwbd"]
 [ext_resource type="PackedScene" uid="uid://dx71bhurninfj" path="res://scenes/characters/enemycharacter.tscn" id="5_pxwbd"]
@@ -30,10 +31,12 @@ _characterStatsResources = ExtResource("4_pxwbd")
 [node name="EnemyTeam" type="Node" parent="TurnManager" unique_id=912994385]
 
 [node name="EnemyCharacter" parent="TurnManager/EnemyTeam" unique_id=1515763191 instance=ExtResource("5_pxwbd")]
-position = Vector2(-61, -7)
+position = Vector2(0, 1)
 
 [node name="StatsComponent" parent="TurnManager/EnemyTeam/EnemyCharacter" unique_id=91222233 instance=ExtResource("3_rca61")]
 _characterStatsResources = ExtResource("6_svpld")
 
 [node name="CombatStateMachine" type="Node" parent="." unique_id=1505035299]
 script = ExtResource("6_1i8jf")
+
+[node name="ActionPanel" parent="." unique_id=932627865 instance=ExtResource("1_rum4d")]
