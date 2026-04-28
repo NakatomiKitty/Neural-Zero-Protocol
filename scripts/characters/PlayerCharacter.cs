@@ -10,11 +10,12 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
         public override void _Ready() 
         {
-            StatsComponent = GetNode<StatsComponent>("StatsComponent");
-            DisabilityComponent = GetNode<DisabilityComponent>("DisabilityComponent");
-            HealthComponent = GetNode<HealthComponent>("HealthComponent");
             ActionValidatorComponent = GetNode<ActionValidatorComponent>("ActionValidatorComponent");
+            base._Ready();
+            
+            ActionValidatorComponent.Initialize(this);
         }
+
     }
 }
 

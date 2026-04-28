@@ -20,23 +20,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 	[GlobalClass]
 	public partial class DisabilityComponent : Node
 	{
-		private StatsComponent _statsComponent;
-
 		private HashSet<DisabilityTypes> _currentDisabilities = new HashSet<DisabilityTypes>();
-
-		public override void _Ready() 
-		{
-			_statsComponent = GetNode<StatsComponent>("../StatsComponent");
-
-			// Check if null
-			if (_statsComponent == null)
-			{
-				GD.PushWarning("StatsComponent not loaded lmao");
-			}
-
-            _statsComponent.StatZeroed += OnStatZeroed;
-            _statsComponent.StatRecovered += OnStatRecovered;
-        }   
 
         // Links StatTypes to DisabilityTypes
         private DisabilityTypes ToDisability(StatTypes statTypes) => statTypes switch
@@ -53,14 +37,14 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 		public bool HasDisability(DisabilityTypes disability) => _currentDisabilities.Contains(disability);
 
-		private void OnStatZeroed(int statInt)
+		public void OnStatZeroed(int statInt)
 		{
 			var disability = ToDisability((StatTypes)statInt);
 			GD.Print($"{disability} ACTIVATED!");
 			_currentDisabilities.Add(disability);
 		}
 
-		private void OnStatRecovered(int statInt)
+		public void OnStatRecovered(int statInt)
 		{
 			var disability = ToDisability((StatTypes)statInt);
 			GD.Print($"{disability} Deactivated!");
