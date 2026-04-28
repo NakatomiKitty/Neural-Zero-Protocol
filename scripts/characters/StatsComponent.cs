@@ -22,62 +22,30 @@ namespace NeuralZeroProtocol.Scripts.Characters
 		[Signal] public delegate void StatZeroedEventHandler(int stat);
 		[Signal] public delegate void StatRecoveredEventHandler(int stat);
 
-		[Export] private CharacterStatResource _characterStatsResources;
-
-		private Dictionary<StatTypes, int> _currentStats = new Dictionary<StatTypes, int>();
+		private Character _character;
 
 		public override void _Ready() {
+			_character = GetNode<Character>("..");
+
 			// If you forget to assign a CharacterStatsResources in the editor, the game would crash when a character uses this component.
 			// Adding this here will atleast notifies us early :)
-			if (_characterStatsResources == null)
+			if (_character == null)
 			{
-				GD.PushWarning("CharacterStatsResources not loaded lmao");
+				GD.PushWarning($"{_character.Name} is loaded in!");
 			}
-
-			InitializeFromResource(_characterStatsResources);
 			DebugPrintAllStats();
 
             // if you want to debug, put ModifyStat(StatTypes.Key, value)
 
 		}
 
-		private void InitializeFromResource(CharacterStatResource resource)
-		{
-			_currentStats.Clear(); // clear just in case of re-initialization
-			float mult = resource.GetStatMultiplier(resource.SelectedRarity); // Get the Rarity Multipliers
-			
-			foreach (StatTypes stat in Enum.GetValues<StatTypes>()) // loop through every StatType Values
-			{
-				// Get the Base Values from the resource
-				int baseValue = resource.GetBaseValues(stat); 
-
-				if (stat == StatTypes.Lck || stat == StatTypes.Nrg) // Makes Lck's value constant (2) AND makes Nrg either 5 or 10 depending on it's tier of rarity
-				{
-					if (stat == StatTypes.Nrg && resource.IsHighTierRarity())
-					{
-						_currentStats[stat] = 10;
-						continue;
-					}
-
-					_currentStats[stat] = baseValue;
-					continue;
-				}
-				
-				float finalValue = MathF.Ceiling(baseValue * mult); // Applies the Rarity Multiplier
-				_currentStats[stat] = (int)finalValue;
-			}
-
-			// Debug Print
-			GD.Print(resource.SelectedRarity);
-		}
-
 		public int GetStat(StatTypes stat) // this retrieves the old value
 		{
-			if (_currentStats.TryGetValue(stat, out int value))
+			if (_character.CurrentStats.TryGetValue(stat, out int value))
 			{
 				return value;
 			}
-			return 0;
+			return 5;
 		}
 
 		public void ModifyStat(StatTypes stat, int changeValue)
@@ -89,7 +57,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			// Debug print
 			GD.Print($"Stat changed: {stat} ({oldValue} → {currentValue}) [changeValue: {changeValue}]");
 
-			_currentStats[stat] = currentValue;
+			_character.CurrentStats[stat] = currentValue;
 
 			// Tell any listening nodes that this stat's value has changed.
 			// Example: If DEX goes from 5 to 1, we send: (2(stat), 1(newValue)) because DEX = 2 in the enum.
@@ -118,11 +86,6 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			GD.Print($"{GetParent().Name} stats");
 			foreach (StatTypes stat in Enum.GetValues<StatTypes>()) // loop through every StatType Values
 			{
-				if (stat == StatTypes.Lck)
-				{
-					GD.Print($"{stat}: {_currentStats[StatTypes.Lck] * 1.25f}");
-					continue;
-				}
 				GD.Print($"{stat}: {GetStat(stat)}");
 			}
 		}

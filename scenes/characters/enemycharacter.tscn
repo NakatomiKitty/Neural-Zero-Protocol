@@ -1,12 +1,18 @@
 [gd_scene format=3 uid="uid://dx71bhurninfj"]
 
 [ext_resource type="Script" uid="uid://bd6wglyawso50" path="res://scripts/characters/EnemyCharacter.cs" id="1_ar6ft"]
+[ext_resource type="Resource" uid="uid://dfyxl621tlai5" path="res://scripts/resources/character_data/TestEnemy.tres" id="2_hije4"]
 [ext_resource type="PackedScene" uid="uid://kq5mlbqthrd4" path="res://scenes/disability_component.tscn" id="2_nfi0l"]
 [ext_resource type="PackedScene" uid="uid://8ynpcmop3vxi" path="res://scenes/health_component.tscn" id="3_hije4"]
+[ext_resource type="PackedScene" uid="uid://cews5tnkglhib" path="res://scenes/stats_component.tscn" id="4_nfi0l"]
 
-[node name="Character" type="Node2D" unique_id=674946849]
+[node name="EnemyCharacter" type="Node2D" unique_id=674946849]
 script = ExtResource("1_ar6ft")
+_characterStatsResources = ExtResource("2_hije4")
 
 [node name="DisabilityComponent" parent="." unique_id=2131075981 instance=ExtResource("2_nfi0l")]
 
 [node name="HealthComponent" parent="." unique_id=2007377075 instance=ExtResource("3_hije4")]
+
+[node name="StatsComponent" parent="." unique_id=1494422534 instance=ExtResource("4_nfi0l")]
+_characterStatsResources = null

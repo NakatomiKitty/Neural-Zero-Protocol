@@ -10,31 +10,26 @@ namespace NeuralZeroProtocol.Scripts.Characters
         [Signal] public delegate void HealthChangedEventHandler(int currentHealth, int maxHealth);
 		[Signal] public delegate void DiedEventHandler(Character parent);
 
-        private StatsComponent _statsComponent;
+        private int _maxHealth;
         private int _currentHealth;
-        public override void _Ready() 
+
+
+        public void InitializeHealth(int maxHealth)
         {
-            _statsComponent = GetNode<StatsComponent>("../StatsComponent");
-
-            // Check if null
-			if (_statsComponent == null)
-			{
-				GD.PushWarning("StatsComponent not loaded lmao");
-			}
-
-            _currentHealth = (int)_statsComponent.GetStat(StatTypes.Hp);
+            _maxHealth = maxHealth;
+            _currentHealth = maxHealth;
+            EmitSignal(SignalName.HealthChanged, _currentHealth, _maxHealth);
         }
 
         public void TakeDamage(int damage)
         {
-            var maxHealth = _statsComponent.GetStat(StatTypes.Hp);
             int oldHealth = _currentHealth;
 
 			_currentHealth = Math.Max(0, _currentHealth - damage);
 
             GD.Print($"{GetParent().Name} got hit! ({oldHealth} → {_currentHealth}) [Received: {damage} damage!]");
 
-            EmitSignal(SignalName.HealthChanged, _currentHealth, maxHealth);
+            EmitSignal(SignalName.HealthChanged, _currentHealth, _maxHealth);
 
             if (_currentHealth <= 0)
             {
@@ -48,14 +43,13 @@ namespace NeuralZeroProtocol.Scripts.Characters
         {
             if (_currentHealth <= 0) return;
 
-            var maxHealth = (int)_statsComponent.GetStat(StatTypes.Hp);
             int oldHealth = _currentHealth;
 
-            _currentHealth = Math.Min(maxHealth, _currentHealth + heal);
+            _currentHealth = Math.Min(_maxHealth, _currentHealth + heal);
 
             GD.Print($"Health got healed! ({oldHealth} → {_currentHealth}) [Healed: {heal } hp!]");
 
-            EmitSignal(SignalName.HealthChanged, _currentHealth, maxHealth);
+            EmitSignal(SignalName.HealthChanged, _currentHealth, _maxHealth);
         }
     }
 }

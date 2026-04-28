@@ -7,22 +7,21 @@ namespace NeuralZeroProtocol.Scripts.Characters
 	[GlobalClass]
 	public partial class ActionValidatorComponent : Node
 	{
-		private StatsComponent _statsComponent;
-		private DisabilityComponent _disabilityComponent;
+		private Character _character;
 
-		public override void _Ready() 
-		{
-			_statsComponent = GetNode<StatsComponent>("../StatsComponent");
-			_disabilityComponent = GetNode<DisabilityComponent>("../DisabilityComponent");
-		}
+		public void Initialize(Character character) => _character = character;
 
-        public bool IsExhausted() => !_disabilityComponent.HasDisability(DisabilityTypes.Exhausted); // If not Exhausted, return true
+		public bool isExhausted() => 
+			!_character.DisabilityComponent.HasDisability(DisabilityTypes.Exhausted);
+		
+        public bool CanAttack() => 
+			isExhausted() && !_character.DisabilityComponent.HasDisability(DisabilityTypes.Fragile);
 
-        public bool CanAttack() => IsExhausted() && !_disabilityComponent.HasDisability(DisabilityTypes.Fragile); // If not Exhausted and is not Fragile, return true
+        public bool CanDodge() => 
+			isExhausted() && !_character.DisabilityComponent.HasDisability(DisabilityTypes.Stiff);
 
-        public bool CanDodge() => IsExhausted() && !_disabilityComponent.HasDisability(DisabilityTypes.Stiff); // if not Exhausted and is not Stiff, return true
-
-        public bool CanCrit() => IsExhausted() && !_disabilityComponent.HasDisability(DisabilityTypes.Mindless); // if not Exhausted and is not Mindless, return true
+        public bool CanCrit() =>  
+			isExhausted() && !_character.DisabilityComponent.HasDisability(DisabilityTypes.Mindless);
 
         // Can always dodge or block, regardless if Exhausted
         public bool CanDefend() => true;
