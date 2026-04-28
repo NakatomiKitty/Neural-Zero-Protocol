@@ -1,6 +1,7 @@
 using Godot;
 using NeuralZeroProtocol.Scripts.Characters;
 using NeuralZeroProtocol.Scripts.Resources.CharacterData;
+using NeuralZeroProtocol.Scripts.Resources.MoveData;
 using System;
 
 namespace NeuralZeroProtocol.Scripts.Combat

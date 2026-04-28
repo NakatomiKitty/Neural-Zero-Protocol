@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dh62avdeo3i7g"]
+
+[ext_resource type="Script" uid="uid://cpq7w8achtdku" path="res://scripts/characters/MovesetComponent.cs" id="1_6mofy"]
+
+[node name="MovesetComponent" type="Node" unique_id=535320526]
+script = ExtResource("1_6mofy")

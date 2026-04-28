@@ -1,4 +1,5 @@
 using Godot;
+using NeuralZeroProtocol.Scripts.Resources.MoveData;
 using System;
 
 namespace NeuralZeroProtocol.Scripts.Characters
@@ -8,14 +9,13 @@ namespace NeuralZeroProtocol.Scripts.Characters
     {
         public ActionValidatorComponent ActionValidatorComponent;
 
-        public override void _Ready() 
+        public override void _EnterTree() 
         {
             ActionValidatorComponent = GetNode<ActionValidatorComponent>("ActionValidatorComponent");
-            base._Ready();
+            base._EnterTree();
             
             ActionValidatorComponent.Initialize(this);
         }
-
     }
 }
 

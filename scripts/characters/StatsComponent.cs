@@ -8,10 +8,8 @@ using System.Collections.Generic;
 namespace NeuralZeroProtocol.Scripts.Characters
 {
 	/// <summary>
-	/// StatsComponent handles a Character's 7 Stats (HP, ATK, DEF, DEX, INT, LCK, NRG) and a Character's Rarity.
-	/// Then applies the Rarity's Multiplier on 5 of the Stats (HP, ATK, DEF, DEX, INT)
-	/// LCK is constant and NRG's value (5 or 10) is dependent on the Character's Rarity Tier
-	/// It stores current values in a dictionary then emits signals when stats (except HP) hit 0 (DeadZone) or recover above 0.
+	/// StatsComponent mostly handles getting the Stat values from Character.CS
+	/// And modifying them then emits signals when stats (except HP) hit 0 (DeadZone) or recover above 0.
 	/// </summary>
 
 	[GlobalClass]
@@ -24,24 +22,22 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 		private Character _character;
 
-		public override void _Ready() {
-			_character = GetNode<Character>("..");
-
-			// If you forget to assign a CharacterStatsResources in the editor, the game would crash when a character uses this component.
-			// Adding this here will atleast notifies us early :)
-			if (_character == null)
+		public override void _Ready() 
+		{
+			if (GetCharacter() == null)
 			{
-				GD.PushWarning($"{_character.Name} is loaded in!");
+				GD.PushWarning($"Character is not loaded in!");
 			}
+			
 			DebugPrintAllStats();
-
             // if you want to debug, put ModifyStat(StatTypes.Key, value)
-
 		}
 
+		private Character GetCharacter() => _character = GetNode<Character>("..");
+		
 		public int GetStat(StatTypes stat) // this retrieves the old value
 		{
-			if (_character.CurrentStats.TryGetValue(stat, out int value))
+			if (GetCharacter().CurrentStats.TryGetValue(stat, out int value))
 			{
 				return value;
 			}
@@ -57,7 +53,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			// Debug print
 			GD.Print($"Stat changed: {stat} ({oldValue} → {currentValue}) [changeValue: {changeValue}]");
 
-			_character.CurrentStats[stat] = currentValue;
+			GetCharacter().CurrentStats[stat] = currentValue;
 
 			// Tell any listening nodes that this stat's value has changed.
 			// Example: If DEX goes from 5 to 1, we send: (2(stat), 1(newValue)) because DEX = 2 in the enum.

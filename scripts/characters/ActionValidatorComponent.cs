@@ -1,5 +1,6 @@
 using Godot;
 using NeuralZeroProtocol.Scripts.Resources.CharacterData;
+using NeuralZeroProtocol.Scripts.Resources.MoveData;
 using System;
 
 namespace NeuralZeroProtocol.Scripts.Characters
@@ -11,9 +12,21 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 		public void Initialize(Character character) => _character = character;
 
+		public override void _Ready() {
+			// If you forget to assign a CharacterStatsResources in the editor, the game would crash when a character uses this component.
+			// Adding this here will atleast notifies us early :)
+			if (_character == null)
+			{
+				GD.PushError($"Character is not loaded in!");
+			}
+		}
+
 		public bool isExhausted() => 
 			!_character.DisabilityComponent.HasDisability(DisabilityTypes.Exhausted);
 		
+		public bool CanUseMove(MoveResource move) => 
+			isExhausted() && !_character.MovesetComponent.CheckNrg(move);
+
         public bool CanAttack() => 
 			isExhausted() && !_character.DisabilityComponent.HasDisability(DisabilityTypes.Fragile);
 

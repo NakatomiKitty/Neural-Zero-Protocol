@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-namespace NeuralZeroProtocol.Scripts.Resources.CharacterData
+namespace NeuralZeroProtocol.Scripts.Resources.MoveData
 {
     [GlobalClass]
     public partial class MoveResource : Resource
