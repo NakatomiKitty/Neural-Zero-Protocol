@@ -12,9 +12,8 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 		public void Initialize(Character character) => _character = character;
 
-		public override void _Ready() {
-			// If you forget to assign a CharacterStatsResources in the editor, the game would crash when a character uses this component.
-			// Adding this here will atleast notifies us early :)
+		public override void _Ready() 
+		{
 			if (_character == null)
 			{
 				GD.PushError($"Character is not loaded in!");

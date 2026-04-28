@@ -34,6 +34,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 			InitializeStats(_characterStatsResources);
 			MovesetComponent.Initialize(this);
+			StatsComponent.Initialize(this);
 		} 
 
 		public override void _Ready() 

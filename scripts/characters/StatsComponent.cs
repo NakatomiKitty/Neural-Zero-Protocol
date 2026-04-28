@@ -24,7 +24,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 		public override void _Ready() 
 		{
-			if (GetCharacter() == null)
+			if (_character == null)
 			{
 				GD.PushWarning($"Character is not loaded in!");
 			}
@@ -33,11 +33,11 @@ namespace NeuralZeroProtocol.Scripts.Characters
             // if you want to debug, put ModifyStat(StatTypes.Key, value)
 		}
 
-		private Character GetCharacter() => _character = GetNode<Character>("..");
+		public void Initialize(Character character) => _character = character;
 		
 		public int GetStat(StatTypes stat) // this retrieves the old value
 		{
-			if (GetCharacter().CurrentStats.TryGetValue(stat, out int value))
+			if (_character.CurrentStats.TryGetValue(stat, out int value))
 			{
 				return value;
 			}
@@ -53,7 +53,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			// Debug print
 			GD.Print($"Stat changed: {stat} ({oldValue} → {currentValue}) [changeValue: {changeValue}]");
 
-			GetCharacter().CurrentStats[stat] = currentValue;
+			_character.CurrentStats[stat] = currentValue;
 
 			// Tell any listening nodes that this stat's value has changed.
 			// Example: If DEX goes from 5 to 1, we send: (2(stat), 1(newValue)) because DEX = 2 in the enum.

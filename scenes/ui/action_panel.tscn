@@ -4,62 +4,68 @@
 
 [node name="ActionPanel" type="Control" unique_id=932627865]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 1152.0
-offset_bottom = 648.0
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -648.0
 script = ExtResource("1_w7tca")
 
 [node name="Panel" type="Panel" parent="." unique_id=932204892]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.035
-anchor_top = 0.81
-anchor_right = 0.965
-anchor_bottom = 0.97
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="PlaceholderAttack" type="Button" parent="Panel" unique_id=2055983200 groups=["ActionButtons"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 24.0
-offset_top = -32.0
-offset_right = 279.68
-offset_bottom = 32.0
-grow_vertical = 2
-theme_override_font_sizes/font_size = 32
-text = "Attack!"
-
-[node name="PlaceholderDefend" type="Button" parent="Panel" unique_id=224437225 groups=["ActionButtons"]]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -128.0
-offset_top = -32.0
-offset_right = 127.99994
-offset_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 32
-text = "Defend!"
-
-[node name="PlaceholderSkip" type="Button" parent="Panel" unique_id=1354594230 groups=["ActionButtons"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -279.68
-offset_top = -32.0
-offset_right = -23.999878
-offset_bottom = 32.0
+anchor_bottom = 1.0
+offset_left = 320.0
+offset_top = -136.0
+offset_right = -320.0
+offset_bottom = -32.320007
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AttackButton" type="Button" parent="Panel" unique_id=2055983200]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.328
+anchor_top = 1.0
+anchor_right = 0.67200005
+anchor_bottom = 1.0
+offset_left = 24.063995
+offset_top = -87.67996
+offset_right = -24.064026
+offset_bottom = -15.679962
+theme_override_font_sizes/font_size = 32
+text = "Attack
+"
+
+[node name="DefendButton" type="Button" parent="Panel" unique_id=224437225]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 0.344
+anchor_bottom = 1.003
+offset_left = 24.0
+offset_top = -87.67996
+offset_right = -24.127975
+offset_bottom = -15.991005
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Defend"
+
+[node name="SkipButton" type="Button" parent="Panel" unique_id=1354594230]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.656
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.12799
+offset_top = -87.67996
+offset_right = -24.0
+offset_bottom = -15.679962
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_font_sizes/font_size = 32
-text = "Skip!"
+text = "Skip"

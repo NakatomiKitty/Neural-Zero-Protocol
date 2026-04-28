@@ -1,10 +1,15 @@
 [gd_scene format=3 uid="uid://csskkm0o5fsuy"]
 
+[ext_resource type="Script" uid="uid://cxebjsdvn72qk" path="res://scripts/combat/BattleScene.cs" id="1_8qdv8"]
 [ext_resource type="PackedScene" uid="uid://cyo4fis4ap8an" path="res://scenes/turn_manager.tscn" id="1_kinr6"]
-[ext_resource type="PackedScene" uid="uid://cchbd2v466eod" path="res://scenes/ui/action_panel.tscn" id="1_rum4d"]
+[ext_resource type="PackedScene" uid="uid://eob2rikglte3" path="res://scenes/characters/playercharacter.tscn" id="3_1i8jf"]
+[ext_resource type="PackedScene" uid="uid://dx71bhurninfj" path="res://scenes/characters/enemycharacter.tscn" id="4_svpld"]
 [ext_resource type="Script" uid="uid://crwko2qor3c5f" path="res://scripts/combat/CombatStateMachine.cs" id="6_1i8jf"]
+[ext_resource type="PackedScene" uid="uid://cchbd2v466eod" path="res://scenes/ui/action_panel.tscn" id="7_rum4d"]
+[ext_resource type="PackedScene" uid="uid://iabgt3a61ewp" path="res://scenes/battle_manager.tscn" id="7_svpld"]
 
 [node name="BattleScene" type="Node2D" unique_id=354502011]
+script = ExtResource("1_8qdv8")
 
 [node name="TurnManager" parent="." unique_id=344082282 node_paths=PackedStringArray("PlayerTeam", "EnemyTeam") instance=ExtResource("1_kinr6")]
 PlayerTeam = NodePath("PlayerTeam")
@@ -12,9 +17,25 @@ EnemyTeam = NodePath("EnemyTeam")
 
 [node name="PlayerTeam" type="Node" parent="TurnManager" unique_id=629256005]
 
+[node name="PlayerCharacter" parent="TurnManager/PlayerTeam" unique_id=674946849 instance=ExtResource("3_1i8jf")]
+
 [node name="EnemyTeam" type="Node" parent="TurnManager" unique_id=912994385]
+
+[node name="EnemyCharacter" parent="TurnManager/EnemyTeam" unique_id=1709186054 instance=ExtResource("4_svpld")]
 
 [node name="CombatStateMachine" type="Node" parent="." unique_id=1505035299]
 script = ExtResource("6_1i8jf")
 
-[node name="ActionPanel" parent="." unique_id=932627865 instance=ExtResource("1_rum4d")]
+[node name="BattleManager" parent="." unique_id=479983199 instance=ExtResource("7_svpld")]
+
+[node name="ActionPanel" parent="." unique_id=932627865 instance=ExtResource("7_rum4d")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = 0.0
+offset_right = 1152.0
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 2

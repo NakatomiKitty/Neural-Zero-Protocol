@@ -5,14 +5,14 @@ namespace NeuralZeroProtocol.Scripts.UI
 {
     public enum ActionType
     {
-        Attack,
+        Move,
         Defend,
         Skip
     }
     [GlobalClass]
     public partial class ActionPanel : Node
     {
-        [Signal] public delegate void ActionSelectedEventHandler();
+        [Signal] public delegate void ActionSelectedEventHandler(int actionType);
 
         private Panel _buttonPanel;
 
@@ -33,11 +33,13 @@ namespace NeuralZeroProtocol.Scripts.UI
         {
             ActionType action = button.Name.ToString() switch
             {
-                "PlaceholderAttack" => ActionType.Attack,
-                "PlaceholderDefend" => ActionType.Defend,
-                "PlaceholderSkip" => ActionType.Skip,
+                "MoveButton" => ActionType.Move,
+                "DefendButton" => ActionType.Defend,
+                "SkipButton" => ActionType.Skip,
                 _ => ActionType.Skip
             };
+
+            GD.Print(action);
             EmitSignal(SignalName.ActionSelected, (int)action);
         }
     }

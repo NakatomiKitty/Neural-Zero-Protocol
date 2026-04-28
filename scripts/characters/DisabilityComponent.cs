@@ -50,8 +50,5 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			GD.Print($"{disability} Deactivated!");
 			_currentDisabilities.Remove(disability);
 		}
-		
-		
-		
 	}
 }

@@ -9,14 +9,19 @@ namespace NeuralZeroProtocol.Scripts.Characters
     public partial class MovesetComponent : Node
     {
         [Export] public Array<MoveResource> Moves = new Array<MoveResource>();
+        
         private Character _character;
 
         public void Initialize(Character character) => _character = character;
 
         public override void _Ready() 
         {
-            GD.Print(_character.StatsComponent.GetStat(StatTypes.Nrg));
-        }
+			if (_character == null)
+			{
+				GD.PushError($"Character is not loaded in!");
+			}
+		}
+        
         public Array<MoveResource> GetMoves() => Moves;
 
         public bool CheckNrg(MoveResource move) => _character.StatsComponent.GetStat(StatTypes.Nrg) >= move.Cost;

@@ -22,16 +22,14 @@ namespace NeuralZeroProtocol.Scripts.Combat
         [Signal] public delegate void StateChangedEventHandler(BattleState newState);
 
         private BattleState _currentState;
-        private TurnManager _turnManager;
-        private ActionPanel _actionPanel;
+        private BattleScene _battleScene;
 
         private Character _currentCharacter;
 
+        public void Initialize(BattleScene battleScene) => _battleScene = battleScene;
+
         public async override void _Ready() 
         {
-            _turnManager = GetNode<TurnManager>("../TurnManager");
-            _actionPanel = GetNode<ActionPanel>("../ActionPanel");
-
             await ChangeState(BattleState.Initializing);
         }
 
@@ -67,31 +65,27 @@ namespace NeuralZeroProtocol.Scripts.Combat
         {
             GD.Print("Battle Initializing...");
 
-            _turnManager.StartBattle();
+            _battleScene.TurnManager.StartBattle();
             
-            foreach (Character character in _turnManager.AllUnits)
-			{
-                // Links every Character's HealthComponent's Died signal in the battle
-				character.HealthComponent.Died += OnCharacterDied;
-			}
-
-            _currentCharacter = _turnManager.GetCurrentUnit();
+            _currentCharacter = _battleScene.TurnManager.GetCurrentUnit();
 
             await CurrentCharacterTurn(_currentCharacter);
         }
 
         private async Task PlayerTurn()
         {
-            PlayerCharacter playerCharacter = (PlayerCharacter)_turnManager.GetCurrentUnit();
+            PlayerCharacter playerCharacter = (PlayerCharacter)_battleScene.TurnManager.GetCurrentUnit();
+
             ActionValidatorComponent actionValidator = playerCharacter.ActionValidatorComponent;
 
             bool isActionValid = false;
+            
             while (!isActionValid)
             {
                 GD.Print($"{playerCharacter.Name}'s turn");
                 GD.Print("Press an action");
 
-                SignalAwaiter awaiter = ToSignal(_actionPanel, ActionPanel.SignalName.ActionSelected);
+                SignalAwaiter awaiter = ToSignal(_battleScene.ActionPanel, ActionPanel.SignalName.ActionSelected);
                 await awaiter;
 
                 ActionType action = (ActionType)awaiter.GetResult()[0].AsInt32();
@@ -99,18 +93,6 @@ namespace NeuralZeroProtocol.Scripts.Combat
                 // PLACEHOLDER! MIGHT CHANGE LOGIC
                 switch (action)
                 {
-                    case ActionType.Attack:
-                        if (actionValidator.CanAttack())
-                        {
-                            GD.Print("Attacked!");
-                            isActionValid = true;
-                        }
-
-                        else
-                        {
-                            GD.Print("Cant Attack, try again");
-                        }
-                        break;
                     case ActionType.Defend:
                         if (actionValidator.CanDefend())
                         {
@@ -136,7 +118,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
         // PLACEHOLDER CODE HERE! WILL PROBABLY CONTAIN CALLING TO THE ENEMY'S AI
         private async Task EnemyTurn()
         {
-            EnemyCharacter enemyCharacter = (EnemyCharacter)_turnManager.GetCurrentUnit();
+            EnemyCharacter enemyCharacter = (EnemyCharacter)_battleScene.TurnManager.GetCurrentUnit();
             GD.Print($"{enemyCharacter.Name}'s turn");
 
             GD.Print("Enemy did something!");
@@ -148,7 +130,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
         {
             GD.Print($"{_currentCharacter.Name} ended it's turn!");
 
-            _currentCharacter = _turnManager.AdvanceToNextUnit();
+            _currentCharacter = _battleScene.TurnManager.AdvanceToNextUnit();
 
             await CurrentCharacterTurn(_currentCharacter);
         }
@@ -157,7 +139,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
         {
             GD.Print("Victory");
 
-            foreach (Character character in _turnManager.AllUnits)
+            foreach (Character character in _battleScene.TurnManager.AllUnits)
 			{
                 // Delinks every Character's HealthComponent's Died signal in the battle
 				character.HealthComponent.Died -= OnCharacterDied;
@@ -168,38 +150,38 @@ namespace NeuralZeroProtocol.Scripts.Combat
         {
             GD.Print("Defeat");
 
-            foreach (Character character in _turnManager.AllUnits)
+            foreach (Character character in _battleScene.TurnManager.AllUnits)
 			{
                 // Delinks every Character's HealthComponent's Died signal in the battle
 				character.HealthComponent.Died -= OnCharacterDied;
 			}
         }
 
-        private void OnCharacterDied(Character deadCharacter)
+        public void OnCharacterDied(Character deadCharacter)
 		{
 			GD.Print(deadCharacter.Name);
 
-			if (_turnManager.TurnOrder.Contains(deadCharacter))
+			if (_battleScene.TurnManager.TurnOrder.Contains(deadCharacter))
 			{
-				int deadIndex = _turnManager.TurnOrder.IndexOf(deadCharacter); 
+				int deadIndex = _battleScene.TurnManager.TurnOrder.IndexOf(deadCharacter); 
                 // Stores the index of the dead character ↑ 
                 // Then removes it ↓
-        		_turnManager.TurnOrder.Remove(deadCharacter);
+        		_battleScene.TurnManager.TurnOrder.Remove(deadCharacter);
                 
                 // if deadIndex is before the CurrentUnitIndex, decrement so whoever comes next takes it's place
-				if (deadIndex < _turnManager.CurrentUnitIndex) _turnManager.CurrentUnitIndex--;
+				if (deadIndex < _battleScene.TurnManager.CurrentUnitIndex) _battleScene.TurnManager.CurrentUnitIndex--;
 
                 // if deadIndex IS the CurrentUnitIndex, immediately go to the next Unit
-				else if (deadIndex == _turnManager.CurrentUnitIndex) _turnManager.CurrentUnitIndex++;
+				else if (deadIndex == _battleScene.TurnManager.CurrentUnitIndex) _battleScene.TurnManager.CurrentUnitIndex++;
 			} 
             
             // NOTE: If you want to add a character that doesnt die when everyone is not dead
             // You should add a flag here that checks if that character cant die.
-			if (_turnManager.AllUnits.Contains(deadCharacter))
+			if (_battleScene.TurnManager.AllUnits.Contains(deadCharacter))
             {
-                if (deadCharacter is PlayerCharacter) _turnManager.PlayerCharacters.Remove(deadCharacter);
+                if (deadCharacter is PlayerCharacter) _battleScene.TurnManager.PlayerCharacters.Remove(deadCharacter);
 
-                if (deadCharacter is EnemyCharacter) _turnManager.EnemyCharacters.Remove(deadCharacter);
+                if (deadCharacter is EnemyCharacter) _battleScene.TurnManager.EnemyCharacters.Remove(deadCharacter);
             } 
 
             if (BattleOutcomeState()) return;
@@ -211,12 +193,12 @@ namespace NeuralZeroProtocol.Scripts.Combat
         // Helper Functions
         private bool BattleOutcomeState()
         {
-            if (!_turnManager.PlayerCharacters.Any())
+            if (!_battleScene.TurnManager.PlayerCharacters.Any())
             {
                 _ = ChangeState(BattleState.Defeat);
                 return true;
             } 
-            else if (!_turnManager.EnemyCharacters.Any())
+            else if (!_battleScene.TurnManager.EnemyCharacters.Any())
             {
                 _ = ChangeState(BattleState.Victory);
                 return true;
