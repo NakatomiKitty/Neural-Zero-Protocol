@@ -15,8 +15,8 @@ namespace NeuralZeroProtocol.Scripts.Cards
         private Card _selectedCard;
 
         private Dictionary<Card, int> _originalZIndexes = new Dictionary<Card, int>();
-
         private Dictionary<Card, Tween> _activeHoverTweens = new Dictionary<Card, Tween>();
+        private HashSet<Card> _cardsUnderMouse = new HashSet<Card>();
 
         public override void _Notification(int what)
         {
@@ -30,8 +30,39 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
         private void OnCardClicked(Card card)
         {
-            if (card == _selectedCard) DeselectCard(card);
-        
+            // Verify this card is the topmost under mouse
+            var mousePos = GetGlobalMousePosition();
+
+            var space = GetWorld2D().DirectSpaceState;
+
+            var query = new PhysicsPointQueryParameters2D
+            {
+                Position = mousePos,
+                CollideWithAreas = true,
+                CollisionMask = 1
+            };
+
+            var results = space.IntersectPoint(query);
+
+            Card highestCard = null;
+            int highestZ = int.MinValue;
+
+            foreach (var result in results)
+            {
+                var area = result["collider"].As<Area2D>();
+                var newCard = area?.GetParent<Card>();
+
+                if (card != null && card.ZIndex > highestZ)
+                {
+                    highestCard = newCard;
+                    highestZ = newCard.ZIndex;
+                }
+            }
+            if (highestCard != card) return;
+
+            // Proceed with select/deselect
+            if (card == _selectedCard) DeselectCard();
+
             else SelectCard(card);
         }
 
@@ -39,66 +70,132 @@ namespace NeuralZeroProtocol.Scripts.Cards
         {
             if (_selectedCard == card) return;
 
-            // Deselect previous card
+            // Deselect previous card with tween
             if (_selectedCard != null)
             {
-                // Restore original ZIndex from CreateHandFromPath
-                _selectedCard.ZIndex = _originalZIndexes[_selectedCard];
-
-                // Kill any tween and reset scale to normal
+                // Kill any hover or selection tween on old card
                 if (_activeHoverTweens.ContainsKey(_selectedCard) && _activeHoverTweens[_selectedCard].IsRunning())
                     _activeHoverTweens[_selectedCard].Kill();
-
                 _activeHoverTweens.Remove(_selectedCard);
-
-                _selectedCard.Scale = Vector2.One;
+                
+                // Tween scale back to 1.0
+                Tween tween = CreateTween();
+                tween.TweenProperty(_selectedCard, "scale", Vector2.One, 0.05f);
+                _activeHoverTweens[_selectedCard] = tween;
+                tween.Finished += () => _activeHoverTweens.Remove(_selectedCard);
+                
+                // Restore ZIndex
+                _selectedCard.ZIndex = _originalZIndexes[_selectedCard];
+                _selectedCard.UpdatePriority();
             }
 
             _selectedCard = card;
 
-            // Kill any hover tween on the new card
+            // Remove from hover set
+            _cardsUnderMouse.Remove(card);
+            if (_currentHoveredCard == card)
+                _currentHoveredCard = null;
+
+            // Kill any existing tween on new card
             if (_activeHoverTweens.ContainsKey(card) && _activeHoverTweens[card].IsRunning())
                 _activeHoverTweens[card].Kill();
-
             _activeHoverTweens.Remove(card);
 
-            card.Scale = new Vector2(1.1f, 1.1f);
+            // Tween scale to 1.1
+            Tween selectTween = CreateTween();
+            selectTween.TweenProperty(card, "scale", new Vector2(1.1f, 1.1f), 0.05f);
+            _activeHoverTweens[card] = selectTween;
+            selectTween.Finished += () => _activeHoverTweens.Remove(card);
+
+            // Set ZIndex and priority
             card.ZIndex = 10;
+            card.UpdatePriority();
 
-            _currentHoveredCard = null;
-
-            RefreshHoverUnderMouse(card);
+            UpdateHoverEffect();
         }
 
-        private void DeselectCard(Card card)
+        private void DeselectCard()
         {
             if (_selectedCard == null) return;
-    
-            _selectedCard.ZIndex = _originalZIndexes[_selectedCard];
 
-            if (_activeHoverTweens.ContainsKey(_selectedCard) && _activeHoverTweens[_selectedCard].IsRunning())
-                _activeHoverTweens[_selectedCard].Kill();
+            Card oldSelected = _selectedCard;
 
-            _activeHoverTweens.Remove(_selectedCard);
+            // Kill any tween on old selected
+            if (_activeHoverTweens.ContainsKey(oldSelected) && _activeHoverTweens[oldSelected].IsRunning())
+                _activeHoverTweens[oldSelected].Kill();
+            _activeHoverTweens.Remove(oldSelected);
 
-            _selectedCard.Scale = Vector2.One;
+            // Tween scale back to 1.0
+            Tween tween = CreateTween();
+            tween.TweenProperty(oldSelected, "scale", Vector2.One, 0.05f);
+            _activeHoverTweens[oldSelected] = tween;
+            tween.Finished += () => _activeHoverTweens.Remove(oldSelected);
+
+            // Restore ZIndex
+            oldSelected.ZIndex = _originalZIndexes[oldSelected];
+            oldSelected.UpdatePriority();
+
             _selectedCard = null;
 
-            RefreshHoverUnderMouse(card);
+            // Re-add to under-mouse set
+            if (!_cardsUnderMouse.Contains(oldSelected))
+                _cardsUnderMouse.Add(oldSelected);
+
+            UpdateHoverEffect();
         }
 
         private void OnHoveredOverCard(Card card)
         {
             if (card == _selectedCard) return;   // skip if selected
 
-            ApplyHoverEffect(card, true);
+            _cardsUnderMouse.Add(card);
+            UpdateHoverEffect();
         }
 
         private void OnHoveredOffCard(Card card)
         {
             if (card == _selectedCard) return;   // skip if selected
 
-            ApplyHoverEffect(card, false);  
+            _cardsUnderMouse.Remove(card);
+            UpdateHoverEffect();
+        }
+
+        private void UpdateHoverEffect()
+        {
+
+            if (_cardsUnderMouse.Count == 0)
+            {
+                if (_currentHoveredCard != null)
+                {
+                    ApplyHoverEffect(_currentHoveredCard, false);
+                    _currentHoveredCard = null;
+                }
+                return;
+            }
+
+            Card highestCard = null;
+            int highestZ = int.MinValue;
+
+            foreach (Card card in _cardsUnderMouse)
+            {
+                if (card == _selectedCard) continue;
+
+                if (card.ZIndex > highestZ)
+                {
+                    highestCard = card;
+                    highestZ = card.ZIndex;
+                }
+            }
+
+            if (highestCard != _currentHoveredCard)
+            {
+                if(_currentHoveredCard != null) ApplyHoverEffect(_currentHoveredCard, false);
+                    
+                if (highestCard != null) ApplyHoverEffect(highestCard, true);
+
+                _currentHoveredCard = highestCard;
+            }
+            
         }
 
         private void ApplyHoverEffect(Card card, bool isHovered)
@@ -125,43 +222,15 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
             if (isHovered)
             {
-                card.ZIndex = 9;
+                card.ZIndex = 11;
+                card.UpdatePriority();
             }
             else
             {
                 card.ZIndex = _originalZIndexes[card];
+                card.UpdatePriority(); 
             }
         }
-
-        // private Card RaycastPickCard()
-        // {
-        //     var spaceState = GetWorld2D().DirectSpaceState;
-        //     var parameters = new PhysicsPointQueryParameters2D
-        //     {
-        //         Position = GetGlobalMousePosition(),
-        //         CollideWithAreas = true,
-        //         CollisionMask = 1
-        //     };
-
-        //     var results = spaceState.IntersectPoint(parameters);
-        //     if (results.Count == 0) return null;
-
-        //     // Find the highest Z-index card among all cards
-        //     Card highestCard = null;
-        //     int highestZ = int.MinValue;
-
-        //     foreach (var result in results)
-        //     {
-        //         var collider = (Node2D)result["collider"];
-        //         var card = collider.GetParent() as Card;
-        //         if (card != null && card.ZIndex > highestZ)
-        //         {
-        //             highestCard = card;
-        //             highestZ = card.ZIndex; 
-        //         }
-        //     }
-        //     return highestCard;
-        // }
 
         private void CreateHandFromPath(int cardCount)
 		{
@@ -205,27 +274,10 @@ namespace NeuralZeroProtocol.Scripts.Cards
             {
                 int distanceFromCenter = Math.Abs(i - centerIndex);
                 cards[i].ZIndex = maxZ - distanceFromCenter;
+                cards[i].UpdatePriority();
                 _originalZIndexes[cards[i]] = cards[i].ZIndex;
             }
 		}
-
-        // Helper Functions
-        private void RefreshHoverUnderMouse(Card card)
-        {
-            // Clear current hover state to force re‑evaluation
-            if (_currentHoveredCard != null)
-            {
-                ApplyHoverEffect(_currentHoveredCard, false);
-                _currentHoveredCard = null;
-            }
-
-            // Raycast to see if a card is under mouse
-            if (card != null && card != _selectedCard)
-            {
-                _currentHoveredCard = card;
-                ApplyHoverEffect(card, true);
-            }
-        }
 
         private void ConnectCard(Card card)
 		{

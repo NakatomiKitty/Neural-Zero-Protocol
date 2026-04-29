@@ -20,10 +20,15 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
         public override void _Ready() 
         {
-            _area2D.Priority = ZIndex;
             _area2D.MouseEntered += OnMouseEntered;
             _area2D.MouseExited += OnMouseExited;
             _area2D.InputEvent += OnMouseClicked;
+            UpdatePriority();
+        }
+
+        public void UpdatePriority()
+        {
+            _area2D.Priority = ZIndex;
         }
 
         private void OnMouseClicked(Node viewport, InputEvent @event, long shapeIdx)
