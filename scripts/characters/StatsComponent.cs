@@ -24,6 +24,8 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 		public override void _Ready() 
 		{
+			_character = GetNode<Character>("..");
+			
 			if (_character == null)
 			{
 				GD.PushWarning($"Character is not loaded in!");
@@ -32,8 +34,6 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			DebugPrintAllStats();
             // if you want to debug, put ModifyStat(StatTypes.Key, value)
 		}
-
-		public void Initialize(Character character) => _character = character;
 		
 		public int GetStat(StatTypes stat) // this retrieves the old value
 		{

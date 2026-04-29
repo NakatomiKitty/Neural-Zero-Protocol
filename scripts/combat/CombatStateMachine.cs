@@ -1,7 +1,6 @@
 using Godot;
 using NeuralZeroProtocol.Scripts.Characters;
 using NeuralZeroProtocol.Scripts.UI;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,10 +25,9 @@ namespace NeuralZeroProtocol.Scripts.Combat
 
         private Character _currentCharacter;
 
-        public void Initialize(BattleScene battleScene) => _battleScene = battleScene;
-
         public async override void _Ready() 
         {
+            _battleScene = GetNode<BattleScene>("..");
             await ChangeState(BattleState.Initializing);
         }
 

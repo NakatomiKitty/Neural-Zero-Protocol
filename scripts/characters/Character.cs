@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 using System;
 
@@ -13,28 +14,30 @@ namespace NeuralZeroProtocol.Scripts.Characters
 	/// It also acts as the main hub for the components
 	/// </summary>
     [GlobalClass]
+	[Scene]
     public partial class Character : Node2D
     {
-        public StatsComponent StatsComponent;
-        public DisabilityComponent DisabilityComponent;
-        public HealthComponent HealthComponent;
-		public MovesetComponent MovesetComponent;
+        [Node] public StatsComponent StatsComponent;
+        [Node] public DisabilityComponent DisabilityComponent;
+        [Node] public HealthComponent HealthComponent;
+		[Node] public MovesetComponent MovesetComponent;
 
         [Export] private CharacterStatResource _characterStatsResources;
 
 		public Dictionary<StatTypes, int> CurrentStats = new Dictionary<StatTypes, int>();
 
-		// Initializes Stats before anything else
+
+        public override void _Notification(int what)
+        {
+            if (what == NotificationSceneInstantiated)
+			{
+				WireNodes();
+			}
+        }
+
 		public override void _EnterTree()
 		{
-			StatsComponent = GetNode<StatsComponent>("StatsComponent");
-			DisabilityComponent = GetNode<DisabilityComponent>("DisabilityComponent");
-			HealthComponent = GetNode<HealthComponent>("HealthComponent");
-			MovesetComponent = GetNode<MovesetComponent>("MovesetComponent");
-
 			InitializeStats(_characterStatsResources);
-			MovesetComponent.Initialize(this);
-			StatsComponent.Initialize(this);
 		} 
 
 		public override void _Ready() 
@@ -55,7 +58,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 		}
 		
 		
-
+		// Initializes Stats before anything else
         private void InitializeStats(CharacterStatResource resource)
 		{
 			CurrentStats.Clear(); // clear just in case of re-initialization

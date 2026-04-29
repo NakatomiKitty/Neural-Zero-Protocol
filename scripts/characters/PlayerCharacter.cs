@@ -1,20 +1,20 @@
 using Godot;
-using NeuralZeroProtocol.Scripts.Resources.MoveData;
-using System;
+using GodotUtilities;
 
 namespace NeuralZeroProtocol.Scripts.Characters
 {
     [GlobalClass]
+    [Scene]
     public partial class PlayerCharacter : Character
     {
-        public ActionValidatorComponent ActionValidatorComponent;
+        [Node] public ActionValidatorComponent ActionValidatorComponent;
 
-        public override void _EnterTree() 
+        public override void _Notification(int what)
         {
-            ActionValidatorComponent = GetNode<ActionValidatorComponent>("ActionValidatorComponent");
-            base._EnterTree();
-            
-            ActionValidatorComponent.Initialize(this);
+            if (what == NotificationSceneInstantiated)
+			{
+				WireNodes();
+			}
         }
     }
 }

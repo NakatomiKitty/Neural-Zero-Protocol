@@ -1,13 +1,21 @@
 [gd_scene format=3 uid="uid://8ic6l8vm65v7"]
 
 [ext_resource type="Script" uid="uid://ckl3r5sn55yqu" path="res://scripts/cards/CardSystem.cs" id="1_vn21b"]
-[ext_resource type="PackedScene" uid="uid://yp6mlqwlekiq" path="res://scenes/card.tscn" id="2_gagc2"]
+
+[sub_resource type="Curve2D" id="Curve2D_gagc2"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 368, 501.5, 0, 0, 0, 0, 471.99988, 429.71436, 0, 0, 0, 0, 576, 388.5714, 0, 0, 0, 0, 680, 429.71436, 0, 0, 0, 0, 784, 501.5)
+}
+point_count = 5
 
 [node name="CardSystem" type="Node2D" unique_id=1780472782]
 script = ExtResource("1_vn21b")
 
-[node name="Card" parent="." unique_id=1511861092 instance=ExtResource("2_gagc2")]
-position = Vector2(285, 416)
+[node name="Path2D" type="Path2D" parent="." unique_id=1051675310]
+position = Vector2(400, 408.00003)
+scale = Vector2(0.30769217, 0.3888888)
+curve = SubResource("Curve2D_gagc2")
 
-[node name="Card2" parent="." unique_id=1269224650 instance=ExtResource("2_gagc2")]
-position = Vector2(475, 413)
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=330325061]
+position = Vector2(368, 501.5)
+rotation = -0.60415053

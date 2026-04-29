@@ -12,10 +12,10 @@ namespace NeuralZeroProtocol.Scripts.Characters
         
         private Character _character;
 
-        public void Initialize(Character character) => _character = character;
-
         public override void _Ready() 
         {
+            _character = GetNode<Character>("..");
+            
 			if (_character == null)
 			{
 				GD.PushError($"Character is not loaded in!");

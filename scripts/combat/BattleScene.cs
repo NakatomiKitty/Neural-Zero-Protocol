@@ -1,26 +1,25 @@
 using Godot;
+using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Characters;
 using NeuralZeroProtocol.Scripts.UI;
-using System;
 
 namespace NeuralZeroProtocol.Scripts.Combat
 {
+    [Scene]
     public partial class BattleScene : Node2D
     {
-        public TurnManager TurnManager;
-        public ActionPanel ActionPanel;
-        public CombatStateMachine CombatStateMachine;
-        public BattleManager BattleManager;
+        [Node] public TurnManager TurnManager;
+        [Node] public ActionPanel ActionPanel;
+        [Node] public CombatStateMachine CombatStateMachine;
+        [Node] public BattleManager BattleManager;
 
-        public override void _EnterTree() 
+
+        public override void _Notification(int what)
         {
-            TurnManager = GetNode<TurnManager>("TurnManager");
-            ActionPanel = GetNode<ActionPanel>("ActionPanel");
-            CombatStateMachine = GetNode<CombatStateMachine>("CombatStateMachine");
-            BattleManager = GetNode<BattleManager>("BattleManager");
-
-            CombatStateMachine.Initialize(this);
-            BattleManager.Initialize(this);
+            if (what == NotificationSceneInstantiated)
+			{
+				WireNodes();
+			}
         }
 
         public override void _Ready() 

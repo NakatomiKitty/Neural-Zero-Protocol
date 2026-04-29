@@ -1,7 +1,6 @@
 using Godot;
-using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
-using System;
+
 
 namespace NeuralZeroProtocol.Scripts.Characters
 {
@@ -10,10 +9,10 @@ namespace NeuralZeroProtocol.Scripts.Characters
 	{
 		private Character _character;
 
-		public void Initialize(Character character) => _character = character;
-
 		public override void _Ready() 
 		{
+			_character = GetNode<Character>("..");
+
 			if (_character == null)
 			{
 				GD.PushError($"Character is not loaded in!");
