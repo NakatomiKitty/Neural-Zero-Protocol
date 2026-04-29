@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://8ic6l8vm65v7"]
+
+[ext_resource type="Script" uid="uid://ckl3r5sn55yqu" path="res://scripts/cards/CardSystem.cs" id="1_vn21b"]
+[ext_resource type="PackedScene" uid="uid://yp6mlqwlekiq" path="res://scenes/card.tscn" id="2_gagc2"]
+
+[node name="CardSystem" type="Node2D" unique_id=1780472782]
+script = ExtResource("1_vn21b")
+
+[node name="Card" parent="." unique_id=1511861092 instance=ExtResource("2_gagc2")]
+position = Vector2(285, 416)
+
+[node name="Card2" parent="." unique_id=1269224650 instance=ExtResource("2_gagc2")]
+position = Vector2(475, 413)
