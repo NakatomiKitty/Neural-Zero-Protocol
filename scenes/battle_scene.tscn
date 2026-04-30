@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://crwko2qor3c5f" path="res://scripts/combat/CombatStateMachine.cs" id="6_1i8jf"]
 [ext_resource type="PackedScene" uid="uid://cchbd2v466eod" path="res://scenes/ui/action_panel.tscn" id="7_rum4d"]
 [ext_resource type="PackedScene" uid="uid://iabgt3a61ewp" path="res://scenes/battle_manager.tscn" id="7_svpld"]
+[ext_resource type="PackedScene" uid="uid://8ic6l8vm65v7" path="res://scenes/card_system.tscn" id="8_rum4d"]
 
 [node name="BattleScene" type="Node2D" unique_id=354502011]
 script = ExtResource("1_8qdv8")
@@ -29,6 +30,7 @@ script = ExtResource("6_1i8jf")
 [node name="BattleManager" parent="." unique_id=479983199 instance=ExtResource("7_svpld")]
 
 [node name="ActionPanel" parent="." unique_id=932627865 instance=ExtResource("7_rum4d")]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -39,3 +41,5 @@ offset_right = 1152.0
 offset_bottom = 648.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="CardSystem" parent="." unique_id=1780472782 instance=ExtResource("8_rum4d")]

@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_3u1s5")
+MoveElement = 0
 Name = "Punch"
 Power = 10
 Cost = 1

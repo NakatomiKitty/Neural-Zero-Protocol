@@ -24,7 +24,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
         [Export] private CharacterStatResource _characterStatsResources;
 
-		public Dictionary<StatTypes, int> CurrentStats = new Dictionary<StatTypes, int>();
+		public Dictionary<StatType, int> CurrentStats = new Dictionary<StatType, int>();
 
 
         public override void _Notification(int what)
@@ -49,7 +49,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 				GD.PushWarning("CharacterStatsResources not loaded lmao");
 			}
 
-			int maxHP = StatsComponent.GetStat(StatTypes.Hp);
+			int maxHP = StatsComponent.GetStat(StatType.Hp);
 
 			HealthComponent.InitializeHealth(maxHP);
 
@@ -64,14 +64,14 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			CurrentStats.Clear(); // clear just in case of re-initialization
 			float mult = resource.GetStatMultiplier(resource.SelectedRarity); // Get the Rarity Multipliers
 			
-			foreach (StatTypes stat in Enum.GetValues<StatTypes>()) // loop through every StatType Values
+			foreach (StatType stat in Enum.GetValues<StatType>()) // loop through every StatType Values
 			{
 				// Get the Base Values from the resource
 				int baseValue = resource.GetBaseValues(stat); 
 
-				if (stat == StatTypes.Lck || stat == StatTypes.Nrg) // Makes Lck's value constant (2) AND makes Nrg either 5 or 10 depending on it's tier of rarity
+				if (stat == StatType.Lck || stat == StatType.Nrg) // Makes Lck's value constant (2) AND makes Nrg either 5 or 10 depending on it's tier of rarity
 				{
-					if (stat == StatTypes.Nrg && resource.IsHighTierRarity())
+					if (stat == StatType.Nrg && resource.IsHighTierRarity())
 					{
 						CurrentStats[stat] = 10;
 						continue;

@@ -35,7 +35,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
             // if you want to debug, put ModifyStat(StatTypes.Key, value)
 		}
 		
-		public int GetStat(StatTypes stat) // this retrieves the old value
+		public int GetStat(StatType stat) // this retrieves the old value
 		{
 			if (_character.CurrentStats.TryGetValue(stat, out int value))
 			{
@@ -44,7 +44,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			return 5;
 		}
 
-		public void ModifyStat(StatTypes stat, int changeValue)
+		public void ModifyStat(StatType stat, int changeValue)
 		{
 
 			var oldValue = GetStat(stat);
@@ -62,7 +62,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			// If the stat was positive and now becomes exactly zero, it means the character just entered the "DeadZone".
 			// Example: ATK drops from 5 to 0 → character becomes "Fragile". etc. etc. etc.
 			
-			if (stat != StatTypes.Hp && oldValue > 0 && currentValue == 0) 
+			if (stat != StatType.Hp && oldValue > 0 && currentValue == 0) 
 			{   
 				GD.Print($"{stat} reached zero! Activating disability!");
 				EmitSignal(SignalName.StatZeroed, (int)stat);
@@ -80,7 +80,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 		public void DebugPrintAllStats()
 		{   
 			GD.Print($"{GetParent().Name} stats");
-			foreach (StatTypes stat in Enum.GetValues<StatTypes>()) // loop through every StatType Values
+			foreach (StatType stat in Enum.GetValues<StatType>()) // loop through every StatType Values
 			{
 				GD.Print($"{stat}: {GetStat(stat)}");
 			}

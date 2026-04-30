@@ -17,7 +17,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
         private static Random _random = new Random();
 
         // if Atk > Dex + Lck, dodge the attack
-        public static bool EvasionCheck(Character attacker, Character defender) => GetStatValue(defender, StatTypes.Dex) + (GetStatValue(defender, StatTypes.Lck) * 1.25f) < GetStatValue(attacker, StatTypes.Atk);
+        public static bool EvasionCheck(Character attacker, Character defender) => GetStatValue(defender, StatType.Dex) + (GetStatValue(defender, StatType.Lck) * 1.25f) < GetStatValue(attacker, StatType.Atk);
 
         public static int CalculateDamage(Character attacker, Character defender, MoveResource move)
         {
@@ -29,12 +29,12 @@ namespace NeuralZeroProtocol.Scripts.Combat
             // if CalculateEvasionCheck is true, miss the attack
             if (EvasionCheck(attacker, defender)) return 0;
 
-            int baseDamage = move.Power + GetStatValue(attacker, StatTypes.Atk) - (int)(GetStatValue(defender, StatTypes.Def) * 0.75f);
+            int baseDamage = move.Power + GetStatValue(attacker, StatType.Atk) - (int)(GetStatValue(defender, StatType.Def) * 0.75f);
 
             // if it's a CriticalChance is true, apply Critical hit bonus.
             if(CriticalChance(attacker, defender, move))
             {
-                int critBonus = (int)(GetStatValue(attacker, StatTypes.Atk) * (GetStatValue(attacker, StatTypes.Int) / 100.0f));
+                int critBonus = (int)(GetStatValue(attacker, StatType.Atk) * (GetStatValue(attacker, StatType.Int) / 100.0f));
                 return baseDamage + critBonus;
             }
 
@@ -44,7 +44,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
         public static int CalculateAbsoluteBlock(Character attacker, Character defender, MoveResource move)
         {
             // TODO: This is for Shield Gauge
-            float totalAttack = move.Power + GetStatValue(attacker, StatTypes.Atk) - GetStatValue(defender, StatTypes.Def);
+            float totalAttack = move.Power + GetStatValue(attacker, StatType.Atk) - GetStatValue(defender, StatType.Def);
 
             return (int)totalAttack;
         }
@@ -60,7 +60,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
             // if attacker has "Cursed" disability, return false
             if (attacker.DisabilityComponent.HasDisability(DisabilityTypes.Cursed)) return false;
 
-            float critChance = GetStatValue(attacker, StatTypes.Lck) * 1.25f;
+            float critChance = GetStatValue(attacker, StatType.Lck) * 1.25f;
             critChance = Math.Clamp(critChance, 0, 100); //Clamp so the percentage doesn't go below zero or past 100
 
             int roll = _random.Next(0,100);
@@ -71,7 +71,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
         // Private Helper Functions
 
         private static bool IsDefenderBroken(Character defender) => defender.DisabilityComponent.HasDisability(DisabilityTypes.Broken);
-        private static int GetStatValue(Character character, StatTypes stat) => character.StatsComponent.GetStat(stat);
+        private static int GetStatValue(Character character, StatType stat) => character.StatsComponent.GetStat(stat);
     }
 
     

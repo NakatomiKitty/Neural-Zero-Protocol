@@ -23,14 +23,14 @@ namespace NeuralZeroProtocol.Scripts.Characters
 		private HashSet<DisabilityTypes> _currentDisabilities = new HashSet<DisabilityTypes>();
 
         // Links StatTypes to DisabilityTypes
-        private DisabilityTypes ToDisability(StatTypes statTypes) => statTypes switch
+        private DisabilityTypes ToDisability(StatType statTypes) => statTypes switch
         {
-            StatTypes.Atk => DisabilityTypes.Fragile,
-            StatTypes.Def => DisabilityTypes.Broken,
-            StatTypes.Dex => DisabilityTypes.Stiff,
-            StatTypes.Int => DisabilityTypes.Mindless,
-            StatTypes.Lck => DisabilityTypes.Cursed,
-            StatTypes.Nrg => DisabilityTypes.Exhausted,
+            StatType.Atk => DisabilityTypes.Fragile,
+            StatType.Def => DisabilityTypes.Broken,
+            StatType.Dex => DisabilityTypes.Stiff,
+            StatType.Int => DisabilityTypes.Mindless,
+            StatType.Lck => DisabilityTypes.Cursed,
+            StatType.Nrg => DisabilityTypes.Exhausted,
             _ => 0,
         };
 
@@ -39,14 +39,14 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 		public void OnStatZeroed(int statInt)
 		{
-			var disability = ToDisability((StatTypes)statInt);
+			var disability = ToDisability((StatType)statInt);
 			GD.Print($"{disability} ACTIVATED!");
 			_currentDisabilities.Add(disability);
 		}
 
 		public void OnStatRecovered(int statInt)
 		{
-			var disability = ToDisability((StatTypes)statInt);
+			var disability = ToDisability((StatType)statInt);
 			GD.Print($"{disability} Deactivated!");
 			_currentDisabilities.Remove(disability);
 		}

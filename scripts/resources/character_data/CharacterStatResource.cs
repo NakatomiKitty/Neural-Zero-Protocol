@@ -1,9 +1,10 @@
 using Godot;
+using NeuralZeroProtocol.Scripts.Combat;
 using System;
 using System.Collections.Generic;
 namespace NeuralZeroProtocol.Scripts.Resources.CharacterData
 {   
-    public enum StatTypes
+    public enum StatType
     {
         Hp,
         Atk,
@@ -12,16 +13,6 @@ namespace NeuralZeroProtocol.Scripts.Resources.CharacterData
         Int,
         Lck,
         Nrg,
-    }
-
-    public enum Rarity
-    {
-        Scrap,
-        Common,
-        Uncommon,
-        Rare,
-        SuperRare,
-        UltraRare,
     }
     
     [GlobalClass]
@@ -37,6 +28,8 @@ namespace NeuralZeroProtocol.Scripts.Resources.CharacterData
             { Rarity.UltraRare, 1.50f },
         };
 
+        [Export] public ElementType CharacterElement01 = ElementType.None;
+        [Export] public ElementType CharacterElement02 = ElementType.None;
         [Export] public Rarity SelectedRarity = Rarity.Scrap;
 
         [Export] public int MaxHealth = 500;
@@ -62,23 +55,23 @@ namespace NeuralZeroProtocol.Scripts.Resources.CharacterData
 
         public bool IsHighTierRarity() => SelectedRarity >= Rarity.Rare;
 
-        public int GetBaseValues(StatTypes stat)
+        public int GetBaseValues(StatType stat)
         {
             switch (stat)
             {
-                case StatTypes.Hp:
+                case StatType.Hp:
                     return MaxHealth;
-                case StatTypes.Atk:
+                case StatType.Atk:
                     return AtkBase;
-                case StatTypes.Def:
+                case StatType.Def:
                     return DefBase;
-                case StatTypes.Dex:
+                case StatType.Dex:
                     return DexBase;
-                case StatTypes.Int:
+                case StatType.Int:
                     return IntBase;
-                case StatTypes.Lck:
+                case StatType.Lck:
                     return LckBase;
-                case StatTypes.Nrg:
+                case StatType.Nrg:
                     return NrgBase;
                 default:
                     return 0;

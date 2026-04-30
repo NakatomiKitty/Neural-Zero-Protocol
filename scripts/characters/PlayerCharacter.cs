@@ -16,6 +16,12 @@ namespace NeuralZeroProtocol.Scripts.Characters
 				WireNodes();
 			}
         }
+
+        public override void _Ready()
+        {
+            AddToGroup("playercharacters");
+        }
+
     }
 }
 

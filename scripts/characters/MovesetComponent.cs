@@ -24,11 +24,11 @@ namespace NeuralZeroProtocol.Scripts.Characters
         
         public Array<MoveResource> GetMoves() => Moves;
 
-        public bool CheckNrg(MoveResource move) => _character.StatsComponent.GetStat(StatTypes.Nrg) >= move.Cost;
+        public bool CheckNrg(MoveResource move) => _character.StatsComponent.GetStat(StatType.Nrg) >= move.Cost;
         
         public void SpendNrg(MoveResource move)
         {
-            if (CheckNrg(move)) _character.StatsComponent.ModifyStat(StatTypes.Nrg, -move.Cost);
+            if (CheckNrg(move)) _character.StatsComponent.ModifyStat(StatType.Nrg, -move.Cost);
         }
 
 

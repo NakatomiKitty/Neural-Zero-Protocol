@@ -50,7 +50,7 @@ namespace NeuralZeroProtocol.Scripts.Characters
 			TurnOrder.Clear();
 			
 			// Sort by DEX (High to Low). -
-			TurnOrder = AllUnits.OrderByDescending(unit => unit.StatsComponent.GetStat(StatTypes.Dex)).ToList();
+			TurnOrder = AllUnits.OrderByDescending(unit => unit.StatsComponent.GetStat(StatType.Dex)).ToList();
 			
 			CurrentUnitIndex = 0;
 			GD.Print($"Turn Order Generated. Next up: {TurnOrder[0].Name}");
