@@ -41,6 +41,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
         private void OnMouseEntered()
         {
+            GD.Print($"Card {Name}: mouse entered");
             EmitSignal(SignalName.Hovered, this);
         }
 

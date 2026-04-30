@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://8ic6l8vm65v7"]
 
 [ext_resource type="Script" uid="uid://ckl3r5sn55yqu" path="res://scripts/cards/CardSystem.cs" id="1_vn21b"]
+[ext_resource type="Script" uid="uid://cdu00buuwu2iw" path="res://scripts/cards/CardHand.cs" id="2_vn21b"]
+[ext_resource type="Script" uid="uid://dnn8ivmiktpyd" path="res://scripts/cards/CardHoverController.cs" id="3_gagc2"]
+[ext_resource type="Script" uid="uid://t3ph6jyvpvyx" path="res://scripts/cards/CardSelectionController.cs" id="4_rf4ta"]
 
 [sub_resource type="Curve2D" id="Curve2D_gagc2"]
 _data = {
@@ -19,3 +22,12 @@ curve = SubResource("Curve2D_gagc2")
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=330325061]
 position = Vector2(368, 501.5)
 rotation = -0.60415053
+
+[node name="CardHand" type="Node2D" parent="." unique_id=237884205]
+script = ExtResource("2_vn21b")
+
+[node name="CardHoverController" type="Node" parent="." unique_id=1508093805]
+script = ExtResource("3_gagc2")
+
+[node name="CardSelectionController" type="Node2D" parent="." unique_id=1813170449]
+script = ExtResource("4_rf4ta")
