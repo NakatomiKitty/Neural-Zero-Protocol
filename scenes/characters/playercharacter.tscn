@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://8ynpcmop3vxi" path="res://scenes/health_component.tscn" id="3_rkwct"]
 [ext_resource type="PackedScene" uid="uid://dtukkkjtf20no" path="res://scenes/action_validator_component.tscn" id="4_n2haq"]
 [ext_resource type="PackedScene" uid="uid://cews5tnkglhib" path="res://scenes/stats_component.tscn" id="5_1qab0"]
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="7_gsbux"]
 [ext_resource type="PackedScene" uid="uid://dh62avdeo3i7g" path="res://scenes/moveset_component.tscn" id="7_n2haq"]
 [ext_resource type="Resource" uid="uid://c4nyop0dt0tvy" path="res://resources/moves/Kick.tres" id="9_1qab0"]
 
@@ -21,6 +22,6 @@ _characterStatsResources = ExtResource("2_rkwct")
 [node name="ActionValidatorComponent" parent="." unique_id=1305398855 instance=ExtResource("4_n2haq")]
 
 [node name="MovesetComponent" parent="." unique_id=535320526 instance=ExtResource("7_n2haq")]
-Moves = Array[Object]([ExtResource("2_n2haq"), ExtResource("9_1qab0")])
+Moves = Array[ExtResource("7_gsbux")]([ExtResource("2_n2haq"), ExtResource("9_1qab0")])
 
 [node name="StatsComponent" parent="." unique_id=1494422534 instance=ExtResource("5_1qab0")]
