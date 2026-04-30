@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters;
 using Godot;
 using GodotUtilities;
+using NeuralZeroProtocol.Scripts.Resources.MoveData;
 
 namespace NeuralZeroProtocol.Scripts.Cards
 {
@@ -33,7 +34,11 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
             // always create 5 cards to the hand. 
             // TODO: ADD A SYSTEM IN THE FUTURE WHERE YOU CAN INCREASE YOUR HAND SIZE
-            CardHand.CreateHandFromPath(5, _card);
+        }
+
+        public void UpdateCardSkin(MoveResource move)
+        {
+            CardHand.CreateHandFromPath(5, _card, move);
         }
 
         private void OnCardAdded(Card card) => ConnectCard(card);

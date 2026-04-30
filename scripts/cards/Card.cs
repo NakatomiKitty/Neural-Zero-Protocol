@@ -1,5 +1,6 @@
 using Godot;
 using GodotUtilities;
+using NeuralZeroProtocol.Scripts.Resources.MoveData;
 using System;
 
 namespace NeuralZeroProtocol.Scripts.Cards
@@ -16,6 +17,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
         [Signal] public delegate void NotHoveredEventHandler(Card card);
         [Signal] public delegate void ClickedEventHandler(Card card);
         [Node] private Area2D _area2D;
+        [Node] private Sprite2D _cardImage;
 
         public override void _Notification(int what)
         {
@@ -29,7 +31,6 @@ namespace NeuralZeroProtocol.Scripts.Cards
             _area2D.InputEvent += OnMouseClicked;
             UpdatePriority();
         }
-
         /// <summary>
         /// Keep the Area2D's input priority in sync with the visual ZIndex.
         /// Higher ZIndex means higher priority which means it receives clicks first.
@@ -38,6 +39,12 @@ namespace NeuralZeroProtocol.Scripts.Cards
         {
             _area2D.Priority = ZIndex;
         }
+
+        public void ChangeCardSkin(MoveResource move)
+        {
+            _cardImage.Frame = (int)move.MoveElement * 2 + (int)move.ActionType;
+        }
+
 
         private void OnMouseClicked(Node viewport, InputEvent @event, long shapeIdx)
         {

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://yp6mlqwlekiq"]
 
 [ext_resource type="Script" uid="uid://bjaex8f4c15k1" path="res://scripts/cards/Card.cs" id="1_6u4wf"]
-[ext_resource type="Texture2D" uid="uid://bk0542tmlwdvn" path="res://assets/sprites/null_star_spellaction.png" id="1_d81rb"]
+[ext_resource type="Texture2D" uid="uid://c726jxq13abb5" path="res://assets/sprites/card_spritesheet.png" id="2_6u4wf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d81rb"]
 size = Vector2(136, 189)
@@ -10,9 +10,11 @@ size = Vector2(136, 189)
 script = ExtResource("1_6u4wf")
 
 [node name="CardImage" type="Sprite2D" parent="." unique_id=1854701218]
-position = Vector2(1.9073486e-06, -7.6293945e-06)
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("1_d81rb")
+position = Vector2(4.2915344e-06, -0.5000081)
+scale = Vector2(0.40117994, 0.40042374)
+texture = ExtResource("2_6u4wf")
+hframes = 18
+region_rect = Rect2(0, 0, 339, 472)
 
 [node name="Area2D" type="Area2D" parent="." unique_id=833704693]
 

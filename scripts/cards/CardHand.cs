@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using NeuralZeroProtocol.Scripts.Resources.MoveData;
 
 
 namespace NeuralZeroProtocol.Scripts.Cards
@@ -17,8 +18,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
             _path2d = GetNode<Path2D>("../Path2D");
             _cardSystem = GetNode<CardSystem>("..");
         }
-
-        public void CreateHandFromPath(int cardCount, PackedScene cardScene)
+        public void CreateHandFromPath(int cardCount, PackedScene cardScene, MoveResource move)
 		{
 			Curve2D curve = _path2d.Curve;
 			float totalLength = curve.GetBakedLength();
@@ -39,6 +39,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
 				Vector2 position = curve.SampleBaked(offset);
 
 				Card card = cardScene.Instantiate<Card>();
+                card.ChangeCardSkin(move);
 				AddChild(card);
 
 				card.Position = position;

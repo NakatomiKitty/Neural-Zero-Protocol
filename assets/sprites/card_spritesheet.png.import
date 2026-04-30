@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bk0542tmlwdvn"
-path="res://.godot/imported/null_star_spellaction.png-b9c5172916fd668a88f50f922480a1f0.ctex"
+uid="uid://c726jxq13abb5"
+path="res://.godot/imported/card_spritesheet.png-a81e85b37a51393d1cc04fbb55f15e57.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/null_star_spellaction.png"
-dest_files=["res://.godot/imported/null_star_spellaction.png-b9c5172916fd668a88f50f922480a1f0.ctex"]
+source_file="res://assets/sprites/card_spritesheet.png"
+dest_files=["res://.godot/imported/card_spritesheet.png-a81e85b37a51393d1cc04fbb55f15e57.ctex"]
 
 [params]
 

@@ -35,7 +35,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
         public static bool EvasionCheck(Character attacker, Character defender) => 
             GetStatValue(defender, StatType.Dex) + 
             (GetStatValue(defender, StatType.Lck) * 1.25f) < 
-            GetStatValue(attacker, StatTyp e.Atk);
+            GetStatValue(attacker, StatType.Atk);
 
         
         public static int CalculateDamage(Character attacker, Character defender, MoveResource move)
