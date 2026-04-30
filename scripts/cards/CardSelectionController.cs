@@ -4,7 +4,10 @@ using System.Collections.Generic;
 
 namespace NeuralZeroProtocol.Scripts.Cards
 {
-
+	/// <summary>
+    /// Handles card selection/deselection logic, including visual feedback (scale, ZIndex, priority).
+    /// When selection changes, emits a signal to notify other controllers.
+    /// </summary>
 	public partial class CardSelectionController : Node2D
 	{	
 		[Signal] public delegate void SelectionChangedEventHandler(Card oldCard, Card newCard);
@@ -14,9 +17,14 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
 		public override void _Ready() => _cardSystem = GetNode<CardSystem>("..");
 		
+		/// <summary>
+		/// This is a hefty one, Called when any card is clicked
+		/// Then performs a task (a raycast) to find the topmost card (highestCard) and only
+		/// proceeds if the clicked card is indeed the highest (prevents jank shit when cards overlap)
+		/// Works alongside Card.UpdatePriority.
+		/// </summary>
 		public void OnCardClicked(Card card)
         {
-            // Verify this card is the topmost under mouse
             var mousePos = GetGlobalMousePosition();
 
             var space = GetWorld2D().DirectSpaceState;
@@ -36,6 +44,8 @@ namespace NeuralZeroProtocol.Scripts.Cards
             foreach (var result in results)
             {
                 var area = result["collider"].As<Area2D>();
+
+				// Gets the parent of the Area2D, which is the card itself
                 var newCard = area?.GetParent<Card>();
 
                 if (newCard != null && newCard.ZIndex > highestZ)
@@ -44,79 +54,76 @@ namespace NeuralZeroProtocol.Scripts.Cards
                     highestZ = newCard.ZIndex;
                 }
             }
+
+			// Only the topmost card under the mouse can be selected/deselected
             if (highestCard != card) return;
 
             // Proceed with select/deselect
-            if (card == _selectedCard) DeselectCard();
-
-            else SelectCard(card);
+            if (card == _selectedCard) 
+				DeselectCard();
+            else 
+				SelectCard(card);
         }
 
-
+		/// <summary>
+        /// Makes the given card the currently selected card.
+        /// Deselects any previously selected card, then make those scale back down,
+        /// then applies selection visual effects to the new card.
+        /// Finally, emits a signal to update other controllers.
+        /// </summary>
         private void SelectCard(Card card)
         {
             if (_selectedCard == card) return;
 
-			Card oldCard = _selectedCard;
+			Card oldCard = _selectedCard; // May be null
 
-            // Deselect previous card with tween
+            // Deselect previous card if there is any
             if (_selectedCard != null)
             {
-
-                // Kill any hover or selection tween on old card
-                _cardSystem.CardHoverController.KillAndRemoveTween(oldCard);
-                
                 // Tween scale back to 1.0
                 Tween tween = CreateTween();
                 tween.TweenProperty(oldCard, "scale", Vector2.One, 0.05f);
 
-                _cardSystem.CardHoverController.AddTween(oldCard, tween);
-                
-                // Restore ZIndex
+                // Restore original ZIndex from the dictionary and priority
                 oldCard.ZIndex = _cardSystem.OriginalZIndexes[oldCard];
 
                 oldCard.UpdatePriority();
             }
 
+			// Selects the new card
             _selectedCard = card;
 
 			EmitSignal(SignalName.SelectionChanged, oldCard, card);
 
-            _cardSystem.CardHoverController.OnCardSelected(_selectedCard);
-
-            // Tween scale to 1.1
+            // Apply selection visuals
             Tween selectTween = CreateTween();
             selectTween.TweenProperty(card, "scale", new Vector2(1.1f, 1.1f), 0.05f);
 
-            _cardSystem.CardHoverController.AddTween(card, selectTween);
-
-            // Set ZIndex and priority
             card.ZIndex = 10;
             card.UpdatePriority();
         }
 
+		/// <summary>
+        /// Deselects the currently selected card, restoring its appearance.
+        /// Emits a signal with oldCard = the deselected card and newCard(_selectedCard) = null.
+        /// </summary>
         private void DeselectCard()
         {
             if (_selectedCard == null) return;
-
             Card oldSelected = _selectedCard;
-
-            // Kill any tween on old selected
-            _cardSystem.CardHoverController.KillAndRemoveTween(oldSelected);
 
             // Tween scale back to 1.0
             Tween tween = CreateTween();
-            tween.TweenProperty(oldSelected, "scale", Vector2.One, 0.05f);
+            tween.TweenProperty(oldSelected, "scale", Vector2.One, CardSystem.TWEEN_DURATION);
 
-            _cardSystem.CardHoverController.AddTween(oldSelected, tween);
-
-            // Restore ZIndex
+            // Restore original ZIndex from the dictionary and priority
             oldSelected.ZIndex = _cardSystem.OriginalZIndexes[oldSelected];
             oldSelected.UpdatePriority();
 
             _selectedCard = null;
 
 			EmitSignal(SignalName.SelectionChanged, oldSelected, _selectedCard);
+
         }
 	}
 }

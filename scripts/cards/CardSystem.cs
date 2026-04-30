@@ -5,9 +5,15 @@ using GodotUtilities;
 
 namespace NeuralZeroProtocol.Scripts.Cards
 {
+    /// <summary>
+    /// Main hub for everything card related
+    /// </summary>
+    
     [Scene]
     public partial class CardSystem : Node2D
     {
+        public const float TWEEN_DURATION = 0.05f;
+        
         private static readonly PackedScene _card = GD.Load<PackedScene>("res://scenes/card.tscn");
         [Node] public CardHand CardHand;
         [Node] public CardHoverController CardHoverController;
@@ -24,6 +30,9 @@ namespace NeuralZeroProtocol.Scripts.Cards
         {
             CardSelectionController.SelectionChanged += OnSelectionChanged;
             CardHand.CardAdded += OnCardAdded;
+
+            // always create 5 cards to the hand. 
+            // TODO: ADD A SYSTEM IN THE FUTURE WHERE YOU CAN INCREASE YOUR HAND SIZE
             CardHand.CreateHandFromPath(5, _card);
         }
 

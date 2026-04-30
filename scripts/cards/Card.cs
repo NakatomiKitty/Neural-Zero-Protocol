@@ -4,6 +4,10 @@ using System;
 
 namespace NeuralZeroProtocol.Scripts.Cards
 {
+    /// <summary>
+    /// Represents a single card in the hand. Handles mouse input and emits signals
+    /// for hovering, unhovering, and click.
+    /// </summary>
     [GlobalClass]
     [Scene]
     public partial class Card : Node2D
@@ -26,6 +30,10 @@ namespace NeuralZeroProtocol.Scripts.Cards
             UpdatePriority();
         }
 
+        /// <summary>
+        /// Keep the Area2D's input priority in sync with the visual ZIndex.
+        /// Higher ZIndex means higher priority which means it receives clicks first.
+        /// </summary>
         public void UpdatePriority()
         {
             _area2D.Priority = ZIndex;
@@ -35,13 +43,13 @@ namespace NeuralZeroProtocol.Scripts.Cards
         {
             if (@event is InputEventMouseButton mouseButton && mouseButton.ButtonIndex == MouseButton.Left && mouseButton.IsPressed())
             {
+                // Passes itself to the signal
                 EmitSignal(SignalName.Clicked, this);
             }
         }
 
         private void OnMouseEntered()
         {
-            GD.Print($"Card {Name}: mouse entered");
             EmitSignal(SignalName.Hovered, this);
         }
 
