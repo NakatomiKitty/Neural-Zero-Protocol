@@ -1,130 +1,204 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 namespace NeuralZeroProtocol.Scripts.Cards
 {
-	/// <summary>
+    /// <summary>
     /// Handles card selection/deselection logic, including visual feedback (scale, ZIndex, priority).
     /// When selection changes, emits a signal to notify other controllers.
     /// </summary>
-	public partial class CardSelectionController : Node2D
-	{	
-		[Signal] public delegate void SelectionChangedEventHandler(Card oldCard, Card newCard);
+    public partial class CardSelectionController : Node2D
+    {
+        [Signal] public delegate void SelectionChangedEventHandler(Card oldCard, Card newCard);
+        
+        private readonly Dictionary<Card, Tween> _activePositionTweens = new();
+        private bool _isSwapping;
+        private Tween _swapTweenClicked, _swapTweenCenter;
+        
+        private CardSystem _cardSystem;
+        private Card _centerCard;
+        private Card _selectedCard;
 
-		private CardSystem _cardSystem;
-		private Card _selectedCard;
+        public override void _Ready() => _cardSystem = GetNode<CardSystem>("..");
 
-		public override void _Ready() => _cardSystem = GetNode<CardSystem>("..");
-		
-		/// <summary>
-		/// This is a hefty one, Called when any card is clicked
-		/// Then performs a task (a raycast) to find the topmost card (highestCard) and only
-		/// proceeds if the clicked card is indeed the highest (prevents jank shit when cards overlap)
-		/// Works alongside Card.UpdatePriority.
-		/// </summary>
-		public void OnCardClicked(Card card)
+        public void SetCenterCard(Card centerCard)
+        {
+            _centerCard = centerCard;
+            if (_selectedCard == null) SelectCard(centerCard);
+        }
+        
+        /// <summary>
+		/// This is a hefty one, Called when any card is clicked, Then:
+        /// 1. Finds the topmost card under the mouse (prevents clicks when cards overlap).
+        /// 2. If clicked card is not the center, attempt to swap it with the center.
+        /// 3. Otherwise, toggle selection (only if it's already not selected).
+        /// </summary>
+        public void OnCardClicked(Card clickedCard)
+        {
+            if (!IsTopmostCard(clickedCard)) return;
+            
+            // Swap with center card
+            if (clickedCard != _centerCard)
+            {
+                if (_isSwapping) return; // Already swapping, ignore additional clicks
+                SwapWithCenter(clickedCard);
+                return;
+            }
+            
+            // Clicked the center card – select/deselect it
+            if (clickedCard != _selectedCard) SelectCard(clickedCard);
+        }
+        
+        // Makes the given card the selected one. Deselects any previous selection.
+        public void SelectCard(Card card)
+        {
+            if (_selectedCard == card) return;
+            
+            // Deselect previous card if there is one
+            if (_selectedCard != null) ApplyVisualState(_selectedCard, false);
+            
+            var oldCard = _selectedCard;
+            _selectedCard = card;
+
+            EmitSignal(SignalName.SelectionChanged, oldCard, card);
+            
+            // Apply visual effects for the new selected card
+            ApplyVisualState(card, true);
+        }
+        
+        // Deselects the currently selected card and emits a signal with newCard = null.
+        private void DeselectCard()
+        {
+            if (_selectedCard == null) return;
+
+            var oldSelected = _selectedCard;
+
+            ApplyVisualState(oldSelected, false);
+
+            _selectedCard = null;
+
+            EmitSignal(SignalName.SelectionChanged, oldSelected, _selectedCard);
+        }
+        
+        /// <summary>
+        /// Applies the visual effects(scale, position offset, ZIndex) for either selected OR deselected.
+        /// Uses a single tween with parallel animations to avoid conflicts.
+        /// </summary>
+        /// <param name="card"> The card to modify.</param>
+        /// <param name="selected"> If true, scale card up, lift it up slightly, and raise it's ZIndex,
+        /// if false, restore original.</param>
+        private void ApplyVisualState(Card card, bool selected)
+        {
+            KillPositionTween(card);
+
+            var tween = CreateTween();
+            var basePosition = _cardSystem.CardBasePositions[card];
+            var targetScale = selected ? Vector2.One * 1.15f : Vector2.One;
+            var targetPosition = selected ? basePosition + Vector2.Down * -10 : basePosition; // up = -Y
+            var duration = CardSystem.TWEEN_DURATION;
+            
+            tween.Parallel().TweenProperty(card, "scale", targetScale, duration);
+            tween.Parallel().TweenProperty(card, "position", targetPosition, duration);
+
+            _activePositionTweens[card] = tween;
+            
+            card.ZIndex = selected ? 10 : _cardSystem.OriginalZIndexes[card];
+            
+            card.UpdatePriority();
+        }
+        
+        // Performs a physics point query to find the card with the highest ZIndex under the mouse.
+        // Returns true if the given clickedCard is indeed the topmost one.
+        private bool IsTopmostCard(Card clickedCard)
         {
             var mousePos = GetGlobalMousePosition();
-
             var space = GetWorld2D().DirectSpaceState;
-
             var query = new PhysicsPointQueryParameters2D
             {
                 Position = mousePos,
                 CollideWithAreas = true,
                 CollisionMask = 1
             };
-
+            
             var results = space.IntersectPoint(query);
-
             Card highestCard = null;
-            int highestZ = int.MinValue;
-
+            var highestZ = int.MinValue;
+            
             foreach (var result in results)
             {
-                var area = result["collider"].As<Area2D>();
-
-				// Gets the parent of the Area2D, which is the card itself
-                var newCard = area?.GetParent<Card>();
-
-                if (newCard != null && newCard.ZIndex > highestZ)
+                if (result["collider"].As<Area2D>()?.GetParent<Card>() is Card card && card.ZIndex > highestZ)
                 {
-                    highestCard = newCard;
-                    highestZ = newCard.ZIndex;
+                    highestCard = card;
+                    highestZ = card.ZIndex;
                 }
             }
-
-			// Only the topmost card under the mouse can be selected/deselected
-            if (highestCard != card) return;
-
-            // Proceed with select/deselect
-            if (card == _selectedCard) 
-				DeselectCard();
-            else 
-				SelectCard(card);
+            return highestCard == clickedCard;
         }
-
-		/// <summary>
-        /// Makes the given card the currently selected card.
-        /// Deselects any previously selected card, then make those scale back down,
-        /// then applies selection visual effects to the new card.
-        /// Finally, emits a signal to update other controllers.
+        
+        /// <summary>
+        /// The main appeal! Swaps the clicked card with the current center card.
+        /// Then tweens the positions and rotations, then swaps their base positions and ZIndex in the CardSystem.
+        /// Then, finally selects the new center card.
         /// </summary>
-        private void SelectCard(Card card)
+        private void SwapWithCenter(Card clickedCard)
         {
-            if (_selectedCard == card) return;
-
-			Card oldCard = _selectedCard; // May be null
-
-            // Deselect previous card if there is any
-            if (_selectedCard != null)
+            _swapTweenClicked?.Kill();
+            _swapTweenCenter?.Kill();
+            
+            var oldCenter = _centerCard;
+            var clickedBase = _cardSystem.CardBasePositions[clickedCard];
+            var centerBase = _cardSystem.CardBasePositions[oldCenter];
+            
+            KillPositionTween(clickedCard);
+            KillPositionTween(oldCenter);
+            
+            _isSwapping = true;
+            
+            // Tween shit
+            _swapTweenClicked = CreateTween();
+            _swapTweenCenter = CreateTween();
+            
+            _swapTweenClicked.TweenProperty(clickedCard, "position", centerBase, 0.1f);
+            _swapTweenClicked.Parallel().TweenProperty(clickedCard, "rotation", oldCenter.Rotation, 0.1f);
+            
+            _swapTweenCenter.TweenProperty(oldCenter, "position", clickedBase, 0.1f);
+            _swapTweenCenter.Parallel().TweenProperty(oldCenter, "rotation", clickedCard.Rotation, 0.1f);
+            
+            _swapTweenClicked.Finished += () =>
             {
-                // Tween scale back to 1.0
-                Tween tween = CreateTween();
-                tween.TweenProperty(oldCard, "scale", Vector2.One, 0.05f);
+                if (!_isSwapping) return;
+                
+                // Swap base positions
+                (_cardSystem.CardBasePositions[clickedCard], _cardSystem.CardBasePositions[oldCenter]) = (centerBase, clickedBase);
+                
+                // Swap Z indexes
+                (_cardSystem.OriginalZIndexes[clickedCard], _cardSystem.OriginalZIndexes[oldCenter]) = 
+                    (_cardSystem.OriginalZIndexes[oldCenter], _cardSystem.OriginalZIndexes[clickedCard]);
+                
+                // First, deselect the current centerCard
+                DeselectCard();
+                // Then select the new centerCard
+                SelectCard(clickedCard);
+                
+                // Don't forget to update the _centerCard value to the new _centerCard!
+                _centerCard = clickedCard;
 
-                // Restore original ZIndex from the dictionary and priority
-                oldCard.ZIndex = _cardSystem.OriginalZIndexes[oldCard];
-
-                oldCard.UpdatePriority();
-            }
-
-			// Selects the new card
-            _selectedCard = card;
-
-			EmitSignal(SignalName.SelectionChanged, oldCard, card);
-
-            // Apply selection visuals
-            Tween selectTween = CreateTween();
-            selectTween.TweenProperty(card, "scale", new Vector2(1.1f, 1.1f), 0.05f);
-
-            card.ZIndex = 10;
-            card.UpdatePriority();
+                clickedCard.UpdatePriority();
+                oldCenter.UpdatePriority();
+                
+                _isSwapping = false;
+                _swapTweenClicked = _swapTweenCenter = null;
+            };
         }
-
-		/// <summary>
-        /// Deselects the currently selected card, restoring its appearance.
-        /// Emits a signal with oldCard = the deselected card and newCard(_selectedCard) = null.
-        /// </summary>
-        private void DeselectCard()
+        
+        // Safely kills an active position tween for a card and removes it from the dictionary.
+        // Just a helper function
+        private void KillPositionTween(Card card)
         {
-            if (_selectedCard == null) return;
-            Card oldSelected = _selectedCard;
-
-            // Tween scale back to 1.0
-            Tween tween = CreateTween();
-            tween.TweenProperty(oldSelected, "scale", Vector2.One, CardSystem.TWEEN_DURATION);
-
-            // Restore original ZIndex from the dictionary and priority
-            oldSelected.ZIndex = _cardSystem.OriginalZIndexes[oldSelected];
-            oldSelected.UpdatePriority();
-
-            _selectedCard = null;
-
-			EmitSignal(SignalName.SelectionChanged, oldSelected, _selectedCard);
-
+            if (_activePositionTweens.TryGetValue(card, out var tween) && tween.IsRunning())
+                tween.Kill();
+            _activePositionTweens.Remove(card);
         }
-	}
+    }
 }
 

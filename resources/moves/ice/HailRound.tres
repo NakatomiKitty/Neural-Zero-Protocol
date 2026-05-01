@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://dk716tbjt5v0d"]
+
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="1_oatbn"]
+
+[resource]
+script = ExtResource("1_oatbn")
+MoveElement = 4
+Name = "HailRound"
+Power = 20
+Cost = 1
+metadata/_custom_type_script = "uid://b0axq5jxdi4cy"

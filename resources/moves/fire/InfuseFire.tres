@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://do0fab5lprmy0"]
+
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="1_f23xv"]
+
+[resource]
+script = ExtResource("1_f23xv")
+MoveElement = 0
+ActionType = 1
+Name = "Infuse Fire"
+Cost = 1
+metadata/_custom_type_script = "uid://b0axq5jxdi4cy"

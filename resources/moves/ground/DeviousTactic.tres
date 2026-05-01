@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://c8eg7hy5me6pi"]
+
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="1_wnrxg"]
+
+[resource]
+script = ExtResource("1_wnrxg")
+MoveElement = 2
+Name = "Devious Tactic"
+Power = 10
+Cost = 1
+metadata/_custom_type_script = "uid://b0axq5jxdi4cy"

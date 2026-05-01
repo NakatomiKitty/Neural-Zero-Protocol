@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://eob2rikglte3"]
 
 [ext_resource type="Script" uid="uid://bmlt0oqug2cy0" path="res://scripts/characters/PlayerCharacter.cs" id="1_gipb7"]
-[ext_resource type="Resource" uid="uid://ds553nwj8ycyk" path="res://resources/moves/Punch.tres" id="2_n2haq"]
+[ext_resource type="Resource" uid="uid://ds553nwj8ycyk" path="res://resources/moves/null/Focus.tres" id="2_n2haq"]
 [ext_resource type="Resource" uid="uid://b5qdo4spmy8m1" path="res://scripts/resources/character_data/TestPlayer.tres" id="2_rkwct"]
 [ext_resource type="PackedScene" uid="uid://kq5mlbqthrd4" path="res://scenes/disability_component.tscn" id="2_t75uv"]
 [ext_resource type="PackedScene" uid="uid://8ynpcmop3vxi" path="res://scenes/health_component.tscn" id="3_rkwct"]
@@ -9,7 +9,20 @@
 [ext_resource type="PackedScene" uid="uid://cews5tnkglhib" path="res://scenes/stats_component.tscn" id="5_1qab0"]
 [ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="7_gsbux"]
 [ext_resource type="PackedScene" uid="uid://dh62avdeo3i7g" path="res://scenes/moveset_component.tscn" id="7_n2haq"]
-[ext_resource type="Resource" uid="uid://c4nyop0dt0tvy" path="res://resources/moves/Kick.tres" id="9_1qab0"]
+[ext_resource type="Resource" uid="uid://s1ekcgqlcd6p" path="res://resources/moves/null/Charge.tres" id="8_e5ugt"]
+[ext_resource type="Resource" uid="uid://bc37gtycx6yew" path="res://resources/moves/ground/RockClub.tres" id="10_hkqsh"]
+[ext_resource type="Resource" uid="uid://dvltbd1nssics" path="res://resources/moves/null/Shoot.tres" id="11_5ser0"]
+[ext_resource type="Resource" uid="uid://qqh2wam73o64" path="res://resources/moves/ice/Freeze.tres" id="11_sw865"]
+[ext_resource type="Resource" uid="uid://bdjtkk7rty20t" path="res://resources/moves/ground/RockSlug.tres" id="12_8jjtb"]
+[ext_resource type="Resource" uid="uid://m7qxo670ibwr" path="res://resources/moves/wind/AirShot.tres" id="12_esux5"]
+[ext_resource type="Resource" uid="uid://0vof8m0xn786" path="res://resources/moves/wind/CallTheWind.tres" id="13_hkqsh"]
+[ext_resource type="Resource" uid="uid://c8eg7hy5me6pi" path="res://resources/moves/ground/DeviousTactic.tres" id="13_t8y6x"]
+[ext_resource type="Resource" uid="uid://wed3rpxuhpey" path="res://resources/moves/wind/GaleSlash.tres" id="14_sw865"]
+[ext_resource type="Resource" uid="uid://cqu4d1uilxmxw" path="res://resources/moves/fire/Inferno.tres" id="15_8jjtb"]
+[ext_resource type="Resource" uid="uid://do0fab5lprmy0" path="res://resources/moves/fire/InfuseFire.tres" id="16_t8y6x"]
+[ext_resource type="Resource" uid="uid://crnfrkvfrfh8j" path="res://resources/moves/fire/Fireball.tres" id="17_cqymp"]
+[ext_resource type="Resource" uid="uid://cn8sjtlx57c7w" path="res://resources/moves/fire/WarmGlow.tres" id="18_fr3ev"]
+[ext_resource type="Resource" uid="uid://dgdhn21xiwemd" path="res://resources/moves/fire/LaceCinder.tres" id="19_77uuu"]
 
 [node name="PlayerCharacter" type="Node2D" unique_id=674946849]
 script = ExtResource("1_gipb7")
@@ -22,6 +35,6 @@ _characterStatsResources = ExtResource("2_rkwct")
 [node name="ActionValidatorComponent" parent="." unique_id=1305398855 instance=ExtResource("4_n2haq")]
 
 [node name="MovesetComponent" parent="." unique_id=535320526 instance=ExtResource("7_n2haq")]
-Moves = Array[ExtResource("7_gsbux")]([ExtResource("2_n2haq"), ExtResource("9_1qab0")])
+Moves = Array[ExtResource("7_gsbux")]([ExtResource("8_e5ugt"), ExtResource("8_e5ugt"), ExtResource("2_n2haq"), ExtResource("10_hkqsh"), ExtResource("11_sw865"), ExtResource("12_8jjtb"), ExtResource("13_t8y6x"), ExtResource("11_5ser0"), ExtResource("13_t8y6x"), ExtResource("11_5ser0"), ExtResource("12_esux5"), ExtResource("12_esux5"), ExtResource("13_hkqsh"), ExtResource("14_sw865"), ExtResource("14_sw865"), ExtResource("15_8jjtb"), ExtResource("16_t8y6x"), ExtResource("17_cqymp"), ExtResource("18_fr3ev"), ExtResource("19_77uuu")])
 
 [node name="StatsComponent" parent="." unique_id=1494422534 instance=ExtResource("5_1qab0")]

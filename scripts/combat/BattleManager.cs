@@ -14,26 +14,29 @@ namespace NeuralZeroProtocol.Scripts.Combat
 
         private Array<Node> _playerCharacters = new Array<Node>();
         private Array<MoveResource> _moves = new Array<MoveResource>();
-        private MoveResource _move;
+        private Array<MoveResource> _selectedMoves;
 
         public override void _Ready() 
         {
             _playerCharacters = GetTree().GetNodesInGroup("playercharacters");
 
-            GetMovesFromPlayer();
+            GetSelectedMovesFromPlayer();
         }
 
-        private void GetMovesFromPlayer()
+        // Gets the moves from the moveset component, then get 5 random moves and returns it as an array
+        public Array<MoveResource> GetSelectedMovesFromPlayer()
         {
             foreach (PlayerCharacter playerCharacter in _playerCharacters)
             {
-                _moves = playerCharacter.MovesetComponent.GetMoves();
+                _moves = playerCharacter.MovesetComponent.GetMoves().Duplicate();
             }
 
-            _move = _moves[0];
-        }
+            _moves.Shuffle();
 
-        public MoveResource GetMove() => _move;
+            int cardsToTake = Mathf.Min(5, _moves.Count);
+            _selectedMoves = _moves.Slice(0, cardsToTake);
+            return _selectedMoves;
+        }
     }
 }
 

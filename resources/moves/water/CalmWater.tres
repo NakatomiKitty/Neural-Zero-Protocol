@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://b2bsd2hc51r20"]
+
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="1_g6v8q"]
+
+[resource]
+script = ExtResource("1_g6v8q")
+MoveElement = 5
+ActionType = 1
+Name = "Calm Water"
+Cost = 1
+metadata/_custom_type_script = "uid://b0axq5jxdi4cy"

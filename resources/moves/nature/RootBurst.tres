@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://bw43ht07rtts6"]
+
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="1_ww6jy"]
+
+[resource]
+script = ExtResource("1_ww6jy")
+MoveElement = 1
+Name = "Root Burst"
+Power = 20
+Cost = 2
+metadata/_custom_type_script = "uid://b0axq5jxdi4cy"

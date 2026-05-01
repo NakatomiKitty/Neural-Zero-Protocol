@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Cards;
@@ -15,6 +16,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
         [Node] public CombatStateMachine CombatStateMachine;
         [Node] public BattleManager BattleManager;
         [Node] public CardSystem CardSystem;
+        private MoveResource[] _moves;
 
         public override void _Notification(int what)
         {
@@ -31,8 +33,9 @@ namespace NeuralZeroProtocol.Scripts.Combat
                 // Links every Character's HealthComponent's Died signal in the battle
 				character.HealthComponent.Died += CombatStateMachine.OnCharacterDied;
 			}
-
-            CardSystem.UpdateCardSkin(BattleManager.GetMove());
+            
+            // Passes the array to Cardsystem so it can be used to update the card skins
+            CardSystem.UpdateCardSkin(BattleManager.GetSelectedMovesFromPlayer());
         }
     }
 }

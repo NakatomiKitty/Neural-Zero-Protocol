@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://dgdhn21xiwemd"]
+
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="1_7p5gm"]
+
+[resource]
+script = ExtResource("1_7p5gm")
+MoveElement = 0
+ActionType = 1
+Name = "Lace Cinder"
+Power = 35
+Cost = 1
+metadata/_custom_type_script = "uid://b0axq5jxdi4cy"

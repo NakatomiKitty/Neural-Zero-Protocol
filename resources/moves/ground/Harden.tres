@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://c217w7kio6xs3"]
+
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="1_eg8ln"]
+
+[resource]
+script = ExtResource("1_eg8ln")
+MoveElement = 1
+ActionType = 1
+Name = "Growth"
+Cost = 1
+metadata/_custom_type_script = "uid://b0axq5jxdi4cy"

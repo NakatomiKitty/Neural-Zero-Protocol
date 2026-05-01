@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using Godot.Collections;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
 
 
@@ -9,6 +10,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
     public partial class CardHand : Node2D
     {
         [Signal] public delegate void CardAddedEventHandler(Card card);
+        [Signal] public delegate void GetCenterCardEventHandler(Card card);
 
         private Path2D _path2d;
         private CardSystem _cardSystem;
@@ -18,7 +20,10 @@ namespace NeuralZeroProtocol.Scripts.Cards
             _path2d = GetNode<Path2D>("../Path2D");
             _cardSystem = GetNode<CardSystem>("..");
         }
-        public void CreateHandFromPath(int cardCount, PackedScene cardScene, MoveResource move)
+
+        // private void SwapWithCenter(Card cardClicked);
+
+        public void CreateHandFromPath(int cardCount, PackedScene cardScene, Array<MoveResource> moves)
 		{
 			Curve2D curve = _path2d.Curve;
 			float totalLength = curve.GetBakedLength();
@@ -28,7 +33,10 @@ namespace NeuralZeroProtocol.Scripts.Cards
             float spacing = 105f; 
             float centerOffset = totalLength / 2f;
 
-			for (int i = 0; i < cardCount; i++)
+            // Adds cards and positions and rotates them properly
+            // Aswell as assigning the cards their respective moves
+            // Which allows the cards to display the information of the moves
+			for (int i = 0; i < moves.Count; i++)
 			{
 				float indexOffset = i - (cardCount - 1) / 2f;
 
@@ -37,12 +45,15 @@ namespace NeuralZeroProtocol.Scripts.Cards
                 offset = Mathf.Clamp(offset, 0, totalLength);
 
 				Vector2 position = curve.SampleBaked(offset);
-
-				Card card = cardScene.Instantiate<Card>();
-                card.ChangeCardSkin(move);
+                Card card = cardScene.Instantiate<Card>();
+            
+                card.ChangeCardSkin(moves[i]);
+                
 				AddChild(card);
 
 				card.Position = position;
+
+                _cardSystem.CardBasePositions[card] = position;
 
                 float maxRotation = Mathf.DegToRad(15f);
                 float normalized = indexOffset / ((cardCount - 1) / 2f);
@@ -64,11 +75,15 @@ namespace NeuralZeroProtocol.Scripts.Cards
                 _cardSystem.OriginalZIndexes[cards[i]] = cards[i].ZIndex;
             }
 
+            SetCenterCard(cards[cards.Count / 2]);
+
             foreach (var card in cards)
             {
                 EmitSignal(SignalName.CardAdded, card);
             }
 		}
+
+        private void SetCenterCard(Card centerCard) => EmitSignal(SignalName.GetCenterCard, centerCard);
     }
 }
 
