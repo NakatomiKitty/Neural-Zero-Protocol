@@ -94,7 +94,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
             var tween = CreateTween();
             var basePosition = _cardSystem.CardBasePositions[card];
             var targetScale = selected ? Vector2.One * 1.15f : Vector2.One;
-            var targetPosition = selected ? basePosition + Vector2.Down * -10 : basePosition; // up = -Y
+            var targetPosition = selected ? basePosition + Vector2.Down * -20 : basePosition; // up = -Y
             var duration = CardSystem.TWEEN_DURATION;
             
             tween.Parallel().TweenProperty(card, "scale", targetScale, duration);

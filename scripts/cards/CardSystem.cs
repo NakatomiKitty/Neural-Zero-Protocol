@@ -12,7 +12,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
     [Scene]
     public partial class CardSystem : Node2D
     {
-        public const float TWEEN_DURATION = 0.05f;
+        public const float TWEEN_DURATION = 0.03f;
         
         private static readonly PackedScene _card = GD.Load<PackedScene>("res://scenes/card.tscn");
         [Node] public CardHand CardHand;
