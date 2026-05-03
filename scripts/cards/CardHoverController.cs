@@ -10,29 +10,38 @@ namespace NeuralZeroProtocol.Scripts.Cards
 	/// </summary>
 	public partial class CardHoverController : Node
 	{
-		private Dictionary<Card, Tween> _activeHoverTweens = new Dictionary<Card, Tween>();
-        private HashSet<Card> _cardsUnderMouse = new HashSet<Card>();
+        private const float HOVER_TWEEN_DURATION = 0.4f;
+
+		public Dictionary<Card, Tween> ActiveHoverTweens = new Dictionary<Card, Tween>();
+        public HashSet<Card> CardsUnderMouse = new HashSet<Card>();
 
 		private CardSystem _cardSystem;
 		private Card _selectedCard;
 
-		private Card _currentHoveredCard;
+		private Card _mouseHoveredCard; // Used for selecting with mouse 
+        private Card _forcedHighlightedCard; // Used for selecting with keyboard
 
+        private bool _isSwapping;
+        
 		public override void _Ready() => _cardSystem = GetNode<CardSystem>("..");
+        
+        public Card GetForcedHighlightedCard() => _forcedHighlightedCard;
+        
+        public void OnSwappingStateChanged(bool isSwapping) => _isSwapping = isSwapping;
 
 		public void OnCardSelected(Card card)
 		{
 			// Selected card no longer gets the hover effect 
-            _cardsUnderMouse.Remove(card);
+            CardsUnderMouse.Remove(card);
 
-            if (_currentHoveredCard == card)
+            if (_mouseHoveredCard == card)
 			{
-				if (_currentHoveredCard != null)
+				if (_mouseHoveredCard != null)
 
 					// If the selected card was hovered, remove the hover effect immediately.
-					ApplyHoverEffect(_currentHoveredCard, false);
+					ApplyHoverEffect(_mouseHoveredCard, false);
 
-				_currentHoveredCard = null;
+				_mouseHoveredCard = null;
 			}
 
             // Stop any ongoing tweens on this card
@@ -53,32 +62,68 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
 		public void OnHoveredOverCard(Card card)
         {
+            if (_isSwapping) return;
+
+            if (card == _forcedHighlightedCard) return;
+
             if (card == _selectedCard) return;   // Never hover the selected card
 
-            _cardsUnderMouse.Add(card);
+            CardsUnderMouse.Add(card);
             UpdateHoverEffect();
         }
 
         public void OnHoveredOffCard(Card card)
         {
+            if (_isSwapping) return;
+
+            if (card == _forcedHighlightedCard) return;
+
             if (card == _selectedCard) return; 
 
-            _cardsUnderMouse.Remove(card);
+            CardsUnderMouse.Remove(card);
+
             UpdateHoverEffect();
         }
 
+        public void ForceHighlight(Card card)
+        {
+            ClearForcedHighlight();
 
+            if (card == _forcedHighlightedCard) return;
+
+            if (card == _selectedCard) return;
+
+           _forcedHighlightedCard = card;
+
+           ApplyHoverEffect(_forcedHighlightedCard, true);
+        }
+
+        public void ClearForcedHighlight()
+        {
+            if (_forcedHighlightedCard == null) return;
+
+            var highlightedCard = _forcedHighlightedCard;
+
+            _forcedHighlightedCard = null;
+
+            UpdateHoverEffect();
+
+            ApplyHoverEffect(highlightedCard, false);
+        }
         // Re‑evaluates which card (if there is any) should receive the hover effect.
         // The effect is given to the highest‑ZIndex card that is NOT selected.
 		public void UpdateHoverEffect()
         {
+            if (_isSwapping) return;
 
-            if (_cardsUnderMouse.Count == 0)
+            if (_forcedHighlightedCard != null) return;
+
+            if (CardsUnderMouse.Count == 0)
             {
-                if (_currentHoveredCard != null)
+                if (_mouseHoveredCard != null)
                 {
-                    ApplyHoverEffect(_currentHoveredCard, false);
-                    _currentHoveredCard = null;
+                    ApplyHoverEffect(_mouseHoveredCard, false);
+                    _mouseHoveredCard = null;
                 }
                 return;
             }
@@ -86,8 +131,9 @@ namespace NeuralZeroProtocol.Scripts.Cards
             Card highestCard = null;
             int highestZ = int.MinValue;
 
-            foreach (Card card in _cardsUnderMouse)
+            foreach (Card card in CardsUnderMouse)
             {
+
 				if (card == null) continue;
                 if (card == _selectedCard) continue;
                 if (card.ZIndex > highestZ)
@@ -97,26 +143,25 @@ namespace NeuralZeroProtocol.Scripts.Cards
                 }
             }
 
-            if (highestCard != _currentHoveredCard)
+            if (highestCard != _mouseHoveredCard)
             {
-                if(_currentHoveredCard != null) ApplyHoverEffect(_currentHoveredCard, false);
+                if(_mouseHoveredCard != null) ApplyHoverEffect(_mouseHoveredCard, false);
                     
                 if (highestCard != null) ApplyHoverEffect(highestCard, true);
 
-                _currentHoveredCard = highestCard;
+                _mouseHoveredCard = highestCard;
             }
-            
         }
 
 		// Kind of like a helper function! 
 		// Removes and Kill any ongoing tween
 		public void KillAndRemoveTween(Card card)
 		{
-			if (_activeHoverTweens.ContainsKey(card) 
-            && _activeHoverTweens[card].IsRunning())
-                _activeHoverTweens[card].Kill();
+			if (ActiveHoverTweens.ContainsKey(card) 
+            && ActiveHoverTweens[card].IsRunning())
+                ActiveHoverTweens[card].Kill();
 
-			_activeHoverTweens.Remove(card);
+			ActiveHoverTweens.Remove(card);
 		}
 
 		// Also a helper function!
@@ -125,9 +170,9 @@ namespace NeuralZeroProtocol.Scripts.Cards
 		{
 			KillAndRemoveTween(card);
 
-			_activeHoverTweens[card] = tween;
+			ActiveHoverTweens[card] = tween;
 
-            tween.Finished += () => _activeHoverTweens.Remove(card);
+            tween.Finished += () => ActiveHoverTweens.Remove(card);
 		}
 
 		// The main brain! 
@@ -139,15 +184,15 @@ namespace NeuralZeroProtocol.Scripts.Cards
             Vector2 cardScale = isHovered ? new Vector2(1.1f, 1.1f) : Vector2.One;
             
             Tween tween = CreateTween();
-            tween.TweenProperty(card, "scale", cardScale, 0.05f)
-                .SetTrans(Tween.TransitionType.Linear)
-                .SetEase(Tween.EaseType.InOut);
+            tween.TweenProperty(card, "scale", cardScale, HOVER_TWEEN_DURATION)
+                .SetTrans(Tween.TransitionType.Elastic)
+                .SetEase(Tween.EaseType.Out);
 
             AddTween(card, tween);
 
             if (isHovered)
             {
-                card.ZIndex = 9; // Hovered goes above selected (10) and base (5)
+                card.ZIndex = CardSystem.HOVER_Z; // Hovered goes above base (5)
                 card.UpdatePriority();
             }
             else
@@ -157,7 +202,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
             }
         }
 		
-
+        
 	}
 }
 

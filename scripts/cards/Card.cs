@@ -19,6 +19,8 @@ namespace NeuralZeroProtocol.Scripts.Cards
         [Node] private Area2D _area2D;
         [Node] private Sprite2D _cardImage;
 
+        public MoveResource MoveData;
+
         public override void _Notification(int what)
         {
             if (what == NotificationSceneInstantiated) WireNodes();
@@ -42,7 +44,8 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
         public void ChangeCardSkin(MoveResource move)
         {
-            _cardImage.Frame = (int)move.MoveElement * 2 + (int)move.ActionType;
+            MoveData = move;
+            _cardImage.Frame = (int)MoveData.MoveElement * 2 + (int)MoveData.ActionType;
         }
 
 

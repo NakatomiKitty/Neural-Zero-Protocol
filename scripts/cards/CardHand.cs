@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
@@ -23,12 +22,12 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
         // private void SwapWithCenter(Card cardClicked);
 
-        public void CreateHandFromPath(int cardCount, PackedScene cardScene, Array<MoveResource> moves)
+        public void CreateHandFromCurve(int cardCount, PackedScene cardScene, Array<MoveResource> moves)
 		{
 			Curve2D curve = _path2d.Curve;
 			float totalLength = curve.GetBakedLength();
 
-            List<Card> cards = new List<Card>();
+            Array<Card> cards = new Array<Card>();
 
             float spacing = 105f; 
             float centerOffset = totalLength / 2f;

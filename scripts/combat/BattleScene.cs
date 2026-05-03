@@ -4,6 +4,7 @@ using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Cards;
 using NeuralZeroProtocol.Scripts.Characters;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
+using NeuralZeroProtocol.Scripts.Ui;
 using NeuralZeroProtocol.Scripts.UI;
 
 namespace NeuralZeroProtocol.Scripts.Combat
@@ -16,6 +17,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
         [Node] public CombatStateMachine CombatStateMachine;
         [Node] public BattleManager BattleManager;
         [Node] public CardSystem CardSystem;
+        [Node] public UISelectionController UISelectionController;
         private MoveResource[] _moves;
 
         public override void _Notification(int what)
@@ -35,7 +37,12 @@ namespace NeuralZeroProtocol.Scripts.Combat
 			}
             
             // Passes the array to Cardsystem so it can be used to update the card skins
-            CardSystem.UpdateCardSkin(BattleManager.GetSelectedMovesFromPlayer());
+            _ = CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromPlayer());
+        }
+
+        public override void _Input(InputEvent @event) 
+        {
+            CardSystem.GetUIInput(UISelectionController.GetUISelect());
         }
     }
 }

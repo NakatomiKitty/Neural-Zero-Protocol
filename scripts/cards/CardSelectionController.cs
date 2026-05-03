@@ -1,5 +1,6 @@
+using System.Linq;
 using Godot;
-using System.Collections.Generic;
+using Godot.Collections;
 
 namespace NeuralZeroProtocol.Scripts.Cards
 {
@@ -9,24 +10,92 @@ namespace NeuralZeroProtocol.Scripts.Cards
     /// </summary>
     public partial class CardSelectionController : Node2D
     {
-        [Signal] public delegate void SelectionChangedEventHandler(Card oldCard, Card newCard);
+        private const float SELECTION_TWEEN_DURATION = 0.2f;
+        private const float SWAP_TWEEN_DURATION = 0.15f;
+
+        [Signal] public delegate void SelectionChangedEventHandler(Card oldSelectedCard, Card newSelectedCard);
+        [Signal] public delegate void GetHighlightedCardEventHandler(Card card);
+        [Signal] public delegate void SwappingStateChangedEventHandler(bool isSwapping);
+        public Dictionary<Card, Tween> ActivePositionTweens = new();
+        public Array<Card> CardHand;
+        public Card CenterCard;
+        public bool IsSwapping;
+        public bool MouseModeActive;
         
-        private readonly Dictionary<Card, Tween> _activePositionTweens = new();
-        private bool _isSwapping;
         private Tween _swapTweenClicked, _swapTweenCenter;
-        
         private CardSystem _cardSystem;
-        private Card _centerCard;
-        private Card _selectedCard;
+        private Card _mouseSelectedCard; // Used for selecting with mouse
+        private Card _keyboardHighlightedCard; // Used for selecting with keyboard
 
         public override void _Ready() => _cardSystem = GetNode<CardSystem>("..");
 
+        public void SetCardHand(Array<Node> cardHand)
+        {
+            CardHand = [.. cardHand.OfType<Card>()];
+
+            GD.Print(CardHand);
+        } 
+
         public void SetCenterCard(Card centerCard)
         {
-            _centerCard = centerCard;
-            if (_selectedCard == null) SelectCard(centerCard);
+            _keyboardHighlightedCard = centerCard;
+
+            CenterCard = centerCard;
+
+            if (_mouseSelectedCard == null) SelectCard(centerCard);
+
+            EmitSignal(SignalName.GetHighlightedCard, CenterCard);
         }
         
+        public void MoveLeft()
+        {
+            if (CardHand == null || CardHand.Count == 0) return;
+
+            int centerIndex = CardHand.IndexOf(_keyboardHighlightedCard);
+
+            int toLeftCardIndex = centerIndex - 1;
+
+            if(toLeftCardIndex < 0) toLeftCardIndex = CardHand.Count - 1;
+
+            _keyboardHighlightedCard = CardHand[toLeftCardIndex];
+
+            GD.Print(_keyboardHighlightedCard.Name);
+
+            EmitSignal(SignalName.GetHighlightedCard, _keyboardHighlightedCard);
+        }
+
+        public void MoveRight()
+        {
+            if (CardHand == null || CardHand.Count == 0) return;
+
+            int centerIndex = CardHand.IndexOf(_keyboardHighlightedCard);
+
+            int toRightCardIndex = centerIndex + 1;
+
+            if(toRightCardIndex >= CardHand.Count) toRightCardIndex = 0;
+
+            _keyboardHighlightedCard = CardHand[toRightCardIndex];
+
+            GD.Print(_keyboardHighlightedCard.Name);
+
+            EmitSignal(SignalName.GetHighlightedCard, _keyboardHighlightedCard);
+        }
+
+        public void ConfirmCard()
+        {
+            if (CardHand == null || CardHand.Count == 0) return;
+
+            if (MouseModeActive) return; // Mouse selection overrides hotkeys
+            if (IsSwapping) return; // Already swapping, ignore
+            if (_keyboardHighlightedCard == null) return; // No valid highlight
+
+            // If the highlighted card is already the center, do nothing
+            if (_keyboardHighlightedCard == CenterCard) return;
+
+            // Trigger the same swap logic as if the card was clicked
+            SwapWithCenter(_keyboardHighlightedCard);
+        }
+
         /// <summary>
 		/// This is a hefty one, Called when any card is clicked, Then:
         /// 1. Finds the topmost card under the mouse (prevents clicks when cards overlap).
@@ -38,28 +107,29 @@ namespace NeuralZeroProtocol.Scripts.Cards
             if (!IsTopmostCard(clickedCard)) return;
             
             // Swap with center card
-            if (clickedCard != _centerCard)
+            if (clickedCard != CenterCard)
             {
-                if (_isSwapping) return; // Already swapping, ignore additional clicks
+                if (IsSwapping) return; // Already swapping, ignore additional clicks
                 SwapWithCenter(clickedCard);
                 return;
             }
             
             // Clicked the center card – select/deselect it
-            if (clickedCard != _selectedCard) SelectCard(clickedCard);
+            if (clickedCard != _mouseSelectedCard) SelectCard(clickedCard);
         }
         
         // Makes the given card the selected one. Deselects any previous selection.
         public void SelectCard(Card card)
         {
-            if (_selectedCard == card) return;
+            if (_mouseSelectedCard == card) return;
             
             // Deselect previous card if there is one
-            if (_selectedCard != null) ApplyVisualState(_selectedCard, false);
+            if (_mouseSelectedCard != null) ApplyVisualState(_mouseSelectedCard, false);
             
-            var oldCard = _selectedCard;
-            _selectedCard = card;
+            var oldCard = _mouseSelectedCard;
+            _mouseSelectedCard = card;
 
+            MouseModeActive = true;
             EmitSignal(SignalName.SelectionChanged, oldCard, card);
             
             // Apply visual effects for the new selected card
@@ -69,15 +139,19 @@ namespace NeuralZeroProtocol.Scripts.Cards
         // Deselects the currently selected card and emits a signal with newCard = null.
         private void DeselectCard()
         {
-            if (_selectedCard == null) return;
+            if (_mouseSelectedCard == null) return;
 
-            var oldSelected = _selectedCard;
+            var oldSelected = _mouseSelectedCard;
 
             ApplyVisualState(oldSelected, false);
 
-            _selectedCard = null;
+            _mouseSelectedCard = null;
 
-            EmitSignal(SignalName.SelectionChanged, oldSelected, _selectedCard);
+            MouseModeActive = false;
+
+            EmitSignal(SignalName.GetHighlightedCard, CenterCard);
+
+            EmitSignal(SignalName.SelectionChanged, oldSelected, _mouseSelectedCard);
         }
         
         /// <summary>
@@ -94,15 +168,21 @@ namespace NeuralZeroProtocol.Scripts.Cards
             var tween = CreateTween();
             var basePosition = _cardSystem.CardBasePositions[card];
             var targetScale = selected ? Vector2.One * 1.15f : Vector2.One;
-            var targetPosition = selected ? basePosition + Vector2.Down * -20 : basePosition; // up = -Y
-            var duration = CardSystem.TWEEN_DURATION;
+            var targetPosition = selected ? basePosition + Vector2.Down * -20 : basePosition;
+            var duration = SELECTION_TWEEN_DURATION;
             
-            tween.Parallel().TweenProperty(card, "scale", targetScale, duration);
-            tween.Parallel().TweenProperty(card, "position", targetPosition, duration);
+            tween.Parallel()
+                .TweenProperty(card, "scale", targetScale, duration)
+                .SetTrans(Tween.TransitionType.Back)
+                .SetEase(Tween.EaseType.Out);
+            tween.Parallel()
+                .TweenProperty(card, "position", targetPosition, duration)
+                .SetTrans(Tween.TransitionType.Back)
+                .SetEase(Tween.EaseType.Out);
 
-            _activePositionTweens[card] = tween;
+            ActivePositionTweens[card] = tween;
             
-            card.ZIndex = selected ? 10 : _cardSystem.OriginalZIndexes[card];
+            card.ZIndex = selected ? CardSystem.SELECTED_Z : _cardSystem.OriginalZIndexes[card];
             
             card.UpdatePriority();
         }
@@ -142,38 +222,56 @@ namespace NeuralZeroProtocol.Scripts.Cards
         /// </summary>
         private void SwapWithCenter(Card clickedCard)
         {
+            if (IsSwapping) return;
+
             _swapTweenClicked?.Kill();
             _swapTweenCenter?.Kill();
-            
-            var oldCenter = _centerCard;
+
+            var oldCenter = CenterCard;
             var clickedBase = _cardSystem.CardBasePositions[clickedCard];
             var centerBase = _cardSystem.CardBasePositions[oldCenter];
             
             KillPositionTween(clickedCard);
             KillPositionTween(oldCenter);
             
-            _isSwapping = true;
-            
+            IsSwapping = true;
+
+            EmitSignal(SignalName.SwappingStateChanged, IsSwapping);
+
             // Tween shit
             _swapTweenClicked = CreateTween();
             _swapTweenCenter = CreateTween();
             
-            _swapTweenClicked.TweenProperty(clickedCard, "position", centerBase, 0.1f);
-            _swapTweenClicked.Parallel().TweenProperty(clickedCard, "rotation", oldCenter.Rotation, 0.1f);
+            _swapTweenClicked.TweenProperty(clickedCard, "position", centerBase, SWAP_TWEEN_DURATION)
+                .SetTrans(Tween.TransitionType.Back)
+                .SetEase(Tween.EaseType.InOut);
             
-            _swapTweenCenter.TweenProperty(oldCenter, "position", clickedBase, 0.1f);
-            _swapTweenCenter.Parallel().TweenProperty(oldCenter, "rotation", clickedCard.Rotation, 0.1f);
+            _swapTweenClicked.Parallel().TweenProperty(clickedCard, "rotation", oldCenter.Rotation, SWAP_TWEEN_DURATION);
+            
+            _swapTweenCenter.TweenProperty(oldCenter, "position", clickedBase, SWAP_TWEEN_DURATION)
+                .SetTrans(Tween.TransitionType.Back)
+                .SetEase(Tween.EaseType.InOut);
+
+            _swapTweenCenter.Parallel().TweenProperty(oldCenter, "rotation", clickedCard.Rotation, SWAP_TWEEN_DURATION);
             
             _swapTweenClicked.Finished += () =>
             {
-                if (!_isSwapping) return;
-                
+                if (!IsSwapping) return;
+
                 // Swap base positions
                 (_cardSystem.CardBasePositions[clickedCard], _cardSystem.CardBasePositions[oldCenter]) = (centerBase, clickedBase);
                 
                 // Swap Z indexes
                 (_cardSystem.OriginalZIndexes[clickedCard], _cardSystem.OriginalZIndexes[oldCenter]) = 
                     (_cardSystem.OriginalZIndexes[oldCenter], _cardSystem.OriginalZIndexes[clickedCard]);
+
+                int clickedIndex = CardHand.IndexOf(clickedCard);
+                int centerIndex = CardHand.IndexOf(oldCenter);
+                if (clickedIndex != -1 && centerIndex != -1)
+                {
+                    CardHand[clickedIndex] = oldCenter;
+                    CardHand[centerIndex] = clickedCard;
+                }
                 
                 // First, deselect the current centerCard
                 DeselectCard();
@@ -181,12 +279,17 @@ namespace NeuralZeroProtocol.Scripts.Cards
                 SelectCard(clickedCard);
                 
                 // Don't forget to update the _centerCard value to the new _centerCard!
-                _centerCard = clickedCard;
+                CenterCard = clickedCard;
+
+                EmitSignal(SignalName.GetHighlightedCard, CenterCard);
 
                 clickedCard.UpdatePriority();
                 oldCenter.UpdatePriority();
                 
-                _isSwapping = false;
+                IsSwapping = false;
+
+                EmitSignal(SignalName.SwappingStateChanged, IsSwapping);
+
                 _swapTweenClicked = _swapTweenCenter = null;
             };
         }
@@ -195,9 +298,9 @@ namespace NeuralZeroProtocol.Scripts.Cards
         // Just a helper function
         private void KillPositionTween(Card card)
         {
-            if (_activePositionTweens.TryGetValue(card, out var tween) && tween.IsRunning())
+            if (ActivePositionTweens.TryGetValue(card, out var tween) && tween.IsRunning())
                 tween.Kill();
-            _activePositionTweens.Remove(card);
+            ActivePositionTweens.Remove(card);
         }
     }
 }
