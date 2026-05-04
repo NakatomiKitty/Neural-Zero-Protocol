@@ -17,7 +17,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
     {
         public const float TWEEN_DURATION = 0.03f;
         public const int BASE_Z = 5;
-        public const int HOVER_Z = 9;
+        public const int HOVER_Z = 11;
         public const int SELECTED_Z = 10;
         
         private static readonly PackedScene _card = GD.Load<PackedScene>("res://scenes/card.tscn");
@@ -38,6 +38,10 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
         public override void _Ready()
         {
+            float designWidth = 1152f; // the resolution you designed the hand for
+            float scale = GetViewport().GetVisibleRect().Size.X / designWidth;
+            Scale = new Vector2(scale, scale);
+
             CardSelectionController.SelectionChanged += OnSelectionChanged;
             CardSelectionController.GetHighlightedCard += OnGetHighlightedCard;
             CardSelectionController.SwappingStateChanged += CardHoverController.OnSwappingStateChanged;

@@ -1,9 +1,19 @@
 [gd_scene format=3 uid="uid://cq163srn7bw54"]
 
+[ext_resource type="PackedScene" uid="uid://8ic6l8vm65v7" path="res://scenes/card_system.tscn" id="1_qn1v3"]
+
 [node name="ActionPanel" type="Control" unique_id=1956158257]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -568.0
+offset_top = -640.0
+offset_right = 584.0
+offset_bottom = 8.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
+
+[node name="CardSystem" parent="." unique_id=1780472782 instance=ExtResource("1_qn1v3")]
+position = Vector2(571, 570)

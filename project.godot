@@ -17,11 +17,18 @@ config/icon="res://icon.svg"
 
 [display]
 
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 window/vsync/vsync_mode=0
+window/default_theme_scale=2.0
 
 [dotnet]
 
 project/assembly_name="Neural Zero- Protocol"
+
+[gui]
+
+theme/default_theme_scale=2.0
 
 [input]
 

@@ -45,5 +45,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="CardSystem" parent="." unique_id=1780472782 instance=ExtResource("8_rum4d")]
+position = Vector2(576, 448)
 
 [node name="UISelectionController" parent="." unique_id=1785561435 instance=ExtResource("9_3oc74")]
