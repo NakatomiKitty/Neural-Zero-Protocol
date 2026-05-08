@@ -26,6 +26,10 @@ window/default_theme_scale=2.0
 
 project/assembly_name="Neural Zero- Protocol"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/rider-plugin/plugin.cfg")
+
 [gui]
 
 theme/default_theme_scale=2.0

@@ -4,14 +4,14 @@
 [ext_resource type="Texture2D" uid="uid://c726jxq13abb5" path="res://assets/sprites/card_spritesheet.png" id="2_6u4wf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d81rb"]
-size = Vector2(102, 143)
+size = Vector2(120, 165)
 
 [node name="Card" type="Node2D" unique_id=1511861092]
 script = ExtResource("1_6u4wf")
 
 [node name="CardImage" type="Sprite2D" parent="." unique_id=1854701218]
 position = Vector2(4.2915344e-06, -0.5000081)
-scale = Vector2(0.301, 0.3)
+scale = Vector2(0.351, 0.35)
 texture = ExtResource("2_6u4wf")
 hframes = 18
 region_rect = Rect2(0, 0, 339, 472)
