@@ -11,7 +11,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/scripts/cards/CardSelectionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardSelectionController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,19 +161,6 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/scripts/cards/CardSelectionController.cs</url>
-          <line>222</line>
-          <properties documentPath="D:\GodotGames\Neural-Zero-Protocol\scripts\cards\CardSelectionController.cs" containingFunctionPresentation="Method 'SwapWithCenter'">
-            <startOffsets>
-              <option value="8209" />
-            </startOffsets>
-            <endOffsets>
-              <option value="8237" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
