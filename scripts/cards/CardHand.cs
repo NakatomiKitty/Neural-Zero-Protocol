@@ -50,7 +50,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
                 card.Position = ToLocal(globalPos);
                 _cardSystem.CardBasePositions[card] = card.Position;
 
-                float maxRotation = Mathf.DegToRad(15f);
+                float maxRotation = Mathf.DegToRad(10f);
                 float normalized = indexOffset / ((cardCount - 1) / 2f);
                 card.Rotation = normalized * maxRotation;
 
