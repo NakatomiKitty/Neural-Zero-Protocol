@@ -94,8 +94,8 @@ public partial class BattleMenu : Control
 		
 		// Swap the container's position with TWEEEEENNNNN
 		
-		SwapTweenLerp(_initialButtonContainer, secondaryBasePosition);
-		SwapTweenLerp(_secondaryButtonContainer, initialBasePosition);
+		SwapMenuLerp(_initialButtonContainer, secondaryBasePosition);
+		SwapMenuLerp(_secondaryButtonContainer, initialBasePosition);
 
 		_menuTween.Finished += () =>
 		{
@@ -152,7 +152,7 @@ public partial class BattleMenu : Control
 		}
 	}
 
-	private void SwapTweenLerp(Control buttonContainer, Vector2 finalPosition)
+	private void SwapMenuLerp(Control buttonContainer, Vector2 finalPosition)
 	{
 		_menuTween = CreateTween();
 

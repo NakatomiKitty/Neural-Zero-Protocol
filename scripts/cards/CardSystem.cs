@@ -37,16 +37,16 @@ namespace NeuralZeroProtocol.Scripts.Cards
         public override void _Ready()
         {
             float designWidth = 1152f; // the resolution you designed the hand for
+            
             float scale = GetViewport().GetVisibleRect().Size.X / designWidth;
+            
             Scale = new Vector2(scale, scale);
-
+            
             CardSelectionController.SelectionChanged += OnSelectionChanged;
-            CardSelectionController.GetHighlightedCard += OnGetHighlightedCard;
+            CardSelectionController.GetHighlightedCard += OnHighlightedCardReceived;
             CardSelectionController.SwappingStateChanged += CardHoverController.OnSwappingStateChanged;
             
-            CardHand.CardAdded += OnCardAdded;
-            CardHand.GetCenterCard += OnGetCenterCard;
-            
+            CardHand.CardAdded += ConnectCardSignals;
         }
 
         public async Task CreateHandFromMoves(Array<MoveResource> moves)
@@ -54,11 +54,20 @@ namespace NeuralZeroProtocol.Scripts.Cards
             // First, clears any remaining cards 
             await ClearCardRegistry();
             
-            // always create 5 cards to the hand. 
             // TODO: ADD A SYSTEM IN THE FUTURE WHERE YOU CAN INCREASE YOUR HAND SIZE
             // Create the deck while passing down the array
-            CardHand.CreateHandFromCurve(5, Card, moves);
-
+            Array<Card> cards = CardHand.CreateHandFromCurve(5, Card, moves);
+            
+            foreach (Card card in cards)
+            {
+                CardBasePositions[card] = card.Position;   // store position after layout
+                OriginalZIndexes[card] = card.ZIndex;      // store ZIndex after assignment
+            }
+            
+            
+            Card centerCard = cards[cards.Count / 2];
+            CardSelectionController.SetCenterCard(centerCard);
+            
             CardSelectionController.SetCardHand(CardHand.GetChildren());
         }
 
@@ -74,10 +83,10 @@ namespace NeuralZeroProtocol.Scripts.Cards
             switch (uiSelection)
             {
                 case UiSelection.Left:
-                    CardSelectionController.MoveLeft();
+                    CardSelectionController.KeyboardMoveLeft();
                     break;
                 case UiSelection.Right:
-                    CardSelectionController.MoveRight();
+                    CardSelectionController.KeyboardMoveRight();
                     break;
                 case UiSelection.Confirm:
                     CardSelectionController.ConfirmCard();
@@ -85,11 +94,9 @@ namespace NeuralZeroProtocol.Scripts.Cards
             }
         }
 
-        private void OnCardAdded(Card card) => ConnectCard(card);
-
-        private void OnGetCenterCard(Card centerCard) => CardSelectionController.SetCenterCard(centerCard);
+        private void ConnectCardSignals(Card card) => ConnectCard(card);
         
-        private void OnGetHighlightedCard(Card card) => CardHoverController.ForceHighlight(card);
+        private void OnHighlightedCardReceived(Card card) => CardHoverController.ForceHighlight(card);
 
         private void OnSelectionChanged(Card oldCard, Card newCard)
         {
