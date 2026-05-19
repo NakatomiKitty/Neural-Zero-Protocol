@@ -1,31 +1,29 @@
 using Godot;
-using Godot.Collections;
-using System;
 
-namespace NeuralZeroProtocol.Scripts.Ui
+namespace NeuralZeroProtocol.Scripts.Ui;
+
+public enum UiSelection
 {
-	public enum UiSelection
-	{
-		None,
-		Left,
-		Right,
-		Up,
-		Down,
-		Confirm,
-		Cancel
-	}
+	None,
+	Left,
+	Right,
+	Up,
+	Down,
+	Confirm,
+	Cancel
+}
 
-	public abstract partial class UiSelectionController : Node
+public partial class UiSelectionController : Node
+{
+	public static UiSelection GetUiSelect()
 	{
-		public UiSelection GetUiSelect()
-		{
-			if (Input.IsActionJustPressed("ui_left")) return UiSelection.Left;
-			if (Input.IsActionJustPressed("ui_right")) return UiSelection.Right;
-			if (Input.IsActionJustPressed("ui_up")) return UiSelection.Up;
-			if (Input.IsActionJustPressed("ui_down")) return UiSelection.Down;
-			if (Input.IsActionJustPressed("ui_select")) return UiSelection.Confirm;
-			if (Input.IsActionJustPressed("ui_cancel")) return UiSelection.Cancel;
-			return UiSelection.None;
-		}
+		if (Input.IsActionJustPressed("ui_left")) return UiSelection.Left;
+		if (Input.IsActionJustPressed("ui_right")) return UiSelection.Right;
+		if (Input.IsActionJustPressed("ui_up")) return UiSelection.Up;
+		if (Input.IsActionJustPressed("ui_down")) return UiSelection.Down;
+		if (Input.IsActionJustPressed("ui_select")) return UiSelection.Confirm;
+		if (Input.IsActionJustPressed("ui_cancel")) return UiSelection.Cancel;
+		return UiSelection.None;
 	}
 }
+

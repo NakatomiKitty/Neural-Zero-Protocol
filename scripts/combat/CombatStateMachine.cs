@@ -1,214 +1,219 @@
+using System;
 using Godot;
 using NeuralZeroProtocol.Scripts.Characters;
 using NeuralZeroProtocol.Scripts.UI;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NeuralZeroProtocol.Scripts.Combat
+// TODO: DON'T OPTIMIZE YET, USE THE NEW BATTLE MENU FIRST!
+namespace NeuralZeroProtocol.Scripts.Combat;
+
+public enum BattleState
 {
-    public enum BattleState
+    Initializing,
+    PlayerTurn,
+    EnemyTurn,
+    TurnEnd,
+    Victory,
+    Defeat,
+}
+
+public partial class CombatStateMachine : Node
+{
+    [Signal] public delegate void StateChangedEventHandler(BattleState newState);
+
+    private BattleState _currentState;
+    private BattleScene _battleScene;
+
+    private Character _currentCharacter;
+
+    public override async void _Ready()
     {
-        Initializing,
-        PlayerTurn,
-        EnemyTurn,
-        TurnEnd,
-        Victory,
-        Defeat,
+        _battleScene = GetNode<BattleScene>("..");
+        
+        await ChangeState(BattleState.Initializing);
     }
 
-    public partial class CombatStateMachine : Node
+    public async Task ChangeState(BattleState newState)
     {
-        [Signal] public delegate void StateChangedEventHandler(BattleState newState);
+        _currentState = newState;
+        EmitSignal(SignalName.StateChanged, (int)newState);
 
-        private BattleState _currentState;
-        private BattleScene _battleScene;
-
-        private Character _currentCharacter;
-
-        public async override void _Ready() 
+        switch (_currentState)
         {
-            _battleScene = GetNode<BattleScene>("..");
-            await ChangeState(BattleState.Initializing);
+            case BattleState.Initializing:
+                await Initializing();
+                break;
+            case BattleState.PlayerTurn:
+                await PlayerTurn();
+                break;
+            case BattleState.EnemyTurn:
+                await EnemyTurn();
+                break;
+            case BattleState.TurnEnd:
+                await TurnEnd();
+                break;
+            case BattleState.Victory:
+                Victory();
+                break;
+            case BattleState.Defeat:
+                Defeat();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
+    }
 
-        public async Task ChangeState(BattleState newState)
+    private async Task Initializing()
+    {
+        GD.Print("Battle Initializing...");
+
+        _battleScene.TurnManager.StartBattle();
+        
+        _currentCharacter = _battleScene.TurnManager.GetCurrentUnit();
+
+        await CurrentCharacterTurn(_currentCharacter);
+    }
+
+    private async Task PlayerTurn()
+    {
+        PlayerCharacter playerCharacter = (PlayerCharacter)_battleScene.TurnManager.GetCurrentUnit();
+
+        ActionValidatorComponent actionValidator = playerCharacter.ActionValidatorComponent;
+
+        bool isActionValid = false;
+        
+        while (!isActionValid)
         {
-            _currentState = newState;
-            EmitSignal(SignalName.StateChanged, (int)newState);
+            GD.Print($"{playerCharacter.Name}'s turn");
+            GD.Print("Press an action");
 
-            switch (_currentState)
+            SignalAwaiter awaiter = ToSignal(_battleScene.ActionPanel, ActionPanel.SignalName.ActionSelected);
+            await awaiter;
+
+            ActionType action = (ActionType)awaiter.GetResult()[0].AsInt32();
+
+            // PLACEHOLDER! MIGHT CHANGE LOGIC
+            switch (action)
             {
-                case BattleState.Initializing:
-                    await Initializing();
+                case ActionType.Defend:
+                    if (ActionValidatorComponent.CanDefend())
+                    {
+                        GD.Print("Defended!");
+                        isActionValid = true;
+                    }
                     break;
-                case BattleState.PlayerTurn:
-                    await PlayerTurn();
-                    break;
-                case BattleState.EnemyTurn:
-                    await EnemyTurn();
-                    break;
-                case BattleState.TurnEnd:
-                    await TurnEnd();
-                    break;
-                case BattleState.Victory:
-                    Victory();
-                    break;
-                case BattleState.Defeat:
-                    Defeat();
+                case ActionType.Skip:
+                    if (ActionValidatorComponent.CanSkip())
+                    {
+                        GD.Print("Skipped!");
+                        isActionValid = true;
+                    }
                     break;
             }
         }
 
-        private async Task Initializing()
-        {
-            GD.Print("Battle Initializing...");
+        // After a valid action, check battle outcome and end turn
+        if (BattleOutcomeState()) return;
+        await ChangeState(BattleState.TurnEnd);
+    }
 
-            _battleScene.TurnManager.StartBattle();
-            
-            _currentCharacter = _battleScene.TurnManager.GetCurrentUnit();
+    // PLACEHOLDER CODE HERE! WILL PROBABLY CONTAIN CALLING TO THE ENEMY'S AI
+    private async Task EnemyTurn()
+    {
+        EnemyCharacter enemyCharacter = (EnemyCharacter)_battleScene.TurnManager.GetCurrentUnit();
+        GD.Print($"{enemyCharacter.Name}'s turn");
 
-            await CurrentCharacterTurn(_currentCharacter);
-        }
+        GD.Print("Enemy did something!");
 
-        private async Task PlayerTurn()
-        {
-            PlayerCharacter playerCharacter = (PlayerCharacter)_battleScene.TurnManager.GetCurrentUnit();
+        await ChangeState(BattleState.TurnEnd);
+    }
 
-            ActionValidatorComponent actionValidator = playerCharacter.ActionValidatorComponent;
+    private async Task TurnEnd()
+    {
+        GD.Print($"{_currentCharacter.Name} ended it's turn!");
 
-            bool isActionValid = false;
-            
-            while (!isActionValid)
-            {
-                GD.Print($"{playerCharacter.Name}'s turn");
-                GD.Print("Press an action");
+        _currentCharacter = _battleScene.TurnManager.AdvanceToNextUnit();
 
-                SignalAwaiter awaiter = ToSignal(_battleScene.ActionPanel, ActionPanel.SignalName.ActionSelected);
-                await awaiter;
+        await CurrentCharacterTurn(_currentCharacter);
+    }
 
-                ActionType action = (ActionType)awaiter.GetResult()[0].AsInt32();
+    private void Victory()
+    {
+        GD.Print("Victory");
 
-                // PLACEHOLDER! MIGHT CHANGE LOGIC
-                switch (action)
-                {
-                    case ActionType.Defend:
-                        if (actionValidator.CanDefend())
-                        {
-                            GD.Print("Defended!");
-                            isActionValid = true;
-                        }
-                        break;
-                    case ActionType.Skip:
-                        if (actionValidator.CanSkip())
-                        {
-                            GD.Print("Skipped!");
-                            isActionValid = true;
-                        }
-                        break;
-                }
-            }
-
-            // After a valid action, check battle outcome and end turn
-            if (BattleOutcomeState()) return;
-            await ChangeState(BattleState.TurnEnd);
-        }
-
-        // PLACEHOLDER CODE HERE! WILL PROBABLY CONTAIN CALLING TO THE ENEMY'S AI
-        private async Task EnemyTurn()
-        {
-            EnemyCharacter enemyCharacter = (EnemyCharacter)_battleScene.TurnManager.GetCurrentUnit();
-            GD.Print($"{enemyCharacter.Name}'s turn");
-
-            GD.Print("Enemy did something!");
-
-            await ChangeState(BattleState.TurnEnd);
-        }
-
-        private async Task TurnEnd()
-        {
-            GD.Print($"{_currentCharacter.Name} ended it's turn!");
-
-            _currentCharacter = _battleScene.TurnManager.AdvanceToNextUnit();
-
-            await CurrentCharacterTurn(_currentCharacter);
-        }
-
-        private void Victory()
-        {
-            GD.Print("Victory");
-
-            foreach (Character character in _battleScene.TurnManager.AllUnits)
-			{
-                // Delinks every Character's HealthComponent's Died signal in the battle
-				character.HealthComponent.Died -= OnCharacterDied;
-			}
-        }
-
-        private void Defeat()
-        {
-            GD.Print("Defeat");
-
-            foreach (Character character in _battleScene.TurnManager.AllUnits)
-			{
-                // Delinks every Character's HealthComponent's Died signal in the battle
-				character.HealthComponent.Died -= OnCharacterDied;
-			}
-        }
-
-        public void OnCharacterDied(Character deadCharacter)
+        foreach (Character character in _battleScene.TurnManager.AllUnits)
 		{
-			GD.Print(deadCharacter.Name);
-
-			if (_battleScene.TurnManager.TurnOrder.Contains(deadCharacter))
-			{
-				int deadIndex = _battleScene.TurnManager.TurnOrder.IndexOf(deadCharacter); 
-                // Stores the index of the dead character ↑ 
-                // Then removes it ↓
-        		_battleScene.TurnManager.TurnOrder.Remove(deadCharacter);
-                
-                // if deadIndex is before the CurrentUnitIndex, decrement so whoever comes next takes it's place
-				if (deadIndex < _battleScene.TurnManager.CurrentUnitIndex) _battleScene.TurnManager.CurrentUnitIndex--;
-
-                // if deadIndex IS the CurrentUnitIndex, immediately go to the next Unit
-				else if (deadIndex == _battleScene.TurnManager.CurrentUnitIndex) _battleScene.TurnManager.CurrentUnitIndex++;
-			} 
-            
-            // NOTE: If you want to add a character that doesnt die when everyone is not dead
-            // You should add a flag here that checks if that character cant die.
-			if (_battleScene.TurnManager.AllUnits.Contains(deadCharacter))
-            {
-                if (deadCharacter is PlayerCharacter) _battleScene.TurnManager.PlayerCharacters.Remove(deadCharacter);
-
-                if (deadCharacter is EnemyCharacter) _battleScene.TurnManager.EnemyCharacters.Remove(deadCharacter);
-            } 
-
-            if (BattleOutcomeState()) return;
-
-			// Disconnect the signal to avoid memory leaks
-    		deadCharacter.HealthComponent.Died -= OnCharacterDied;
+            // Delinks every Character's HealthComponent's Died signal in the battle
+			character.HealthComponent.Died -= OnCharacterDied;
 		}
+    }
 
-        // Helper Functions
-        private bool BattleOutcomeState()
+    private void Defeat()
+    {
+        GD.Print("Defeat");
+
+        foreach (Character character in _battleScene.TurnManager.AllUnits)
+		{
+            // Delinks every Character's HealthComponent's Died signal in the battle
+			character.HealthComponent.Died -= OnCharacterDied;
+		}
+    }
+
+    public void OnCharacterDied(Character deadCharacter)
+	{
+		GD.Print(deadCharacter.Name);
+
+		if (_battleScene.TurnManager.TurnOrder.Contains(deadCharacter))
+		{
+			int deadIndex = _battleScene.TurnManager.TurnOrder.IndexOf(deadCharacter); 
+            // Stores the index of the dead character ↑ 
+            // Then removes it ↓
+        	_battleScene.TurnManager.TurnOrder.Remove(deadCharacter);
+            
+            // if deadIndex is before the CurrentUnitIndex, decrement so whoever comes next takes it's place
+			if (deadIndex < _battleScene.TurnManager.CurrentUnitIndex) _battleScene.TurnManager.CurrentUnitIndex--;
+
+            // if deadIndex IS the CurrentUnitIndex, immediately go to the next Unit
+			else if (deadIndex == _battleScene.TurnManager.CurrentUnitIndex) _battleScene.TurnManager.CurrentUnitIndex++;
+		} 
+        
+        // NOTE: If you want to add a character that doesnt die when everyone is not dead
+        // You should add a flag here that checks if that character cant die.
+		if (_battleScene.TurnManager.AllUnits.Contains(deadCharacter))
         {
-            if (!_battleScene.TurnManager.PlayerCharacters.Any())
-            {
-                _ = ChangeState(BattleState.Defeat);
-                return true;
-            } 
-            else if (!_battleScene.TurnManager.EnemyCharacters.Any())
-            {
-                _ = ChangeState(BattleState.Victory);
-                return true;
-            } 
+            if (deadCharacter is PlayerCharacter) _battleScene.TurnManager.PlayerCharacters.Remove(deadCharacter);
 
-            return false;
-        }
+            if (deadCharacter is EnemyCharacter) _battleScene.TurnManager.EnemyCharacters.Remove(deadCharacter);
+        } 
 
-        private async Task CurrentCharacterTurn(Character character)
+        if (BattleOutcomeState()) return;
+
+		// Disconnect the signal to avoid memory leaks
+    	deadCharacter.HealthComponent.Died -= OnCharacterDied;
+	}
+
+    // Helper Functions
+    private bool BattleOutcomeState()
+    {
+        if (!_battleScene.TurnManager.PlayerCharacters.Any())
         {
-            if (character is PlayerCharacter) await ChangeState(BattleState.PlayerTurn);
-            else if (character is EnemyCharacter) await ChangeState(BattleState.EnemyTurn);
-        }
+            _ = ChangeState(BattleState.Defeat);
+            return true;
+        } 
+        else if (!_battleScene.TurnManager.EnemyCharacters.Any())
+        {
+            _ = ChangeState(BattleState.Victory);
+            return true;
+        } 
+
+        return false;
+    }
+
+    private async Task CurrentCharacterTurn(Character character)
+    {
+        if (character is PlayerCharacter) await ChangeState(BattleState.PlayerTurn);
+        else if (character is EnemyCharacter) await ChangeState(BattleState.EnemyTurn);
     }
 }
+

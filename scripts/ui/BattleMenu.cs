@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 namespace NeuralZeroProtocol.Scripts.Ui;
@@ -58,6 +59,8 @@ public partial class BattleMenu : Control
 			case MenuState.SecondaryMenu:
 				EnterSecondaryMenu();
 				break;
+			default:
+				throw new ArgumentOutOfRangeException();
 		}
 	}
 	private void EnterInitialMenu()
@@ -158,7 +161,7 @@ public partial class BattleMenu : Control
 			.SetEase(Tween.EaseType.Out);
 	}
 	
-	private void GrabFocusOnButton(Control container, string buttonName)
+	private static void GrabFocusOnButton(Control container, string buttonName)
 	{
 		foreach (Node child in container.GetChildren())
 		{
