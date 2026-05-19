@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://b711lsqcd7ru1"]
+
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="1_vfykd"]
+
+[resource]
+script = ExtResource("1_vfykd")
+MoveElement = 2
+Name = "Shockwave"
+Power = 20
+Cost = 2
+metadata/_custom_type_script = "uid://b0axq5jxdi4cy"

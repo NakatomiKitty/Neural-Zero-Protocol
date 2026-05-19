@@ -25,8 +25,14 @@ namespace NeuralZeroProtocol.Scripts.UI
                 if (child is Button button)
                 {
                     button.Pressed += () => OnAnyButtonPressed(button);
+                    button.MouseEntered += () => OnAnyButtonEntered(button);
                 }
             }
+        }
+
+        private void OnAnyButtonEntered(Button button)
+        {
+            GD.Print($"Hovering on: {button.Name}");
         }
 
         private void OnAnyButtonPressed(Button button)

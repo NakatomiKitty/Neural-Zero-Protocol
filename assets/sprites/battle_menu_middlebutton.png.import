@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bk0542tmlwdvn"
-path="res://.godot/imported/null_star_spellaction.png-b9c5172916fd668a88f50f922480a1f0.ctex"
+uid="uid://coakp5ja3alo7"
+path="res://.godot/imported/battle_menu_middlebutton.png-066d92f32788d0f3d6d845f9872a755b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/null_star_spellaction.png"
-dest_files=["res://.godot/imported/null_star_spellaction.png-b9c5172916fd668a88f50f922480a1f0.ctex"]
+source_file="res://assets/sprites/battle_menu_middlebutton.png"
+dest_files=["res://.godot/imported/battle_menu_middlebutton.png-066d92f32788d0f3d6d845f9872a755b.ctex"]
 
 [params]
 

@@ -1,6 +1,7 @@
 using Godot;
 using Godot.Collections;
 using GodotUtilities;
+using NeuralZeroProtocol.Scripts.Combat;
 using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 using System;
 
@@ -26,6 +27,9 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 		public Dictionary<StatType, int> CurrentStats = new Dictionary<StatType, int>();
 
+		public ElementType PrimaryElement => _characterStatsResources.PrimaryElement;
+		public ElementType SecondaryElement => _characterStatsResources.SecondaryElement;
+
 
         public override void _Notification(int what)
         {
@@ -37,6 +41,8 @@ namespace NeuralZeroProtocol.Scripts.Characters
 
 		public override void _EnterTree()
 		{
+			GD.Print(PrimaryElement);
+			GD.Print(SecondaryElement);
 			InitializeStats(_characterStatsResources);
 		} 
 

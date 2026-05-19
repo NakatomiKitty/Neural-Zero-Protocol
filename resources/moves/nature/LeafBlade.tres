@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://c1cv7sf32dmia"]
+
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="1_rlbcu"]
+
+[resource]
+script = ExtResource("1_rlbcu")
+MoveElement = 1
+Name = "Leaf Blade"
+Power = 20
+Cost = 1
+metadata/_custom_type_script = "uid://b0axq5jxdi4cy"

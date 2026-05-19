@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://bc37gtycx6yew"]
+
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="1_t8wd1"]
+
+[resource]
+script = ExtResource("1_t8wd1")
+MoveElement = 2
+Name = "Rock Club"
+Power = 20
+Cost = 1
+metadata/_custom_type_script = "uid://b0axq5jxdi4cy"

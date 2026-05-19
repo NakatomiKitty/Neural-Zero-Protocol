@@ -28,8 +28,8 @@ namespace NeuralZeroProtocol.Scripts.Resources.CharacterData
             { Rarity.UltraRare, 1.50f },
         };
 
-        [Export] public ElementType CharacterElement01 = ElementType.None;
-        [Export] public ElementType CharacterElement02 = ElementType.None;
+        [Export] public ElementType PrimaryElement = ElementType.None;
+        [Export] public ElementType SecondaryElement = ElementType.None;
         [Export] public Rarity SelectedRarity = Rarity.Scrap;
 
         [Export] public int MaxHealth = 500;

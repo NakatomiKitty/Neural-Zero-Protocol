@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://rwnjo4ukfdip"]
+
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="1_ot3su"]
+
+[resource]
+script = ExtResource("1_ot3su")
+MoveElement = 1
+ActionType = 1
+Name = "Tangle"
+Cost = 1
+metadata/_custom_type_script = "uid://b0axq5jxdi4cy"

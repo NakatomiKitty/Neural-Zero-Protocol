@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://bb7nmpxmq13uj"]
+
+[ext_resource type="Script" uid="uid://b0axq5jxdi4cy" path="res://scripts/resources/move_data/MoveResource.cs" id="1_0sh33"]
+
+[resource]
+script = ExtResource("1_0sh33")
+MoveElement = 1
+Name = "Seed Shot"
+Power = 20
+Cost = 1
+metadata/_custom_type_script = "uid://b0axq5jxdi4cy"
