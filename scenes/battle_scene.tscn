@@ -11,6 +11,38 @@
 [ext_resource type="PackedScene" uid="uid://dqg1xji5e7e45" path="res://scenes/ui/battle_menu.tscn" id="9_0gp0h"]
 [ext_resource type="PackedScene" uid="uid://cxto2efgk0mcs" path="res://scenes/ui/ui_selection_controller.tscn" id="9_3oc74"]
 
+[sub_resource type="CSharpScript" id="CSharpScript_0gp0h"]
+script/source = "using Godot;
+
+namespace NeuralZeroProtocol.Scripts.Ui;
+
+public enum UiSelection
+{
+	None,
+	Left,
+	Right,
+	Up,
+	Down,
+	Confirm,
+	Cancel
+}
+
+public partial class UiSelectionController : Node
+{
+	public static UiSelection GetUiSelect()
+	{
+		if (Input.IsActionJustPressed(\"ui_left\")) return UiSelection.Left;
+		if (Input.IsActionJustPressed(\"ui_right\")) return UiSelection.Right;
+		if (Input.IsActionJustPressed(\"ui_up\")) return UiSelection.Up;
+		if (Input.IsActionJustPressed(\"ui_down\")) return UiSelection.Down;
+		if (Input.IsActionJustPressed(\"ui_select\")) return UiSelection.Confirm;
+		if (Input.IsActionJustPressed(\"ui_cancel\")) return UiSelection.Cancel;
+		return UiSelection.None;
+	}
+}
+
+"
+
 [node name="BattleScene" type="Node2D" unique_id=354502011]
 script = ExtResource("1_8qdv8")
 
@@ -35,6 +67,7 @@ script = ExtResource("6_1i8jf")
 position = Vector2(576, 464)
 
 [node name="UiSelectionController" parent="." unique_id=1785561435 instance=ExtResource("9_3oc74")]
+script = SubResource("CSharpScript_0gp0h")
 
 [node name="CanvasLayer" parent="." unique_id=1663848318 instance=ExtResource("9_0gp0h")]
 layer = 0
