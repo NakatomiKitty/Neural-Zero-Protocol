@@ -30,14 +30,23 @@ public partial class BattleScene : Node2D
             // Links every Character's HealthComponent's Died signal in the battle
 			character.HealthComponent.Died += CombatStateMachine.OnCharacterDied;
 		}
+
+        TurnManager.StartBattle += OnBattleStart;
         
         // Passes the array to CardSystem so it can be used to update the card skins
         _ = CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromCurrentChar());
     }
-
+    
     public override void _Input(InputEvent @event) 
     {
-        CardSystem.GetUIInput(UiSelectionController.GetUiSelect());
+        CardSystem.GetUiInput(UiSelectionController.GetUiSelect());
+    }
+
+    private void OnBattleStart()
+    {
+        Character firstUnit = TurnManager.GetCurrentUnit();
+        CombatStateMachine.SetCurrentCharacter(firstUnit);
+        CombatStateMachine.StartBattle();
     }
 }
 

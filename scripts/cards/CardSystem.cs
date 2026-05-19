@@ -15,20 +15,18 @@ namespace NeuralZeroProtocol.Scripts.Cards
     [Scene]
     public partial class CardSystem : Node2D
     {
-        public const float TWEEN_DURATION = 0.03f;
-        public const int BASE_Z = 5;
-        public const int HOVER_Z = 11;
-        public const int SELECTED_Z = 10;
+        public const int HoverZ = 11;
+        public const int SelectedZ = 10;
         
-        private static readonly PackedScene _card = GD.Load<PackedScene>("res://scenes/card.tscn");
+        private static readonly PackedScene Card = GD.Load<PackedScene>("res://scenes/card.tscn");
 
         [Node] public CardHand CardHand;
         [Node] public CardHoverController CardHoverController;
         [Node] public CardSelectionController CardSelectionController;
 
-        public Dictionary<Card, int> OriginalZIndexes = new Dictionary<Card, int>();
+        public Dictionary<Card, int> OriginalZIndexes = new();
 
-        public Dictionary<Card, Vector2> CardBasePositions = new Dictionary<Card, Vector2>();
+        public Dictionary<Card, Vector2> CardBasePositions = new();
 
 
         public override void _Notification(int what)
@@ -45,6 +43,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
             CardSelectionController.SelectionChanged += OnSelectionChanged;
             CardSelectionController.GetHighlightedCard += OnGetHighlightedCard;
             CardSelectionController.SwappingStateChanged += CardHoverController.OnSwappingStateChanged;
+            
             CardHand.CardAdded += OnCardAdded;
             CardHand.GetCenterCard += OnGetCenterCard;
             
@@ -54,15 +53,16 @@ namespace NeuralZeroProtocol.Scripts.Cards
         {
             // First, clears any remaining cards 
             await ClearCardRegistry();
+            
             // always create 5 cards to the hand. 
             // TODO: ADD A SYSTEM IN THE FUTURE WHERE YOU CAN INCREASE YOUR HAND SIZE
             // Create the deck while passing down the array
-            CardHand.CreateHandFromCurve(5, _card, moves);
+            CardHand.CreateHandFromCurve(5, Card, moves);
 
             CardSelectionController.SetCardHand(CardHand.GetChildren());
         }
 
-        public void GetUIInput(UiSelection uiSelection)
+        public void GetUiInput(UiSelection uiSelection)
         {
             if (uiSelection == UiSelection.None) return;
 
@@ -88,17 +88,14 @@ namespace NeuralZeroProtocol.Scripts.Cards
         private void OnCardAdded(Card card) => ConnectCard(card);
 
         private void OnGetCenterCard(Card centerCard) => CardSelectionController.SetCenterCard(centerCard);
+        
+        private void OnGetHighlightedCard(Card card) => CardHoverController.ForceHighlight(card);
 
         private void OnSelectionChanged(Card oldCard, Card newCard)
         {
             CardHoverController.OnCardDeselected(oldCard);
 
             if (newCard != null) CardHoverController.OnCardSelected(newCard);
-        }
-
-        private void OnGetHighlightedCard(Card card)
-        {
-            CardHoverController.ForceHighlight(card);
         }
 
         private void ConnectCard(Card card)
@@ -110,7 +107,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
         private async Task ClearCardRegistry()
         {
-            var children = CardHand.GetChildren().ToArray();
+            Node[] children = CardHand.GetChildren().ToArray();
             foreach (Card card in children) 
             {
                 card.Hovered -= CardHoverController.OnHoveredOverCard;

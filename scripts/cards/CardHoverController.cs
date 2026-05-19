@@ -192,7 +192,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
             if (isHovered)
             {
-                card.ZIndex = CardSystem.HOVER_Z; // Hovered goes above base (5)
+                card.ZIndex = CardSystem.HoverZ; // Hovered goes above base (5)
                 card.UpdatePriority();
             }
             else

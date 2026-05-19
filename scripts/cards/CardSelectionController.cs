@@ -182,7 +182,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
             ActivePositionTweens[card] = tween;
             
-            card.ZIndex = selected ? CardSystem.SELECTED_Z : _cardSystem.OriginalZIndexes[card];
+            card.ZIndex = selected ? CardSystem.SelectedZ : _cardSystem.OriginalZIndexes[card];
             
             card.UpdatePriority();
         }

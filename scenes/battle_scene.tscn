@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cchbd2v466eod" path="res://scenes/ui/action_panel.tscn" id="7_rum4d"]
 [ext_resource type="PackedScene" uid="uid://iabgt3a61ewp" path="res://scenes/battle_manager.tscn" id="7_svpld"]
 [ext_resource type="PackedScene" uid="uid://8ic6l8vm65v7" path="res://scenes/card_system.tscn" id="8_rum4d"]
-[ext_resource type="PackedScene" path="res://scenes/ui/battle_menu.tscn" id="9_0gp0h"]
+[ext_resource type="PackedScene" uid="uid://dqg1xji5e7e45" path="res://scenes/ui/battle_menu.tscn" id="9_0gp0h"]
 [ext_resource type="PackedScene" uid="uid://cxto2efgk0mcs" path="res://scenes/ui/ui_selection_controller.tscn" id="9_3oc74"]
 
 [node name="BattleScene" type="Node2D" unique_id=354502011]

@@ -7,6 +7,8 @@ namespace NeuralZeroProtocol.Scripts.Characters;
 
 public partial class TurnManager : Node
 {
+	[Signal] public delegate void StartBattleEventHandler();
+	
 	[Export] public Node PlayerTeam;
 	[Export] public Node EnemyTeam;
 	[Export] public Timer TurnTimer;
@@ -26,18 +28,16 @@ public partial class TurnManager : Node
 		PlayerCharacters = PlayerTeam.GetChildren().Cast<Character>().ToList();
 		EnemyCharacters = EnemyTeam.GetChildren().Cast<Character>().ToList();
 	}
-
-	// Call this to start
-	public void StartBattle() => GenerateTurnOrder();
-
+	
 	private void GenerateTurnOrder()
 	{
 		TurnOrder.Clear();
-		
 		// Sort by DEX (High to Low)
 		TurnOrder = AllUnits.OrderByDescending(unit => unit.StatsComponent.GetStat(StatType.Dex)).ToList();
-		
 		CurrentUnitIndex = 0;
+		
+		EmitSignal(SignalName.StartBattle);
+		
 		GD.Print($"Turn Order Generated. Next up: {TurnOrder[0].Name}");
 	}
 

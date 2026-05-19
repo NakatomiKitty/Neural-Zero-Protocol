@@ -18,6 +18,7 @@ public enum BattleState
     Defeat,
 }
 
+
 public partial class CombatStateMachine : Node
 {
     [Signal] public delegate void StateChangedEventHandler(BattleState newState);
@@ -27,13 +28,18 @@ public partial class CombatStateMachine : Node
 
     private Character _currentCharacter;
 
-    public override async void _Ready()
+    public override void _Ready()
     {
         _battleScene = GetNode<BattleScene>("..");
-        
-        await ChangeState(BattleState.Initializing);
     }
 
+    public async void StartBattle()
+    {
+        await ChangeState(BattleState.Initializing);
+    }
+    
+    public void SetCurrentCharacter(Character character) => _currentCharacter = character;
+    
     public async Task ChangeState(BattleState newState)
     {
         _currentState = newState;
@@ -67,11 +73,7 @@ public partial class CombatStateMachine : Node
     private async Task Initializing()
     {
         GD.Print("Battle Initializing...");
-
-        _battleScene.TurnManager.StartBattle();
         
-        _currentCharacter = _battleScene.TurnManager.GetCurrentUnit();
-
         await CurrentCharacterTurn(_currentCharacter);
     }
 

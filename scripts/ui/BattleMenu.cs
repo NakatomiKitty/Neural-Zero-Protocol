@@ -29,8 +29,8 @@ public partial class BattleMenu : Control
 	private Control _secondaryButtonContainer;
 	private MenuState _currentMenuState;
 	private MenuState _targetMenuState;
-	
-	private Tween _initialContainerTween, _secondaryContainerTween;
+
+	private Tween _menuTween;
 	
 	public override void _Ready()
 	{
@@ -97,7 +97,7 @@ public partial class BattleMenu : Control
 		SwapTweenLerp(_initialButtonContainer, secondaryBasePosition);
 		SwapTweenLerp(_secondaryButtonContainer, initialBasePosition);
 
-		_initialContainerTween.Finished += () =>
+		_menuTween.Finished += () =>
 		{
 			if (_currentMenuState != MenuState.Swapping) return;
 			
@@ -154,9 +154,9 @@ public partial class BattleMenu : Control
 
 	private void SwapTweenLerp(Control buttonContainer, Vector2 finalPosition)
 	{
-		var containerTween = CreateTween();
+		_menuTween = CreateTween();
 
-		containerTween.TweenProperty(buttonContainer, "position", finalPosition, MenuSwapTween)
+		_menuTween.TweenProperty(buttonContainer, "position", finalPosition, MenuSwapTween)
 			.SetTrans(Tween.TransitionType.Quint)
 			.SetEase(Tween.EaseType.Out);
 	}
