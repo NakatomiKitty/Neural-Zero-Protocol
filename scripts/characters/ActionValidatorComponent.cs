@@ -1,7 +1,6 @@
 using Godot;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
 
-
 namespace NeuralZeroProtocol.Scripts.Characters
 {
 	[GlobalClass]

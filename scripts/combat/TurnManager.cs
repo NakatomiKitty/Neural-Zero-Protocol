@@ -1,10 +1,7 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using NeuralZeroProtocol.Scripts.Characters;
 using NeuralZeroProtocol.Scripts.Resources.CharacterData;
-using Godot.Collections;
 
 namespace NeuralZeroProtocol.Scripts.Characters
 {

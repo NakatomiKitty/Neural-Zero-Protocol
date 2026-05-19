@@ -62,9 +62,9 @@ namespace NeuralZeroProtocol.Scripts.Cards
             CardSelectionController.SetCardHand(CardHand.GetChildren());
         }
 
-        public void GetUIInput(UISelection uiSelection)
+        public void GetUIInput(UiSelection uiSelection)
         {
-            if (uiSelection == UISelection.None) return;
+            if (uiSelection == UiSelection.None) return;
 
             if (CardSelectionController.IsSwapping) return;
 
@@ -73,13 +73,13 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
             switch (uiSelection)
             {
-                case UISelection.Left:
+                case UiSelection.Left:
                     CardSelectionController.MoveLeft();
                     break;
-                case UISelection.Right:
+                case UiSelection.Right:
                     CardSelectionController.MoveRight();
                     break;
-                case UISelection.Confirm:
+                case UiSelection.Confirm:
                     CardSelectionController.ConfirmCard();
                     break;
             }

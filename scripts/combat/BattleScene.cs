@@ -1,4 +1,3 @@
-using System;
 using Godot;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Cards;
@@ -17,7 +16,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
         [Node] public CombatStateMachine CombatStateMachine;
         [Node] public BattleManager BattleManager;
         [Node] public CardSystem CardSystem;
-        [Node] public UISelectionController UISelectionController;
+        [Node] public UiSelectionController UiSelectionController;
         private MoveResource[] _moves;
 
         public override void _Notification(int what)
@@ -42,7 +41,7 @@ namespace NeuralZeroProtocol.Scripts.Combat
 
         public override void _Input(InputEvent @event) 
         {
-            CardSystem.GetUIInput(UISelectionController.GetUISelect());
+            CardSystem.GetUIInput(UiSelectionController.GetUiSelect());
         }
     }
 }

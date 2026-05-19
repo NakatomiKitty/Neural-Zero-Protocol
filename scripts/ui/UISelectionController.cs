@@ -4,7 +4,7 @@ using System;
 
 namespace NeuralZeroProtocol.Scripts.Ui
 {
-	public enum UISelection
+	public enum UiSelection
 	{
 		None,
 		Left,
@@ -13,19 +13,19 @@ namespace NeuralZeroProtocol.Scripts.Ui
 		Down,
 		Confirm,
 		Cancel
-	};
+	}
 
-	public partial class UISelectionController : Node
+	public abstract partial class UiSelectionController : Node
 	{
-		public UISelection GetUISelect()
+		public UiSelection GetUiSelect()
 		{
-			if (Input.IsActionJustPressed("ui_left")) return UISelection.Left;
-			if (Input.IsActionJustPressed("ui_right")) return UISelection.Right;
-			if (Input.IsActionJustPressed("ui_up")) return UISelection.Up;
-			if (Input.IsActionJustPressed("ui_down")) return UISelection.Down;
-			if (Input.IsActionJustPressed("ui_select")) return UISelection.Confirm;
-			if (Input.IsActionJustPressed("ui_cancel")) return UISelection.Cancel;
-			return UISelection.None;
+			if (Input.IsActionJustPressed("ui_left")) return UiSelection.Left;
+			if (Input.IsActionJustPressed("ui_right")) return UiSelection.Right;
+			if (Input.IsActionJustPressed("ui_up")) return UiSelection.Up;
+			if (Input.IsActionJustPressed("ui_down")) return UiSelection.Down;
+			if (Input.IsActionJustPressed("ui_select")) return UiSelection.Confirm;
+			if (Input.IsActionJustPressed("ui_cancel")) return UiSelection.Cancel;
+			return UiSelection.None;
 		}
 	}
 }
