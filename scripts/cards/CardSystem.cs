@@ -80,7 +80,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
         private void OnSelectionChanged(Card oldCard, Card newCard)
         {
-            CardHoverController.OnCardDeselected(oldCard);
+            CardHoverController.OnCardDeselected();
 
             if (newCard != null) CardHoverController.OnCardSelected(newCard);
         }

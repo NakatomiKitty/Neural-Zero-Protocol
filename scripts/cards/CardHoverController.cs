@@ -51,7 +51,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
 			UpdateHoverEffect();
 		}
 
-		public void OnCardDeselected(Card card)
+		public void OnCardDeselected()
 		{
 			_selectedCard = null;
 			UpdateHoverEffect();
@@ -108,6 +108,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
             ApplyHoverEffect(highlightedCard, false);
         }
+        
         // Re‑evaluates which card (if there is any) should receive the hover effect.
         // The effect is given to the highest‑ZIndex card that is NOT selected.
         private void UpdateHoverEffect()
@@ -150,8 +151,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
                 _mouseHoveredCard = highestCard;
             }
         }
-
-		// Kind of like a helper function! 
+        
 		// Removes and Kill any ongoing tween
 		private void KillAndRemoveTween(Card card)
 		{
