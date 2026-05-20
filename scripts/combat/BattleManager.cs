@@ -1,42 +1,39 @@
-using System;
-using System.Linq;
 using Godot;
 using Godot.Collections;
-using NeuralZeroProtocol.Scripts.Cards;
 using NeuralZeroProtocol.Scripts.Characters;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
 
-namespace NeuralZeroProtocol.Scripts.Combat
+namespace NeuralZeroProtocol.Scripts.Combat;
+
+public partial class BattleManager : Node
 {
-    public partial class BattleManager : Node
+    private BattleScene _battleScene;
+
+    private Array<Node> _playerCharacters = new();
+    private Array<MoveResource> _moves = new();
+    private Array<MoveResource> _selectedMoves;
+
+    public override void _Ready() 
     {
-        private BattleScene _battleScene;
+        _playerCharacters = GetTree().GetNodesInGroup("PlayerCharacters");
+        
+        GetSelectedMovesFromCurrentChar();
+    }
 
-        private Array<Node> _playerCharacters = new Array<Node>();
-        private Array<MoveResource> _moves = new Array<MoveResource>();
-        private Array<MoveResource> _selectedMoves;
-
-        public override void _Ready() 
+    // Gets the moves from the moveset component, then get 5 random moves and returns it as an array
+    public Array<MoveResource> GetSelectedMovesFromCurrentChar()
+    {
+        foreach (PlayerCharacter currentCharacter in _playerCharacters)
         {
-            _playerCharacters = GetTree().GetNodesInGroup("playercharacters");
-
-            GetSelectedMovesFromPlayer();
+            _moves = currentCharacter.MovesetComponent.GetMoves().Duplicate();
         }
 
-        // Gets the moves from the moveset component, then get 5 random moves and returns it as an array
-        public Array<MoveResource> GetSelectedMovesFromPlayer()
-        {
-            foreach (PlayerCharacter playerCharacter in _playerCharacters)
-            {
-                _moves = playerCharacter.MovesetComponent.GetMoves().Duplicate();
-            }
+        _moves.Shuffle();
 
-            _moves.Shuffle();
-
-            int cardsToTake = Mathf.Min(5, _moves.Count);
-            _selectedMoves = _moves.Slice(0, cardsToTake);
-            return _selectedMoves;
-        }
+        int cardsToTake = Mathf.Min(5, _moves.Count);
+        _selectedMoves = _moves.Slice(0, cardsToTake);
+        return _selectedMoves;
     }
 }
+
 

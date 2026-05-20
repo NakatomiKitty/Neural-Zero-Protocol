@@ -3,35 +3,32 @@ using Godot.Collections;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
 using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 
-namespace NeuralZeroProtocol.Scripts.Characters
+namespace NeuralZeroProtocol.Scripts.Characters;
+
+[GlobalClass]
+public partial class MovesetComponent : Node
 {
-    [GlobalClass]
-    public partial class MovesetComponent : Node
+    [Export] public Array<MoveResource> Moves = new();
+    
+    private Character _character;
+
+    public override void _Ready() 
     {
-        [Export] public Array<MoveResource> Moves = new Array<MoveResource>();
+        _character = GetNode<Character>("..");
         
-        private Character _character;
-
-        public override void _Ready() 
-        {
-            _character = GetNode<Character>("..");
-            
-			if (_character == null)
-			{
-				GD.PushError($"Character is not loaded in!");
-			}
+		if (_character == null)
+		{
+			GD.PushError($"Character is not loaded in!");
 		}
-        
-        public Array<MoveResource> GetMoves() => Moves;
+	}
+    
+    public Array<MoveResource> GetMoves() => Moves;
 
-        public bool CheckNrg(MoveResource move) => _character.StatsComponent.GetStat(StatType.Nrg) >= move.Cost;
-        
-        public void SpendNrg(MoveResource move)
-        {
-            if (CheckNrg(move)) _character.StatsComponent.ModifyStat(StatType.Nrg, -move.Cost);
-        }
-
-
+    public bool CheckNrg(MoveResource move) => _character.StatsComponent.GetStat(StatType.Nrg) >= move.Cost;
+    
+    public void SpendNrg(MoveResource move)
+    {
+        if (CheckNrg(move)) _character.StatsComponent.ModifyStat(StatType.Nrg, -move.Cost);
     }
 }
 

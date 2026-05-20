@@ -1,4 +1,3 @@
-using System;
 using Godot;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Cards;
@@ -7,43 +6,49 @@ using NeuralZeroProtocol.Scripts.Resources.MoveData;
 using NeuralZeroProtocol.Scripts.Ui;
 using NeuralZeroProtocol.Scripts.UI;
 
-namespace NeuralZeroProtocol.Scripts.Combat
+namespace NeuralZeroProtocol.Scripts.Combat;
+
+[Scene]
+public partial class BattleScene : Node2D
 {
-    [Scene]
-    public partial class BattleScene : Node2D
+    [Node] public TurnManager TurnManager;
+    [Node] public ActionPanel ActionPanel;
+    [Node] public CombatStateMachine CombatStateMachine;
+    [Node] public BattleManager BattleManager;
+    [Node] public CardSystem CardSystem;
+    [Node] public UiSelectionController UiSelectionController;
+    private MoveResource[] _moves;
+    
+    public override void _Notification(int what)
     {
-        [Node] public TurnManager TurnManager;
-        [Node] public ActionPanel ActionPanel;
-        [Node] public CombatStateMachine CombatStateMachine;
-        [Node] public BattleManager BattleManager;
-        [Node] public CardSystem CardSystem;
-        [Node] public UISelectionController UISelectionController;
-        private MoveResource[] _moves;
+        if (what == NotificationSceneInstantiated) WireNodes();
+    }
+    
+    public override void _Ready() 
+    {
+        foreach (Character character in TurnManager.AllUnits)
+		{
+            // Links every Character's HealthComponent's Died signal in the battle
+			character.HealthComponent.Died += CombatStateMachine.OnCharacterDied;
+		}
 
-        public override void _Notification(int what)
-        {
-            if (what == NotificationSceneInstantiated)
-			{
-				WireNodes();
-			}
-        }
+        TurnManager.StartBattle += OnBattleStart;
+        
+        // Passes the array to CardSystem so it can be used to update the card skins
+        _ = CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromCurrentChar());
+    }
+    
+    public override void _Input(InputEvent @event) 
+    {
+        CardSystem.CardSelectionController.GetUiInput(UiSelectionController.GetUiSelect());
+    }
 
-        public override void _Ready() 
-        {
-            foreach (Character character in TurnManager.AllUnits)
-			{
-                // Links every Character's HealthComponent's Died signal in the battle
-				character.HealthComponent.Died += CombatStateMachine.OnCharacterDied;
-			}
-            
-            // Passes the array to Cardsystem so it can be used to update the card skins
-            _ = CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromPlayer());
-        }
-
-        public override void _Input(InputEvent @event) 
-        {
-            CardSystem.GetUIInput(UISelectionController.GetUISelect());
-        }
+    private void OnBattleStart()
+    {
+        Character firstUnit = TurnManager.GetCurrentUnit();
+        CombatStateMachine.SetCurrentCharacter(firstUnit);
+        CombatStateMachine.StartBattle();
     }
 }
+
 

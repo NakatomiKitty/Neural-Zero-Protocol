@@ -1,27 +1,17 @@
 using Godot;
-using GodotUtilities;
 
-namespace NeuralZeroProtocol.Scripts.Characters
+namespace NeuralZeroProtocol.Scripts.Characters;
+
+[GlobalClass]
+public partial class PlayerCharacter : Character
 {
-    [GlobalClass]
-    [Scene]
-    public partial class PlayerCharacter : Character
+    public ActionValidatorComponent ActionValidatorComponent;
+
+    public override void _Ready()
     {
-        [Node] public ActionValidatorComponent ActionValidatorComponent;
-
-        public override void _Notification(int what)
-        {
-            if (what == NotificationSceneInstantiated)
-			{
-				WireNodes();
-			}
-        }
-
-        public override void _Ready()
-        {
-            AddToGroup("playercharacters");
-        }
-
+        ActionValidatorComponent = GetNode<ActionValidatorComponent>("ActionValidatorComponent");
+        AddToGroup("PlayerCharacters");
     }
 }
+
 

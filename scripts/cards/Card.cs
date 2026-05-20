@@ -31,17 +31,17 @@ namespace NeuralZeroProtocol.Scripts.Cards
             _area2D.MouseEntered += OnMouseEntered;
             _area2D.MouseExited += OnMouseExited;
             _area2D.InputEvent += OnMouseClicked;
+            
             UpdatePriority();
         }
-        /// <summary>
-        /// Keep the Area2D's input priority in sync with the visual ZIndex.
-        /// Higher ZIndex means higher priority which means it receives clicks first.
-        /// </summary>
-        public void UpdatePriority()
-        {
-            _area2D.Priority = ZIndex;
-        }
+        
+        private void OnMouseEntered() => EmitSignal(SignalName.Hovered, this);
+        private void OnMouseExited() => EmitSignal(SignalName.NotHovered, this);
+        
+        // Higher ZIndex means higher priority which means it receives clicks first.
 
+        public void UpdatePriority() => _area2D.Priority = ZIndex;
+        
         public void ChangeCardSkin(MoveResource move)
         {
             MoveData = move;
@@ -57,16 +57,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
                 EmitSignal(SignalName.Clicked, this);
             }
         }
-
-        private void OnMouseEntered()
-        {
-            EmitSignal(SignalName.Hovered, this);
-        }
-
-        private void OnMouseExited()
-        {
-            EmitSignal(SignalName.NotHovered, this);
-        }
+        
+        
     }
 }
-

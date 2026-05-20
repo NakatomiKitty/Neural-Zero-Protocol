@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://c0yv77ynmfmtf"]
+[gd_scene format=3 uid="uid://dqg1xji5e7e45"]
 
 [ext_resource type="Texture2D" uid="uid://hce1t6sm2638" path="res://assets/sprites/battle_menu_background.png" id="1_dx6n2"]
 [ext_resource type="Texture2D" uid="uid://bvxysdfvu1jr" path="res://assets/sprites/battle_menu_background_overlay.png" id="1_j6r35"]
@@ -18,10 +18,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -595.0
-offset_top = -465.0
-offset_right = 557.0
-offset_bottom = -67.0
+offset_left = -566.0
+offset_top = -141.0
+offset_right = 586.0
+offset_bottom = 257.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("3_luyfx")

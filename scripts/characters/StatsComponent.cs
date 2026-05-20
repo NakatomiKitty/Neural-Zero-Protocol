@@ -3,87 +3,77 @@ using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 using System;
 using System.Collections.Generic;
 
+namespace NeuralZeroProtocol.Scripts.Characters;
 
+/// <summary>
+/// StatsComponent mostly handles getting the Stat values from Character.CS
+/// And modifying them then emits signals when stats (except HP) hit 0 (DeadZone) or recover above 0.
+/// </summary>
 
-namespace NeuralZeroProtocol.Scripts.Characters
+[GlobalClass]
+public partial class StatsComponent : Node
 {
-	/// <summary>
-	/// StatsComponent mostly handles getting the Stat values from Character.CS
-	/// And modifying them then emits signals when stats (except HP) hit 0 (DeadZone) or recover above 0.
-	/// </summary>
+	// Declaration of Signals
+	[Signal] public delegate void StatChangedEventHandler(int stat, int currentValue);
+	[Signal] public delegate void StatZeroedEventHandler(int stat);
+	[Signal] public delegate void StatRecoveredEventHandler(int stat);
 
-	[GlobalClass]
-	public partial class StatsComponent : Node
+	private Character _character;
+
+	public override void _Ready() 
 	{
-		// Declaration of Signals
-		[Signal] public delegate void StatChangedEventHandler(int stat, int currentValue);
-		[Signal] public delegate void StatZeroedEventHandler(int stat);
-		[Signal] public delegate void StatRecoveredEventHandler(int stat);
-
-		private Character _character;
-
-		public override void _Ready() 
+		_character = GetNode<Character>("..");
+		
+		if (_character == null)
 		{
-			_character = GetNode<Character>("..");
-			
-			if (_character == null)
-			{
-				GD.PushWarning($"Character is not loaded in!");
-			}
-			
-			DebugPrintAllStats();
-            // if you want to debug, put ModifyStat(StatTypes.Key, value)
+			GD.PushWarning($"Character is not loaded in!");
 		}
 		
-		public int GetStat(StatType stat) // this retrieves the old value
-		{
-			if (_character.CurrentStats.TryGetValue(stat, out int value))
-			{
-				return value;
-			}
-			return 5;
-		}
+		DebugPrintAllStats();
+        // if you want to debug, put ModifyStat(StatTypes.Key, value)
+	}
+	
+	public int GetStat(StatType stat) // this retrieves the old value
+	{
+		return _character.CurrentStats.GetValueOrDefault(stat, 5);
+	}
 
-		public void ModifyStat(StatType stat, int changeValue)
-		{
+	public void ModifyStat(StatType stat, int changeValue)
+	{
+		
+		int oldValue = GetStat(stat);
+		int currentValue = Math.Max(0, oldValue + changeValue); // Clamp to prevent going past below zero
 
-			var oldValue = GetStat(stat);
-			var currentValue = Math.Max(0, oldValue + changeValue); // Clamp to prevent going past below zero
+		// Debug print
+		GD.Print($"Stat changed: {stat} ({oldValue} → {currentValue}) [changeValue: {changeValue}]");
 
-			// Debug print
-			GD.Print($"Stat changed: {stat} ({oldValue} → {currentValue}) [changeValue: {changeValue}]");
+		_character.CurrentStats[stat] = currentValue;
 
-			_character.CurrentStats[stat] = currentValue;
+		// Tell any listening nodes that this stat's value has changed.
+		EmitSignal(SignalName.StatChanged, (int)stat, currentValue);
 
-			// Tell any listening nodes that this stat's value has changed.
-			// Example: If DEX goes from 5 to 1, we send: (2(stat), 1(newValue)) because DEX = 2 in the enum.
-			EmitSignal(SignalName.StatChanged, (int)stat, currentValue);
-
-			// If the stat was positive and now becomes exactly zero, it means the character just entered the "DeadZone".
-			// Example: ATK drops from 5 to 0 → character becomes "Fragile". etc. etc. etc.
-			
-			if (stat != StatType.Hp && oldValue > 0 && currentValue == 0) 
-			{   
-				GD.Print($"{stat} reached zero! Activating disability!");
-				EmitSignal(SignalName.StatZeroed, (int)stat);
-			}
-
-			// If the stat was zero and was recently recovered, it means the character has gotten out of the "DeadZone"
-			// Character is no more fragile YIPPIEEE
-			else if (oldValue == 0 && currentValue > 0) 
-			{
-				GD.Print($"{stat} recovered! Deactivating disability!");
-				EmitSignal(SignalName.StatRecovered, (int)stat);
-			}
-		}
-
-		public void DebugPrintAllStats()
+		// If the stat was positive and now becomes exactly zero, it means the character just entered the "DeadZone".
+		if (stat != StatType.Hp && oldValue > 0 && currentValue == 0) 
 		{   
-			GD.Print($"{GetParent().Name} stats");
-			foreach (StatType stat in Enum.GetValues<StatType>()) // loop through every StatType Values
-			{
-				GD.Print($"{stat}: {GetStat(stat)}");
-			}
+			GD.Print($"{stat} reached zero! Activating disability!");
+			EmitSignal(SignalName.StatZeroed, (int)stat);
+		}
+
+		// If the stat was zero and was recently recovered, it means the character has gotten out of the "DeadZone"
+		else if (oldValue == 0 && currentValue > 0) 
+		{
+			GD.Print($"{stat} recovered! Deactivating disability!");
+			EmitSignal(SignalName.StatRecovered, (int)stat);
+		}
+	}
+
+	public void DebugPrintAllStats()
+	{   
+		GD.Print($"{GetParent().Name} stats");
+		foreach (StatType stat in Enum.GetValues<StatType>()) // loop through every StatType Values
+		{
+			GD.Print($"{stat}: {GetStat(stat)}");
 		}
 	}
 }
+
