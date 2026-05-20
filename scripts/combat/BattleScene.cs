@@ -40,7 +40,7 @@ public partial class BattleScene : Node2D
     
     public override void _Input(InputEvent @event) 
     {
-        CardSystem.GetUiInput(UiSelectionController.GetUiSelect());
+        CardSystem.CardSelectionController.GetUiInput(UiSelectionController.GetUiSelect());
     }
 
     private void OnBattleStart()

@@ -19,13 +19,11 @@ namespace NeuralZeroProtocol.Scripts.Cards
 		private Card _selectedCard;
 
 		private Card _mouseHoveredCard; // Used for selecting with mouse 
-        private Card _forcedHighlightedCard; // Used for selecting with keyboard
+        private Card _keyboardHoveredCard; // Used for selecting with keyboard
 
         private bool _isSwapping;
         
 		public override void _Ready() => _cardSystem = GetNode<CardSystem>("..");
-
-		private Card GetForcedHighlightedCard() => _forcedHighlightedCard;
         
         public void OnSwappingStateChanged(bool isSwapping) => _isSwapping = isSwapping;
 
@@ -64,7 +62,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
         {
             if (_isSwapping) return;
 
-            if (card == _forcedHighlightedCard) return;
+            if (card == _keyboardHoveredCard) return;
 
             if (card == _selectedCard) return;   // Never hover the selected card
 
@@ -76,7 +74,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
         {
             if (_isSwapping) return;
 
-            if (card == _forcedHighlightedCard) return;
+            if (card == _keyboardHoveredCard) return;
 
             if (card == _selectedCard) return; 
 
@@ -89,22 +87,22 @@ namespace NeuralZeroProtocol.Scripts.Cards
         {
             ClearForcedHighlight();
 
-            if (card == _forcedHighlightedCard) return;
+            if (card == _keyboardHoveredCard) return;
 
             if (card == _selectedCard) return;
 
-           _forcedHighlightedCard = card;
+           _keyboardHoveredCard = card;
 
-           ApplyHoverEffect(_forcedHighlightedCard, true);
+           ApplyHoverEffect(_keyboardHoveredCard, true);
         }
 
-        private void ClearForcedHighlight()
+        public void ClearForcedHighlight()
         {
-            if (_forcedHighlightedCard == null) return;
+            if (_keyboardHoveredCard == null) return;
 
-            Card highlightedCard = _forcedHighlightedCard;
+            Card highlightedCard = _keyboardHoveredCard;
 
-            _forcedHighlightedCard = null;
+            _keyboardHoveredCard = null;
 
             UpdateHoverEffect();
 
@@ -116,7 +114,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
         {
             if (_isSwapping) return;
 
-            if (_forcedHighlightedCard != null) return;
+            if (_keyboardHoveredCard != null) return;
 
             if (_cardsUnderMouse.Count == 0)
             {

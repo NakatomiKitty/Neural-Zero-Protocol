@@ -25,10 +25,11 @@ public partial class BattleMenu : Control
 	
 	[Signal] public delegate void MenuStateChangedEventHandler(MenuState newState);
 	[Signal] public delegate void ButtonSelectedEventHandler(int actionType); // Rename to ActionType once replaced ActionPanel
-	private Control _initialButtonContainer;
-	private Control _secondaryButtonContainer;
+	
 	private MenuState _currentMenuState;
 	private MenuState _targetMenuState;
+	private Control _initialButtonContainer;
+	private Control _secondaryButtonContainer;
 
 	private Tween _menuTween;
 	

@@ -4,7 +4,7 @@ using Godot;
 using Godot.Collections;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
-using NeuralZeroProtocol.Scripts.Ui;
+
 
 namespace NeuralZeroProtocol.Scripts.Cards
 {
@@ -43,8 +43,9 @@ namespace NeuralZeroProtocol.Scripts.Cards
             Scale = new Vector2(scale, scale);
             
             CardSelectionController.SelectionChanged += OnSelectionChanged;
-            CardSelectionController.GetHighlightedCard += OnHighlightedCardReceived;
+            CardSelectionController.GetKeyboardHoveredCard += OnKeyboardHoveredCardReceived;
             CardSelectionController.SwappingStateChanged += CardHoverController.OnSwappingStateChanged;
+            CardSelectionController.KeyboardModeDeactivated += OnKeyboardModeDeactivated;
             
             CardHand.CardAdded += ConnectCardSignals;
         }
@@ -71,32 +72,11 @@ namespace NeuralZeroProtocol.Scripts.Cards
             CardSelectionController.SetCardHand(CardHand.GetChildren());
         }
 
-        public void GetUiInput(UiSelection uiSelection)
-        {
-            if (uiSelection == UiSelection.None) return;
-
-            if (CardSelectionController.IsSwapping) return;
-
-            if (CardSelectionController.MouseModeActive) 
-                CardSelectionController.MouseModeActive = false;
-
-            switch (uiSelection)
-            {
-                case UiSelection.Left:
-                    CardSelectionController.KeyboardMoveLeft();
-                    break;
-                case UiSelection.Right:
-                    CardSelectionController.KeyboardMoveRight();
-                    break;
-                case UiSelection.Confirm:
-                    CardSelectionController.ConfirmCard();
-                    break;
-            }
-        }
-
         private void ConnectCardSignals(Card card) => ConnectCard(card);
         
-        private void OnHighlightedCardReceived(Card card) => CardHoverController.ForceHighlight(card);
+        private void OnKeyboardHoveredCardReceived(Card card) => CardHoverController.ForceHighlight(card);
+        
+        private void OnKeyboardModeDeactivated() => CardHoverController.ClearForcedHighlight();
 
         private void OnSelectionChanged(Card oldCard, Card newCard)
         {
