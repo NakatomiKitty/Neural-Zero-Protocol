@@ -38,7 +38,6 @@ position = Vector2(576, 464)
 
 [node name="CanvasLayer" parent="." unique_id=1663848318 instance=ExtResource("9_0gp0h")]
 layer = 0
-visible = false
 
 [node name="ActionPanel" parent="." unique_id=932627865 instance=ExtResource("7_rum4d")]
 visible = false

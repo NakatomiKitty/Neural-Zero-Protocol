@@ -25,21 +25,23 @@ public partial class BattleMenu : Control
 	
 	[Signal] public delegate void MenuStateChangedEventHandler(MenuState newState);
 	[Signal] public delegate void ButtonSelectedEventHandler(int actionType); // Rename to ActionType once replaced ActionPanel
+	[Signal] public delegate void ActionMenuStateEventHandler(bool isTrue);
 	
 	private MenuState _currentMenuState;
 	private MenuState _targetMenuState;
 	private Control _initialButtonContainer;
-	private Control _secondaryButtonContainer;
 
 	private Tween _menuTween;
+	
+	public Control ActionMenuContainer;
 	
 	public override void _Ready()
 	{
 		_initialButtonContainer = GetNode<Control>("InitialButtonContainer");
-		_secondaryButtonContainer = GetNode<Control>("SecondaryButtonContainer");
+		ActionMenuContainer = GetNode<Control>("SecondaryButtonContainer");
 		
 		GetContainerChildren(_initialButtonContainer);
-		GetContainerChildren(_secondaryButtonContainer);
+		GetContainerChildren(ActionMenuContainer);
 		
 		ChangeState(MenuState.InitialMenu);
 	}
@@ -68,7 +70,7 @@ public partial class BattleMenu : Control
 	{
 		// Hides the opposite container to prevent the keyboard accessing them
 		_initialButtonContainer.Visible = true;
-		_secondaryButtonContainer.Visible = false;
+		ActionMenuContainer.Visible = false;
 		
 		// Set's the keyboard focus on the Moves Button
 		GrabFocusOnButton(_initialButtonContainer, "MovesButton");
@@ -77,34 +79,36 @@ public partial class BattleMenu : Control
 	private void EnterSecondaryMenu()
 	{
 		// Hides the opposite container to prevent the keyboard accessing them
-		_secondaryButtonContainer.Visible = true;
+		ActionMenuContainer.Visible = true;
 		_initialButtonContainer.Visible = false;
 		
 		// Set's the keyboard focus on the Attack Button
-		GrabFocusOnButton(_secondaryButtonContainer, "AttackButton");
+		GrabFocusOnButton(ActionMenuContainer, "AttackButton");
 	}
 	
 	private void SwapTheMenus()
 	{
-		var initialBasePosition = _initialButtonContainer.Position;
-		var secondaryBasePosition = _secondaryButtonContainer.Position;
+		Vector2 initialBasePosition = _initialButtonContainer.Position;
+		Vector2 secondaryBasePosition = ActionMenuContainer.Position;
 		
 		// Set's both of them to true while swapping
 		_initialButtonContainer.Visible = true;
-		_secondaryButtonContainer.Visible = true;
+		ActionMenuContainer.Visible = true;
 		
 		// Swap the container's position with TWEEEEENNNNN
 		
 		SwapMenuLerp(_initialButtonContainer, secondaryBasePosition);
-		SwapMenuLerp(_secondaryButtonContainer, initialBasePosition);
+		SwapMenuLerp(ActionMenuContainer, initialBasePosition);
 
 		_menuTween.Finished += () =>
 		{
 			if (_currentMenuState != MenuState.Swapping) return;
-			
+
+			EmitSignal(SignalName.ActionMenuState, _targetMenuState == MenuState.SecondaryMenu);
+
 			// Swap Z Indexes
-			(_initialButtonContainer.ZIndex, _secondaryButtonContainer.ZIndex) = 
-				(_secondaryButtonContainer.ZIndex, _initialButtonContainer.ZIndex);
+			(_initialButtonContainer.ZIndex, ActionMenuContainer.ZIndex) = 
+				(ActionMenuContainer.ZIndex, _initialButtonContainer.ZIndex);
 			
 			ChangeState(_targetMenuState);
 		};
@@ -113,7 +117,7 @@ public partial class BattleMenu : Control
 	{
 		if (_currentMenuState == MenuState.Swapping) return;
 		
-		var action = button.Name.ToString() switch
+		ButtonType action = button.Name.ToString() switch
 		{
 			"SwitchButton" => ButtonType.Switch,
 			"MovesButton" => ButtonType.Moves,
@@ -126,7 +130,7 @@ public partial class BattleMenu : Control
 		
 		GD.Print(action);
 		
-		EmitSignal(SignalName.ButtonSelected, (int)action); // Will be hooked up to the CombatStateMachine and CardSystem\
+		EmitSignal(SignalName.ButtonSelected, (int)action); // Will be hooked up to the CombatStateMachine and CardSystem
 		
 		if (_currentMenuState == MenuState.InitialMenu && action == ButtonType.Moves)
 		{

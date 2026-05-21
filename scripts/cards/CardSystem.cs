@@ -67,7 +67,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
             
             
             Card centerCard = cards[cards.Count / 2];
-            CardSelectionController.SetCenterCard(centerCard);
+            // CardSelectionController.SetCenterCard(centerCard);
             
             CardSelectionController.SetCardHand(CardHand.GetChildren());
         }

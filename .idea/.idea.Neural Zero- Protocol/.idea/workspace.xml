@@ -12,6 +12,10 @@
   <component name="ChangeListManager">
     <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/ui/battle_menu.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/ui/battle_menu.tscn" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +26,7 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="17" />
+    <option name="cachedIndexableFilesCount" value="32" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -63,7 +67,7 @@
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;features/CardSystem&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;CardSystem/BattleMenu&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -136,6 +140,8 @@
       <workItem from="1779287506377" duration="1186000" />
       <workItem from="1779288862917" duration="1000" />
       <workItem from="1779288906231" duration="71000" />
+      <workItem from="1779289088999" duration="4362000" />
+      <workItem from="1779370394565" duration="512000" />
     </task>
     <servers />
   </component>
