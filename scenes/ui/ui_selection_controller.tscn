@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cxto2efgk0mcs"]
 
-[ext_resource type="Script" uid="uid://ddqt5dqi7r6gn" path="res://scripts/ui/UiSelectionController.cs" id="1_3o6cy"]
+[ext_resource type="Script" uid="uid://d22fhab2og4b6" path="res://scripts/ui/UiSelectionController.cs" id="1_3o6cy"]
 
 [node name="UiSelectionController" type="Node" unique_id=1785561435]
 script = ExtResource("1_3o6cy")
