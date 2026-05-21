@@ -20,7 +20,7 @@ public enum CardSelectionState
 
 public sealed partial class CardSelectionController : Node2D
 {
-    private const float SelectionTweenDuration = 0.2f;
+    private const float SelectionTweenDuration = 0.15f;
     private const float SwapTweenDuration = 0.15f;
 
     [Signal] public delegate void KeyboardModeDeactivatedEventHandler();
@@ -67,15 +67,35 @@ public sealed partial class CardSelectionController : Node2D
     
     public void SetCardHand(Array<Node> cardHand) => CardHand = [.. cardHand.OfType<Card>()];
     
-    public void SetCenterCard(Card centerCard)
+    public void SetCenterCard(Card centerCard) => (_keyboardHoveredCard, CenterCard) = (centerCard, centerCard);
+    
+    // Used in BattleScene.cs, Selects the Center Card when Action Menu shows up
+    public void SelectCenterCard()
     {
-        _keyboardHoveredCard = centerCard;
-        
-        CenterCard = centerCard;
-        
-        if (_selectedCard == null) SelectCard(centerCard);
+        SelectCard(CenterCard);
         
         ChangeState(CardSelectionState.Idle);
+    }
+    
+    // Used in BattleScene.cs, Deselects the Center Card when Action Menu leaves
+    public void DeselectCenterCard()
+    {
+        ApplyVisualState(CenterCard, false);
+    }
+    
+    public void DeselectCard()
+    {
+        if (_selectedCard == null) return;
+
+        Card oldSelected = _selectedCard;
+
+        ApplyVisualState(oldSelected, false);
+
+        _selectedCard = null;
+        
+        EmitSignal(SignalName.GetKeyboardHoveredCard, CenterCard);
+
+        EmitSignal(SignalName.SelectionChanged, oldSelected, _selectedCard);
     }
 
     private void ChangeState(CardSelectionState newState)
@@ -92,22 +112,6 @@ public sealed partial class CardSelectionController : Node2D
                 break;
         }
     }
-    
-    private void DeselectCard()
-    {
-        if (_selectedCard == null) return;
-
-        Card oldSelected = _selectedCard;
-
-        ApplyVisualState(oldSelected, false);
-
-        _selectedCard = null;
-        
-        EmitSignal(SignalName.GetKeyboardHoveredCard, CenterCard);
-
-        EmitSignal(SignalName.SelectionChanged, oldSelected, _selectedCard);
-    }
-    
 }
 
 

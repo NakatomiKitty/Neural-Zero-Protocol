@@ -60,6 +60,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
 		public void OnHoveredOverCard(Card card)
         {
+	        GD.Print($"Hovering: {card.Name}");
             if (_isSwapping) return;
 
             if (card == _keyboardHoveredCard) return;

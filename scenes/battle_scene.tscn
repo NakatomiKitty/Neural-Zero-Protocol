@@ -32,7 +32,7 @@ script = ExtResource("6_1i8jf")
 [node name="BattleManager" parent="." unique_id=479983199 instance=ExtResource("7_svpld")]
 
 [node name="CardSystem" parent="." unique_id=1780472782 instance=ExtResource("8_rum4d")]
-position = Vector2(576, 464)
+position = Vector2(576, 744)
 
 [node name="UiSelectionController" parent="." unique_id=1785561435 instance=ExtResource("9_3oc74")]
 

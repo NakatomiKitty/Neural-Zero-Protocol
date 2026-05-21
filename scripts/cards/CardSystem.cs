@@ -65,9 +65,8 @@ namespace NeuralZeroProtocol.Scripts.Cards
                 OriginalZIndexes[card] = card.ZIndex;      // store ZIndex after assignment
             }
             
-            
             Card centerCard = cards[cards.Count / 2];
-            // CardSelectionController.SetCenterCard(centerCard);
+            CardSelectionController.SetCenterCard(centerCard);
             
             CardSelectionController.SetCardHand(CardHand.GetChildren());
         }

@@ -24,8 +24,6 @@ public partial class CardSelectionController
     // Makes the given card the selected one. Deselects any previous selection.
     public void SelectCard(Card card)
     {
-        if (_selectedCard == card) return;
-        
         // Deselect previous card if there is one
         if (_selectedCard != null) ApplyVisualState(_selectedCard, false);
         

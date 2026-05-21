@@ -29,18 +29,18 @@ public partial class BattleMenu : Control
 	
 	private MenuState _currentMenuState;
 	private MenuState _targetMenuState;
-	private Control _initialButtonContainer;
 
 	private Tween _menuTween;
 	
+	public Control InitialButtonContainer;
 	public Control ActionMenuContainer;
 	
 	public override void _Ready()
 	{
-		_initialButtonContainer = GetNode<Control>("InitialButtonContainer");
+		InitialButtonContainer = GetNode<Control>("InitialButtonContainer");
 		ActionMenuContainer = GetNode<Control>("SecondaryButtonContainer");
 		
-		GetContainerChildren(_initialButtonContainer);
+		GetContainerChildren(InitialButtonContainer);
 		GetContainerChildren(ActionMenuContainer);
 		
 		ChangeState(MenuState.InitialMenu);
@@ -69,18 +69,18 @@ public partial class BattleMenu : Control
 	private void EnterInitialMenu()
 	{
 		// Hides the opposite container to prevent the keyboard accessing them
-		_initialButtonContainer.Visible = true;
+		InitialButtonContainer.Visible = true;
 		ActionMenuContainer.Visible = false;
 		
 		// Set's the keyboard focus on the Moves Button
-		GrabFocusOnButton(_initialButtonContainer, "MovesButton");
+		GrabFocusOnButton(InitialButtonContainer, "MovesButton");
 	}
 	
 	private void EnterSecondaryMenu()
 	{
 		// Hides the opposite container to prevent the keyboard accessing them
 		ActionMenuContainer.Visible = true;
-		_initialButtonContainer.Visible = false;
+		InitialButtonContainer.Visible = false;
 		
 		// Set's the keyboard focus on the Attack Button
 		GrabFocusOnButton(ActionMenuContainer, "AttackButton");
@@ -88,27 +88,36 @@ public partial class BattleMenu : Control
 	
 	private void SwapTheMenus()
 	{
-		Vector2 initialBasePosition = _initialButtonContainer.Position;
+		
+		Vector2 initialBasePosition = InitialButtonContainer.Position;
 		Vector2 secondaryBasePosition = ActionMenuContainer.Position;
 		
+		if (_targetMenuState == MenuState.InitialMenu)
+		{
+			EmitSignal(SignalName.ActionMenuState, false);
+		}
+		
 		// Set's both of them to true while swapping
-		_initialButtonContainer.Visible = true;
+		InitialButtonContainer.Visible = true;
 		ActionMenuContainer.Visible = true;
 		
 		// Swap the container's position with TWEEEEENNNNN
 		
-		SwapMenuLerp(_initialButtonContainer, secondaryBasePosition);
+		SwapMenuLerp(InitialButtonContainer, secondaryBasePosition);
 		SwapMenuLerp(ActionMenuContainer, initialBasePosition);
 
 		_menuTween.Finished += () =>
 		{
 			if (_currentMenuState != MenuState.Swapping) return;
-
-			EmitSignal(SignalName.ActionMenuState, _targetMenuState == MenuState.SecondaryMenu);
-
+			
+			if (_targetMenuState == MenuState.SecondaryMenu)
+			{
+				EmitSignal(SignalName.ActionMenuState, true);
+			}
+			
 			// Swap Z Indexes
-			(_initialButtonContainer.ZIndex, ActionMenuContainer.ZIndex) = 
-				(ActionMenuContainer.ZIndex, _initialButtonContainer.ZIndex);
+			(InitialButtonContainer.ZIndex, ActionMenuContainer.ZIndex) = 
+			(ActionMenuContainer.ZIndex, InitialButtonContainer.ZIndex);
 			
 			ChangeState(_targetMenuState);
 		};

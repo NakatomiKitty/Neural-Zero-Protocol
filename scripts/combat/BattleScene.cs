@@ -36,7 +36,9 @@ public partial class BattleScene : Node2D
             // Links every Character's HealthComponent's Died signal in the battle
 			character.HealthComponent.Died += CombatStateMachine.OnCharacterDied;
 		}
-
+        
+        CardSystem.Visible = false;
+        
         TurnManager.StartBattle += OnBattleStart;
         BattleMenu.ActionMenuState += OnActionMenuState;
         
@@ -62,14 +64,20 @@ public partial class BattleScene : Node2D
     {
         float offset = isTrue ? -32 : 32;
 
-        MoveCardSystemRelativeToButtonContainer(offset);
+        if (!isTrue)
+        {
+            CardSystem.CardSelectionController.DeselectCenterCard();
+        }
+        
+        MoveCardSystemRelativeToButtonContainer(offset, isTrue);
     }
 
-    private void MoveCardSystemRelativeToButtonContainer(float offset)
+    private void MoveCardSystemRelativeToButtonContainer(float offset,  bool isTrue)
     {
-        // Get global position of the button container
-        float buttonGlobalY = BattleMenu.ActionMenuContainer.GlobalPosition.Y;
-    
+        float buttonGlobalY = isTrue ? 
+            BattleMenu.ActionMenuContainer.GlobalPosition.Y : 
+            BattleMenu.InitialButtonContainer.GlobalPosition.Y;
+        
         // Desired global position for CardSystem
         float targetGlobalY = buttonGlobalY + offset;
     
@@ -79,15 +87,29 @@ public partial class BattleScene : Node2D
     
         // Apply the position
         Vector2 newCardSystemPosition = new(CardSystem.Position.X, targetLocalY);
-        CardSystemTween(newCardSystemPosition);
+        CardSystemTween(newCardSystemPosition, isTrue);
     }
 
-    private void CardSystemTween(Vector2 newCardSystemPosition)
+    private void CardSystemTween(Vector2 newCardSystemPosition, bool isTrue)
     {
         _cardSystemTween?.Kill();
         _cardSystemTween = CreateTween();
+        
+        CardSystem.Visible = true;
+        
+        _cardSystemTween.TweenProperty(CardSystem, "position", newCardSystemPosition, MoveTweenDuration)
+            .SetTrans(Tween.TransitionType.Expo)
+            .SetEase(Tween.EaseType.Out);
 
-        _cardSystemTween.TweenProperty(CardSystem, "position", newCardSystemPosition, MoveTweenDuration);
+        _cardSystemTween.Finished += () =>
+        {
+            CardSystem.Visible = isTrue;
+
+            if (isTrue)
+            {
+                CardSystem.CardSelectionController.SelectCenterCard();
+            }
+        };
     }
 }
 
