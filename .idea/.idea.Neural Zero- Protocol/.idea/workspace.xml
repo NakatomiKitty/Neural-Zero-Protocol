@@ -12,12 +12,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/rider-plugin/bin/windows/~rider-gdextension.windows.editor.x86_64.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/battle_scene.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/battle_scene.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/ui/battle_menu.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/ui/battle_menu.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.MouseMode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.MouseMode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.KeyboardMode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.KeyboardMode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" afterDir="false" />
@@ -148,6 +143,7 @@
       <workItem from="1779288906231" duration="71000" />
       <workItem from="1779289088999" duration="4362000" />
       <workItem from="1779370394565" duration="6899000" />
+      <workItem from="1779497908913" duration="4144000" />
     </task>
     <servers />
   </component>

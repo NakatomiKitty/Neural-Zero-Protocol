@@ -22,18 +22,20 @@ public sealed partial class CardSelectionController : Node2D
 {
     private const float SelectionTweenDuration = 0.15f;
     private const float SwapTweenDuration = 0.15f;
-
-    [Signal] public delegate void KeyboardModeDeactivatedEventHandler();
+    
     [Signal] public delegate void SelectionChangedEventHandler(Card oldSelectedCard, Card newSelectedCard);
     [Signal] public delegate void GetKeyboardHoveredCardEventHandler(Card card);
     [Signal] public delegate void SwappingStateChangedEventHandler(bool isSwapping);
+    [Signal] public delegate void KeyboardModeDeactivatedEventHandler();
+    [Signal] public delegate void KeyboardModeCancelledEventHandler(bool isCancelledByMouse);
     
+    private Dictionary<Card, Tween> _activePositionTweens = new();
     private CardSelectionState _state;
     private CardSystem _cardSystem;
     private Tween _swapCardTween;
     private Card _selectedCard; // Used for selecting with mouse
     private Card _keyboardHoveredCard; // Used for selecting with keyboard
-    private Dictionary<Card, Tween> _activePositionTweens = new();
+    private bool _isInActionMenu;
     
     public Array<Card> CardHand { get; private set; }
     public Card CenterCard { get; private set; }
@@ -44,6 +46,8 @@ public sealed partial class CardSelectionController : Node2D
     {
         if (@event is InputEventMouseMotion && _state == CardSelectionState.KeyboardMode)
         {
+            _isInActionMenu = true;
+            EmitSignal(SignalName.KeyboardModeCancelled, true);
             DeactivateKeyboardMode();
         }
         
@@ -57,7 +61,9 @@ public sealed partial class CardSelectionController : Node2D
                 // Check if any card was clicked
                 if (!IsAnyCardUnderMouse())
                 {
-                    // Clicked on empty space → deselect and return to Idle
+                    // Clicked on empty space, which will deselect and return to Idle
+                    _isInActionMenu = true;
+                    EmitSignal(SignalName.KeyboardModeCancelled, true);
                     DeactivateKeyboardMode();
                     ChangeState(CardSelectionState.Idle);
                 }
@@ -72,6 +78,7 @@ public sealed partial class CardSelectionController : Node2D
     // Used in BattleScene.cs, Selects the Center Card when Action Menu shows up
     public void SelectCenterCard()
     {
+        _isInActionMenu = false;
         SelectCard(CenterCard);
         
         ChangeState(CardSelectionState.Idle);

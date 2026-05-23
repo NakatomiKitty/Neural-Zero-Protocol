@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using NeuralZeroProtocol.Scripts.Characters;
 using NeuralZeroProtocol.Scripts.Ui;
 
 namespace NeuralZeroProtocol.Scripts.Cards;
@@ -9,12 +10,15 @@ public partial class CardSelectionController
     public void GetUiInput(UiSelection uiSelection)
     {
         if (_state == CardSelectionState.SwapTheCards) return;
+        
+        if (_isInActionMenu) return;
 
         switch (uiSelection)
         {
             case UiSelection.Left:
             case UiSelection.Right:
             {
+                
                 if (_state != CardSelectionState.KeyboardMode)
                     ActivateKeyboardMode();
                 if (uiSelection == UiSelection.Left)
@@ -27,6 +31,8 @@ public partial class CardSelectionController
                 ConfirmCard();
                 break;
             case UiSelection.Cancel:
+                EmitSignal(SignalName.KeyboardModeCancelled, false);
+                _isInActionMenu = true;
                 DeactivateKeyboardMode();
                 ChangeState(CardSelectionState.Idle);
                 break;
@@ -75,6 +81,12 @@ public partial class CardSelectionController
 
         // Trigger the same swap logic as if the card was clicked
         SwapWithCenter(_keyboardHoveredCard);
+    }
+
+    public void OnMoveToCardSystem()
+    {
+        _isInActionMenu = false;
+        ActivateKeyboardMode();
     }
     
     // Helper Functions

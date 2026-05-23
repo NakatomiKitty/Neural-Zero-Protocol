@@ -41,16 +41,17 @@ public partial class BattleScene : Node2D
         
         TurnManager.StartBattle += OnBattleStart;
         BattleMenu.ActionMenuState += OnActionMenuState;
+        BattleMenu.MoveToCardSystem += CardSystem.CardSelectionController.OnMoveToCardSystem;
+        CardSystem.CardSelectionController.KeyboardModeCancelled += BattleMenu.OnKeyboardModeCancelled;
         
         // Passes the array to CardSystem so it can be used to update the card skins
         _ = CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromCurrentChar());
     }
-
-    
     
     public override void _Input(InputEvent @event) 
     {
         CardSystem.CardSelectionController.GetUiInput(UiSelectionController.GetUiSelect());
+        BattleMenu.GetUiInput(UiSelectionController.GetUiSelect());
     }
 
     private void OnBattleStart()
@@ -71,6 +72,7 @@ public partial class BattleScene : Node2D
         
         MoveCardSystemRelativeToButtonContainer(offset, isTrue);
     }
+    
 
     private void MoveCardSystemRelativeToButtonContainer(float offset,  bool isTrue)
     {

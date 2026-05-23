@@ -17,7 +17,7 @@ public enum MenuState // TODO: ADD A STATE WHERE ON START ROUND OR ON NEXT TURN,
 {
 	InitialMenu,
 	Swapping,
-	SecondaryMenu
+	ActionMenu
 }
 public partial class BattleMenu : Control
 {
@@ -26,6 +26,7 @@ public partial class BattleMenu : Control
 	[Signal] public delegate void MenuStateChangedEventHandler(MenuState newState);
 	[Signal] public delegate void ButtonSelectedEventHandler(int actionType); // Rename to ActionType once replaced ActionPanel
 	[Signal] public delegate void ActionMenuStateEventHandler(bool isTrue);
+	[Signal] public delegate void MoveToCardSystemEventHandler();
 	
 	private MenuState _currentMenuState;
 	private MenuState _targetMenuState;
@@ -45,6 +46,27 @@ public partial class BattleMenu : Control
 		
 		ChangeState(MenuState.InitialMenu);
 	}
+
+	public void GetUiInput(UiSelection uiSelection)
+	{
+		if (_currentMenuState != MenuState.ActionMenu) return;
+
+		if (uiSelection == UiSelection.Up)
+		{
+			GD.Print("should disable action menu buttons");
+			DisableActionMenuButtons(true);
+			EmitSignal(SignalName.MoveToCardSystem);
+		}
+	}
+
+	public void OnKeyboardModeCancelled(bool isCancelledByMouse)
+	{
+		if (_currentMenuState != MenuState.ActionMenu) return;
+		
+		DisableActionMenuButtons(false);
+		
+		if (!isCancelledByMouse) GrabFocusOnButton(ActionMenuContainer, "AttackButton");
+	}
 	
 	public void ChangeState(MenuState newState)
 	{
@@ -59,7 +81,7 @@ public partial class BattleMenu : Control
 			case MenuState.Swapping:
 				SwapTheMenus();
 				break;
-			case MenuState.SecondaryMenu:
+			case MenuState.ActionMenu:
 				EnterSecondaryMenu();
 				break;
 			default:
@@ -82,8 +104,7 @@ public partial class BattleMenu : Control
 		ActionMenuContainer.Visible = true;
 		InitialButtonContainer.Visible = false;
 		
-		// Set's the keyboard focus on the Attack Button
-		GrabFocusOnButton(ActionMenuContainer, "AttackButton");
+		DisableActionMenuButtons(true);
 	}
 	
 	private void SwapTheMenus()
@@ -110,7 +131,7 @@ public partial class BattleMenu : Control
 		{
 			if (_currentMenuState != MenuState.Swapping) return;
 			
-			if (_targetMenuState == MenuState.SecondaryMenu)
+			if (_targetMenuState == MenuState.ActionMenu)
 			{
 				EmitSignal(SignalName.ActionMenuState, true);
 			}
@@ -143,11 +164,11 @@ public partial class BattleMenu : Control
 		
 		if (_currentMenuState == MenuState.InitialMenu && action == ButtonType.Moves)
 		{
-			_targetMenuState = MenuState.SecondaryMenu;
+			_targetMenuState = MenuState.ActionMenu;
 			ChangeState(MenuState.Swapping);
 		}
 		
-		else if (_currentMenuState == MenuState.SecondaryMenu && action == ButtonType.Block)
+		else if (_currentMenuState == MenuState.ActionMenu && action == ButtonType.Block)
 		{
 			_targetMenuState = MenuState.InitialMenu;
 			ChangeState(MenuState.Swapping);
@@ -155,6 +176,18 @@ public partial class BattleMenu : Control
 	}
 
 	#region Helper functions
+
+	private void DisableActionMenuButtons(bool isTrue)
+	{
+		foreach (Node child in ActionMenuContainer.GetChildren())
+		{
+			if (child is TextureButton button)
+			{
+				button.Disabled = isTrue;
+				button.ReleaseFocus();
+			}
+		}
+	}
 	private void GetContainerChildren(Control buttonContainer)
 	{
 		foreach (Node child in buttonContainer.GetChildren())
