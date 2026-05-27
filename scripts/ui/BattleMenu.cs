@@ -71,6 +71,7 @@ public partial class BattleMenu : Control
 
 	public void OnAnyButtonHovered()
 	{
+		// Test
 		DisableActionMenuButtons(false);
 	}
 	
