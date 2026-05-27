@@ -60,11 +60,8 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
 		public void OnHoveredOverCard(Card card)
         {
-	        GD.Print($"Hovering: {card.Name}");
             if (_isSwapping) return;
-
             if (card == _keyboardHoveredCard) return;
-
             if (card == _selectedCard) return;   // Never hover the selected card
 
             _cardsUnderMouse.Add(card);
@@ -74,13 +71,10 @@ namespace NeuralZeroProtocol.Scripts.Cards
         public void OnHoveredOffCard(Card card)
         {
             if (_isSwapping) return;
-
             if (card == _keyboardHoveredCard) return;
-
             if (card == _selectedCard) return; 
 
             _cardsUnderMouse.Remove(card);
-
             UpdateHoverEffect();
         }
 
@@ -89,11 +83,9 @@ namespace NeuralZeroProtocol.Scripts.Cards
             ClearForcedHighlight();
 
             if (card == _keyboardHoveredCard) return;
-
             if (card == _selectedCard) return;
 
            _keyboardHoveredCard = card;
-
            ApplyHoverEffect(_keyboardHoveredCard, true);
         }
 
@@ -102,11 +94,9 @@ namespace NeuralZeroProtocol.Scripts.Cards
             if (_keyboardHoveredCard == null) return;
 
             Card highlightedCard = _keyboardHoveredCard;
-
             _keyboardHoveredCard = null;
 
             UpdateHoverEffect();
-
             ApplyHoverEffect(highlightedCard, false);
         }
         
@@ -115,9 +105,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
         private void UpdateHoverEffect()
         {
             if (_isSwapping) return;
-
             if (_keyboardHoveredCard != null) return;
-
             if (_cardsUnderMouse.Count == 0)
             {
                 if (_mouseHoveredCard != null)
@@ -146,7 +134,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
             if (highestCard != _mouseHoveredCard)
             {
                 if(_mouseHoveredCard != null) ApplyHoverEffect(_mouseHoveredCard, false);
-                    
+                
                 if (highestCard != null) ApplyHoverEffect(highestCard, true);
 
                 _mouseHoveredCard = highestCard;
@@ -169,7 +157,6 @@ namespace NeuralZeroProtocol.Scripts.Cards
 			KillAndRemoveTween(card);
 
 			_activeHoverTweens[card] = tween;
-
             tween.Finished += () => _activeHoverTweens.Remove(card);
 		}
 

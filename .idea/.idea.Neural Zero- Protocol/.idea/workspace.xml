@@ -12,9 +12,16 @@
   <component name="ChangeListManager">
     <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/addons/rider-plugin/plugin.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/addons/rider-plugin/plugin.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/battle_scene.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/battle_scene.tscn" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.KeyboardMode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.KeyboardMode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/combat/CombatStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/CombatStateMachine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/combat/TurnManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/TurnManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/ui/ActionPanel.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/ui/ActionPanel.cs.uid" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,8 +39,6 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptMethodsGenerator/NeuralZeroProtocol.Scripts.Cards.CardSystem_ScriptMethods.generated.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptSignalsGenerator/NeuralZeroProtocol.Scripts.Cards.CardSelectionController_ScriptSignals.generated.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Helpers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.MouseMode.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Swap.cs" root0="FORCE_HIGHLIGHTING" />
@@ -143,7 +148,9 @@
       <workItem from="1779288906231" duration="71000" />
       <workItem from="1779289088999" duration="4362000" />
       <workItem from="1779370394565" duration="6899000" />
-      <workItem from="1779497908913" duration="4144000" />
+      <workItem from="1779497908913" duration="4314000" />
+      <workItem from="1779530991934" duration="5843000" />
+      <workItem from="1779800308477" duration="6664000" />
     </task>
     <servers />
   </component>

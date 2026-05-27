@@ -28,18 +28,6 @@ public partial class TurnManager : Node
 		PlayerCharacters = PlayerTeam.GetChildren().Cast<Character>().ToList();
 		EnemyCharacters = EnemyTeam.GetChildren().Cast<Character>().ToList();
 	}
-	
-	private void GenerateTurnOrder()
-	{
-		TurnOrder.Clear();
-		// Sort by DEX (High to Low)
-		TurnOrder = AllUnits.OrderByDescending(unit => unit.StatsComponent.GetStat(StatType.Dex)).ToList();
-		CurrentUnitIndex = 0;
-		
-		EmitSignal(SignalName.StartBattle);
-		
-		GD.Print($"Turn Order Generated. Next up: {TurnOrder[0].Name}");
-	}
 
 	public Character GetCurrentUnit()
 	{
@@ -57,6 +45,21 @@ public partial class TurnManager : Node
 		}
         
 		return GetCurrentUnit();
+	}
+	
+	public void StartBattleSequence()
+    {
+        GenerateTurnOrder();  // only generates order, no emit
+        EmitSignal(SignalName.StartBattle);
+    }
+	
+	private void GenerateTurnOrder()
+	{
+		TurnOrder.Clear();
+		// Sort by DEX (High to Low)
+		TurnOrder = AllUnits.OrderByDescending(unit => unit.StatsComponent.GetStat(StatType.Dex)).ToList();
+		CurrentUnitIndex = 0;
+		GD.Print($"Turn Order Generated. Next up: {TurnOrder[0].Name}");
 	}
 }
 

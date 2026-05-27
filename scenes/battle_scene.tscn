@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://eob2rikglte3" path="res://scenes/characters/playercharacter.tscn" id="3_1i8jf"]
 [ext_resource type="PackedScene" uid="uid://dx71bhurninfj" path="res://scenes/characters/enemycharacter.tscn" id="4_svpld"]
 [ext_resource type="Script" uid="uid://crwko2qor3c5f" path="res://scripts/combat/CombatStateMachine.cs" id="6_1i8jf"]
-[ext_resource type="PackedScene" uid="uid://cchbd2v466eod" path="res://scenes/ui/action_panel.tscn" id="7_rum4d"]
 [ext_resource type="PackedScene" uid="uid://iabgt3a61ewp" path="res://scenes/battle_manager.tscn" id="7_svpld"]
 [ext_resource type="PackedScene" uid="uid://8ic6l8vm65v7" path="res://scenes/card_system.tscn" id="8_rum4d"]
 [ext_resource type="PackedScene" uid="uid://dqg1xji5e7e45" path="res://scenes/ui/battle_menu.tscn" id="9_0gp0h"]
@@ -34,16 +33,9 @@ script = ExtResource("6_1i8jf")
 [node name="CardSystem" parent="." unique_id=1780472782 instance=ExtResource("8_rum4d")]
 position = Vector2(576, 744)
 
-[node name="UiSelectionController" parent="." unique_id=1785561435 instance=ExtResource("9_3oc74")]
-
 [node name="CanvasLayer" parent="." unique_id=1663848318 instance=ExtResource("9_0gp0h")]
 layer = 0
 
-[node name="ActionPanel" parent="." unique_id=932627865 instance=ExtResource("7_rum4d")]
-visible = false
-offset_left = 144.0
-offset_top = -424.0
-offset_right = 144.0
-offset_bottom = 224.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="UiSelectionController" parent="." unique_id=1785561435 instance=ExtResource("9_3oc74")]
+
+[node name="UseCardController" type="Node" parent="." unique_id=1585935842]

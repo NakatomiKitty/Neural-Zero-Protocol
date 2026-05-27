@@ -1,9 +1,9 @@
 using System;
 using Godot;
 using NeuralZeroProtocol.Scripts.Characters;
-using NeuralZeroProtocol.Scripts.UI;
 using System.Linq;
 using System.Threading.Tasks;
+using NeuralZeroProtocol.Scripts.Ui;
 
 // TODO: DON'T OPTIMIZE YET, USE THE NEW BATTLE MENU FIRST!
 namespace NeuralZeroProtocol.Scripts.Combat;
@@ -51,7 +51,7 @@ public partial class CombatStateMachine : Node
                 await Initializing();
                 break;
             case BattleState.PlayerTurn:
-                await PlayerTurn();
+                PlayerTurn();
                 break;
             case BattleState.EnemyTurn:
                 await EnemyTurn();
@@ -77,47 +77,52 @@ public partial class CombatStateMachine : Node
         await CurrentCharacterTurn(_currentCharacter);
     }
 
-    private async Task PlayerTurn()
+    private async void PlayerTurn()
     {
+        // Reminder: Decouple this shit later 
         PlayerCharacter playerCharacter = (PlayerCharacter)_battleScene.TurnManager.GetCurrentUnit();
-
-        ActionValidatorComponent actionValidator = playerCharacter.ActionValidatorComponent;
-
-        bool isActionValid = false;
         
-        while (!isActionValid)
+        // Decouple this too, bad practice
+        SignalAwaiter awaiter = ToSignal(_battleScene.BattleMenu, BattleMenu.SignalName.ActionSelected);
+        await awaiter;
+
+        ActionType action = (ActionType)awaiter.GetResult()[0].AsInt32();
+
+        if (action == ActionType.Moves)
         {
-            GD.Print($"{playerCharacter.Name}'s turn");
-            GD.Print("Press an action");
-
-            SignalAwaiter awaiter = ToSignal(_battleScene.ActionPanel, ActionPanel.SignalName.ActionSelected);
-            await awaiter;
-
-            ActionType action = (ActionType)awaiter.GetResult()[0].AsInt32();
-
-            // PLACEHOLDER! MIGHT CHANGE LOGIC
-            switch (action)
-            {
-                case ActionType.Defend:
-                    if (ActionValidatorComponent.CanDefend())
-                    {
-                        GD.Print("Defended!");
-                        isActionValid = true;
-                    }
-                    break;
-                case ActionType.Skip:
-                    if (ActionValidatorComponent.CanSkip())
-                    {
-                        GD.Print("Skipped!");
-                        isActionValid = true;
-                    }
-                    break;
-            }
+            PlayerTurn();
+            return;
+        }
+        
+        GD.Print($"{playerCharacter.Name}'s turn");
+        
+        GD.Print($"Action Selected: {action}");
+        
+        switch (action)
+        {
+            // Initial menu
+            case ActionType.Switch:
+                GD.Print("Bring up the character switch menu");
+                break;
+            case ActionType.Run:
+                GD.Print("run away from the battle (add an animation and chance here probably)");
+                break;
+            
+            // Action Menu
+            case ActionType.Block:
+                GD.Print("Block Stance!");
+                break;
+            case ActionType.Attack:
+                GD.Print("Attack card animation");
+                break;
+            case ActionType.Evade:
+                GD.Print("EvadeStance!");
+                break;
         }
 
         // After a valid action, check battle outcome and end turn
-        if (BattleOutcomeState()) return;
-        await ChangeState(BattleState.TurnEnd);
+        // if (BattleOutcomeState()) return;
+        // await ChangeState(BattleState.TurnEnd);
     }
 
     // PLACEHOLDER CODE HERE! WILL PROBABLY CONTAIN CALLING TO THE ENEMY'S AI

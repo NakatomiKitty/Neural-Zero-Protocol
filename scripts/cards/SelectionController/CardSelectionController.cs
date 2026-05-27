@@ -27,7 +27,7 @@ public sealed partial class CardSelectionController : Node2D
     [Signal] public delegate void GetKeyboardHoveredCardEventHandler(Card card);
     [Signal] public delegate void SwappingStateChangedEventHandler(bool isSwapping);
     [Signal] public delegate void KeyboardModeDeactivatedEventHandler();
-    [Signal] public delegate void KeyboardModeCancelledEventHandler(bool isCancelledByMouse);
+    [Signal] public delegate void KeyboardModeCancelledEventHandler(bool isCancelled);
     
     private Dictionary<Card, Tween> _activePositionTweens = new();
     private CardSelectionState _state;
@@ -40,33 +40,39 @@ public sealed partial class CardSelectionController : Node2D
     public Array<Card> CardHand { get; private set; }
     public Card CenterCard { get; private set; }
 
-    public override void _Ready() => _cardSystem = GetNode<CardSystem>("..");
+    public override void _Ready()
+    {
+        _cardSystem = GetNode<CardSystem>("..");
+        
+        _isInActionMenu = true;
+    }
     
     public override void _Input(InputEvent @event)
     {
-        if (@event is InputEventMouseMotion && _state == CardSelectionState.KeyboardMode)
+        switch (@event)
         {
-            _isInActionMenu = true;
-            EmitSignal(SignalName.KeyboardModeCancelled, true);
-            DeactivateKeyboardMode();
-        }
-        
-        if (@event is InputEventMouseButton mouseButton && 
-            mouseButton.ButtonIndex == MouseButton.Left && 
-            mouseButton.Pressed)
-        {
-            // If we're in a state that allows deselection (e.g., not swapping)
-            if (_state != CardSelectionState.SwapTheCards)
+            case InputEventMouseMotion when _state == CardSelectionState.KeyboardMode:
+                _isInActionMenu = true;
+                EmitSignal(SignalName.KeyboardModeCancelled, false);
+                DeactivateKeyboardMode();
+                break;
+            case InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true }:
             {
-                // Check if any card was clicked
-                if (!IsAnyCardUnderMouse())
+                // If we're in a state that allows deselection (e.g., not swapping)
+                if (_state != CardSelectionState.SwapTheCards)
                 {
-                    // Clicked on empty space, which will deselect and return to Idle
-                    _isInActionMenu = true;
-                    EmitSignal(SignalName.KeyboardModeCancelled, true);
-                    DeactivateKeyboardMode();
-                    ChangeState(CardSelectionState.Idle);
+                    // Check if any card was clicked
+                    if (!IsAnyCardUnderMouse())
+                    {
+                        // Clicked on empty space, which will deselect and return to Idle
+                        _isInActionMenu = true;
+                        EmitSignal(SignalName.KeyboardModeCancelled, false);
+                        DeactivateKeyboardMode();
+                        ChangeState(CardSelectionState.Idle);
+                    }
                 }
+
+                break;
             }
         }
     }
@@ -104,7 +110,7 @@ public sealed partial class CardSelectionController : Node2D
 
         EmitSignal(SignalName.SelectionChanged, oldSelected, _selectedCard);
     }
-
+    
     private void ChangeState(CardSelectionState newState)
     {
         _state = newState;

@@ -1,6 +1,4 @@
 using Godot;
-using Godot.Collections;
-using NeuralZeroProtocol.Scripts.Characters;
 using NeuralZeroProtocol.Scripts.Ui;
 
 namespace NeuralZeroProtocol.Scripts.Cards;
@@ -18,7 +16,6 @@ public partial class CardSelectionController
             case UiSelection.Left:
             case UiSelection.Right:
             {
-                
                 if (_state != CardSelectionState.KeyboardMode)
                     ActivateKeyboardMode();
                 if (uiSelection == UiSelection.Left)
@@ -31,7 +28,7 @@ public partial class CardSelectionController
                 ConfirmCard();
                 break;
             case UiSelection.Cancel:
-                EmitSignal(SignalName.KeyboardModeCancelled, false);
+                EmitSignal(SignalName.KeyboardModeCancelled, true);
                 _isInActionMenu = true;
                 DeactivateKeyboardMode();
                 ChangeState(CardSelectionState.Idle);
@@ -85,6 +82,8 @@ public partial class CardSelectionController
 
     public void OnMoveToCardSystem()
     {
+        if (_state == CardSelectionState.KeyboardMode) return;
+        
         _isInActionMenu = false;
         ActivateKeyboardMode();
     }
@@ -105,7 +104,6 @@ public partial class CardSelectionController
         EmitSignal(SignalName.KeyboardModeDeactivated);
         
         ChangeState(CardSelectionState.Idle);
-        
         _keyboardHoveredCard = null;
     }
 }

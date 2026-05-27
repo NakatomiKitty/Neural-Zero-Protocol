@@ -4,7 +4,6 @@ using NeuralZeroProtocol.Scripts.Cards;
 using NeuralZeroProtocol.Scripts.Characters;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
 using NeuralZeroProtocol.Scripts.Ui;
-using NeuralZeroProtocol.Scripts.UI;
 
 namespace NeuralZeroProtocol.Scripts.Combat;
 
@@ -14,7 +13,6 @@ public partial class BattleScene : Node2D
     private const float MoveTweenDuration = 0.5f;
     
     [Node] public TurnManager TurnManager;
-    [Node] public ActionPanel ActionPanel;
     [Node] public CombatStateMachine CombatStateMachine;
     [Node] public BattleManager BattleManager;
     [Node] public CardSystem CardSystem;
@@ -38,14 +36,15 @@ public partial class BattleScene : Node2D
 		}
         
         CardSystem.Visible = false;
-        
         TurnManager.StartBattle += OnBattleStart;
         BattleMenu.ActionMenuState += OnActionMenuState;
         BattleMenu.MoveToCardSystem += CardSystem.CardSelectionController.OnMoveToCardSystem;
         CardSystem.CardSelectionController.KeyboardModeCancelled += BattleMenu.OnKeyboardModeCancelled;
         
         // Passes the array to CardSystem so it can be used to update the card skins
-        _ = CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromCurrentChar());
+        CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromCurrentChar());
+        
+        TurnManager.StartBattleSequence();
     }
     
     public override void _Input(InputEvent @event) 
@@ -56,6 +55,7 @@ public partial class BattleScene : Node2D
 
     private void OnBattleStart()
     {
+        GD.Print("BATTLE STARTEDDD");
         Character firstUnit = TurnManager.GetCurrentUnit();
         CombatStateMachine.SetCurrentCharacter(firstUnit);
         CombatStateMachine.StartBattle();

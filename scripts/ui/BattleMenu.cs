@@ -3,7 +3,7 @@ using Godot;
 
 namespace NeuralZeroProtocol.Scripts.Ui;
 
-public enum ButtonType // Rename to ActionType once replaced ActionPanel
+public enum ActionType 
 {
     Switch,
     Moves,
@@ -24,7 +24,7 @@ public partial class BattleMenu : Control
 	private const float MenuSwapTween = 0.5f;
 	
 	[Signal] public delegate void MenuStateChangedEventHandler(MenuState newState);
-	[Signal] public delegate void ButtonSelectedEventHandler(int actionType); // Rename to ActionType once replaced ActionPanel
+	[Signal] public delegate void ActionSelectedEventHandler(int actionType); // Rename to ActionType once replaced ActionPanel
 	[Signal] public delegate void ActionMenuStateEventHandler(bool isTrue);
 	[Signal] public delegate void MoveToCardSystemEventHandler();
 	
@@ -51,21 +51,27 @@ public partial class BattleMenu : Control
 	{
 		if (_currentMenuState != MenuState.ActionMenu) return;
 
-		if (uiSelection == UiSelection.Up)
+		switch (uiSelection)
 		{
-			GD.Print("should disable action menu buttons");
-			DisableActionMenuButtons(true);
-			EmitSignal(SignalName.MoveToCardSystem);
+			case UiSelection.Up:
+				DisableActionMenuButtons(true);
+				EmitSignal(SignalName.MoveToCardSystem);
+				break;
 		}
 	}
-
-	public void OnKeyboardModeCancelled(bool isCancelledByMouse)
+	
+	public void OnKeyboardModeCancelled(bool isCancelled) 
 	{
 		if (_currentMenuState != MenuState.ActionMenu) return;
 		
 		DisableActionMenuButtons(false);
 		
-		if (!isCancelledByMouse) GrabFocusOnButton(ActionMenuContainer, "AttackButton");
+		if (isCancelled) GrabFocusOnButton(ActionMenuContainer, "AttackButton");
+	}
+
+	public void OnAnyButtonHovered()
+	{
+		DisableActionMenuButtons(false);
 	}
 	
 	public void ChangeState(MenuState newState)
@@ -147,31 +153,30 @@ public partial class BattleMenu : Control
 	{
 		if (_currentMenuState == MenuState.Swapping) return;
 		
-		ButtonType action = button.Name.ToString() switch
+		ActionType action = button.Name.ToString() switch
 		{
-			"SwitchButton" => ButtonType.Switch,
-			"MovesButton" => ButtonType.Moves,
-			"RunButton" => ButtonType.Run,
-			"BlockButton" => ButtonType.Block,
-			"AttackButton" => ButtonType.Attack,
-			"EvadeButton" => ButtonType.Evade,
-			_ => ButtonType.Moves
+			"SwitchButton" => ActionType.Switch,
+			"MovesButton" => ActionType.Moves,
+			"RunButton" => ActionType.Run,
+			"BlockButton" => ActionType.Block,
+			"AttackButton" => ActionType.Attack,
+			"EvadeButton" => ActionType.Evade,
+			_ => ActionType.Moves
 		};
 		
-		GD.Print(action);
+		EmitSignal(SignalName.ActionSelected, (int)action); // Will be hooked up to the CombatStateMachine and CardSystem
 		
-		EmitSignal(SignalName.ButtonSelected, (int)action); // Will be hooked up to the CombatStateMachine and CardSystem
-		
-		if (_currentMenuState == MenuState.InitialMenu && action == ButtonType.Moves)
+		switch (_currentMenuState)
 		{
-			_targetMenuState = MenuState.ActionMenu;
-			ChangeState(MenuState.Swapping);
-		}
-		
-		else if (_currentMenuState == MenuState.ActionMenu && action == ButtonType.Block)
-		{
-			_targetMenuState = MenuState.InitialMenu;
-			ChangeState(MenuState.Swapping);
+			case MenuState.InitialMenu when action == ActionType.Moves:
+				_targetMenuState = MenuState.ActionMenu;
+				ChangeState(MenuState.Swapping);
+				break;
+			// Placeholder, will be adding a back button
+			case MenuState.ActionMenu when action == ActionType.Block:
+				_targetMenuState = MenuState.InitialMenu;
+				ChangeState(MenuState.Swapping);
+				break;
 		}
 	}
 
@@ -183,8 +188,8 @@ public partial class BattleMenu : Control
 		{
 			if (child is TextureButton button)
 			{
-				button.Disabled = isTrue;
 				button.ReleaseFocus();
+				button.Disabled = isTrue;
 			}
 		}
 	}
@@ -195,6 +200,7 @@ public partial class BattleMenu : Control
 			if (child is TextureButton button)
 			{
 				button.Pressed += () => OnAnyButtonPressed(button);
+				button.MouseEntered += OnAnyButtonHovered;
 			}
 		}
 	}
