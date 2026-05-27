@@ -10,20 +10,7 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/rider-plugin/plugin.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/addons/rider-plugin/plugin.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/battle_scene.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/battle_scene.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.KeyboardMode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.KeyboardMode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/combat/CombatStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/CombatStateMachine.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/combat/TurnManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/TurnManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/ui/ActionPanel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/ui/ActionPanel.cs.uid" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" afterDir="false" />
-    </list>
+    <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,8 +23,25 @@
     <option name="cachedIndexableFilesCount" value="32" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="CardSystem/BattleMenu" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Zerrrook"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/NakatomiKitty/Neural-Zero-Protocol.git",
+    "accountId": "4af9903b-6220-430d-9b89-4f78d7f5d2bf"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Helpers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.MouseMode.cs" root0="FORCE_HIGHLIGHTING" />
@@ -151,6 +155,7 @@
       <workItem from="1779497908913" duration="4314000" />
       <workItem from="1779530991934" duration="5843000" />
       <workItem from="1779800308477" duration="6664000" />
+      <workItem from="1779864427129" duration="332000" />
     </task>
     <servers />
   </component>
@@ -164,7 +169,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/CardSystem/BattleMenu" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
