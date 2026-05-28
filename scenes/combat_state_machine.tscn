@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://bvr5fxa3b3kmd"]
+
+[ext_resource type="Script" uid="uid://crwko2qor3c5f" path="res://scripts/combat/CombatStateMachine.cs" id="1_7kaqo"]
+[ext_resource type="Script" uid="uid://gttjdu3lfde8" path="res://scripts/combat/ConfirmAttackHandler.cs" id="2_iilin"]
+
+[node name="CombatStateMachine" type="Node" unique_id=893457447]
+script = ExtResource("1_7kaqo")
+
+[node name="ConfirmAttackHandler" type="Node" parent="." unique_id=824252936]
+script = ExtResource("2_iilin")
