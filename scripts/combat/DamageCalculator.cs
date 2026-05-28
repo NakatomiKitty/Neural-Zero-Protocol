@@ -11,9 +11,9 @@ namespace NeuralZeroProtocol.Scripts.Combat;
 /// All methods are static, this means THIS IS STRICTLY A MATH FUNCTION CLASS!
 /// </summary>
 
-public partial class DamageCalculator
+public partial class DamageCalculator : Node
 {
-    private static readonly Random Random = new Random();
+    private static readonly Random Random = new();
     
     private static readonly float[,] TypeChart = new float[9, 9]
     {
@@ -28,23 +28,16 @@ public partial class DamageCalculator
     /*DARK*/   {0.75f, 0.75f, 1.00f, 1.00f, 1.50f, 1.50f, 2.00f, 0.75f, 1.00f},
     /*NULL*/   {1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f},
     };
-
-    // if Atk > Dex + Lck, dodge the attack
-    public static bool EvasionCheck(Character attacker, Character defender) => 
-        GetStatValue(defender, StatType.Dex) + 
-        (GetStatValue(defender, StatType.Lck) * 1.25f) < 
-        GetStatValue(attacker, StatType.Atk);
-
     
-    public static int CalculateDamage(Character attacker, Character defender, MoveResource move)
+    public static (bool dodged, bool immuned, bool isCrit, int damage) CalculateDamage(Character attacker, Character defender, MoveResource move)
     {
         if (move == null)
         {
             GD.PushWarning("No move selected lmao");
         }
-
-        // if CalculateEvasionCheck is true, miss the attack
-        if (EvasionCheck(attacker, defender)) return 0;
+        
+        bool defenderDodged =  DefenderEvasionCheck(attacker, defender);
+        if (defenderDodged) return (true, false, false, 0);
         
         ElementType attackElem = move.MoveElement; // move's element
         ElementType defPrimary = defender.PrimaryElement;
@@ -53,25 +46,33 @@ public partial class DamageCalculator
         float typeMult = GetCombinedTypeMultiplier(attackElem, defPrimary, defSecondary);
 
         // Immunity check (0.0 multiplier)
-        if (typeMult == 0.0f) return 0;
+        if (typeMult == 0.0f) return (false, true, false, 0);
 
-        int baseDamage = move.Power + GetStatValue(attacker, StatType.Atk) - ((int)(GetStatValue(defender, StatType.Def) * 0.5f));
+        int baseDamage = move.Power + GetStatValue(attacker, StatType.Atk) - (int)(GetStatValue(defender, StatType.Def) * 0.5f);
         
         if (baseDamage < 0) baseDamage = 0;
-
+        
         float damage = baseDamage * typeMult;
-
         // if it's a CriticalChance is true, apply Critical hit bonus.
-        if(CriticalChance(attacker, defender, move))
+        bool isCrit = CriticalChance(attacker, defender, move);
+        if (isCrit)
         {
-            int critBonus = (int)(1.5f + (GetStatValue(attacker, StatType.Int) / 100.0f));
+            float critBonus = (1.5f + GetStatValue(attacker, StatType.Int) / 100.0f);
             damage *= critBonus;
         }
 
-        return (int)damage;
+        return (false, false, isCrit, (int)damage);
     }
+    
+    // if attackerAtk < defenderDex + defenderLck, defender will dodge the attack
+    private static bool DefenderEvasionCheck(Character attacker, Character defender)
+    {
+        return GetStatValue(attacker, StatType.Atk) <
+               GetStatValue(defender, StatType.Dex) + GetStatValue(defender, StatType.Lck) * 1.25f;
+    }
+        
 
-    public static int CalculateAbsoluteBlock(Character attacker, Character defender, MoveResource move)
+    private static int CalculateAbsoluteBlock(Character attacker, Character defender, MoveResource move)
     {
         // TODO: This is for Shield Gauge
         float totalAttack = move.Power + GetStatValue(attacker, StatType.Atk) - GetStatValue(defender, StatType.Def);
@@ -79,7 +80,7 @@ public partial class DamageCalculator
         return (int)totalAttack;
     }
 
-    public static bool CriticalChance(Character attacker, Character defender, MoveResource move)
+    private static bool CriticalChance(Character attacker, Character defender, MoveResource move)
     {
         const float minCritChance = 0f;
         const float maxCritChance = 100f;
@@ -88,11 +89,11 @@ public partial class DamageCalculator
         if (move == null || !move.CanCrit) return false;
         
         if (attacker.DisabilityComponent.HasDisability(DisabilityTypes.Cursed)) return false;
-
+        
         float critChance = GetStatValue(attacker, StatType.Lck) * 1.25f;
         
         critChance = Math.Clamp(critChance, minCritChance, maxCritChance); 
-
+        
         int roll = Random.Next(0,100);
         
         return roll < critChance;
@@ -109,7 +110,7 @@ public partial class DamageCalculator
         if (move == ElementType.None || defend == ElementType.None)
             return 1.0f;
         
-        return TypeChart[(int)move, (int)defend];
+        return TypeChart[(int)defend, (int)move];
     }
 
     // Get combined mult (for dual type characters)

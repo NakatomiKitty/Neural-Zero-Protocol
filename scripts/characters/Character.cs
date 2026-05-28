@@ -40,14 +40,12 @@ public partial class Character : Node2D
 
 	public override void _Ready() 
 	{
-		
 		if (StatsComponent == null) GD.PushError("StatsComponent not found");
 
 		if (_characterStatsResources == null)
 		{
 			GD.PushWarning("CharacterStatsResources not loaded lmao");
 		}
-
 		int maxHp = StatsComponent.GetStat(StatType.Hp);
 
 		HealthComponent.InitializeHealth(maxHp);

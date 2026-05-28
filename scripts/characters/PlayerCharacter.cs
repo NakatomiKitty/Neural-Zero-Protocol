@@ -9,6 +9,8 @@ public partial class PlayerCharacter : Character
 
     public override void _Ready()
     {
+        base._Ready();
+        
         ActionValidatorComponent = GetNode<ActionValidatorComponent>("ActionValidatorComponent");
         AddToGroup("PlayerCharacters");
     }

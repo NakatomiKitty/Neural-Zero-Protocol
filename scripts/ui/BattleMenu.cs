@@ -51,12 +51,10 @@ public partial class BattleMenu : Control
 	{
 		if (_currentMenuState != MenuState.ActionMenu) return;
 
-		switch (uiSelection)
+		if (uiSelection == UiSelection.Up)
 		{
-			case UiSelection.Up:
-				DisableActionMenuButtons(true);
-				EmitSignal(SignalName.MoveToCardSystem);
-				break;
+			DisableActionMenuButtons(true);
+			EmitSignal(SignalName.MoveToCardSystem);
 		}
 	}
 	

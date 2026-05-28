@@ -47,8 +47,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
             MoveData = move;
             _cardImage.Frame = (int)MoveData.MoveElement * 2 + (int)MoveData.ActionType;
         }
-
-
+        
         private void OnMouseClicked(Node viewport, InputEvent @event, long shapeIdx)
         {
             if (@event is InputEventMouseButton mouseButton && mouseButton.ButtonIndex == MouseButton.Left && mouseButton.IsPressed())

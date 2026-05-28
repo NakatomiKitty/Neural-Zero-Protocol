@@ -10,7 +10,25 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="" />
+    <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project.godot" beforeDir="false" afterPath="$PROJECT_DIR$/project.godot" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/battle_scene.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/battle_scene.tscn" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/characters/playercharacter.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/characters/playercharacter.tscn" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/Card.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/Card.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.KeyboardMode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.KeyboardMode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Swap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Swap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/characters/StatsComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/characters/StatsComponent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/combat/CombatStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/CombatStateMachine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/combat/DamageCalculator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/DamageCalculator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/combat/TurnManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/TurnManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/resources/character_data/TestEnemy.tres" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/resources/character_data/TestEnemy.tres" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/resources/character_data/TestPlayer.tres" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/resources/character_data/TestPlayer.tres" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,7 +38,7 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="32" />
+    <option name="cachedIndexableFilesCount" value="33" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -30,18 +48,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Zerrrook"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Zerrrook&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/NakatomiKitty/Neural-Zero-Protocol.git",
-    "accountId": "4af9903b-6220-430d-9b89-4f78d7f5d2bf"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/NakatomiKitty/Neural-Zero-Protocol.git&quot;,
+    &quot;accountId&quot;: &quot;4af9903b-6220-430d-9b89-4f78d7f5d2bf&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Helpers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.MouseMode.cs" root0="FORCE_HIGHLIGHTING" />
@@ -84,7 +102,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -155,8 +173,26 @@
       <workItem from="1779497908913" duration="4314000" />
       <workItem from="1779530991934" duration="5843000" />
       <workItem from="1779800308477" duration="6664000" />
-      <workItem from="1779864427129" duration="332000" />
+      <workItem from="1779864427129" duration="792000" />
+      <workItem from="1779963921745" duration="7271000" />
     </task>
+    <task id="LOCAL-00001" summary="Test">
+      <option name="closed" value="true" />
+      <created>1779864862653</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1779864862653</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Testtt">
+      <option name="closed" value="true" />
+      <created>1779864923992</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1779864923992</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -189,6 +225,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Test" />
+    <MESSAGE value="Testtt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Testtt" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

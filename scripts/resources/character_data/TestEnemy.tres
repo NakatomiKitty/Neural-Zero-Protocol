@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_etngy")
-SelectedRarity = 4
+PrimaryElement = 0
 metadata/_custom_type_script = "uid://qhh2gclbele1"

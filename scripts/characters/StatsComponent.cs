@@ -43,13 +43,11 @@ public partial class StatsComponent : Node
 		
 		int oldValue = GetStat(stat);
 		int currentValue = Math.Max(0, oldValue + changeValue); // Clamp to prevent going past below zero
-
-		// Debug print
+		
 		GD.Print($"Stat changed: {stat} ({oldValue} → {currentValue}) [changeValue: {changeValue}]");
 
 		_character.CurrentStats[stat] = currentValue;
-
-		// Tell any listening nodes that this stat's value has changed.
+		
 		EmitSignal(SignalName.StatChanged, (int)stat, currentValue);
 
 		// If the stat was positive and now becomes exactly zero, it means the character just entered the "DeadZone".

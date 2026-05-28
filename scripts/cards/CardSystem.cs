@@ -5,21 +5,23 @@ using Godot.Collections;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
 
-
 namespace NeuralZeroProtocol.Scripts.Cards
 {
     /// <summary>
     /// Main hub for everything card related
+    /// I really need to name things better
     /// </summary>
     
     [Scene]
     public partial class CardSystem : Node2D
     {
+        
+        
+        private static readonly PackedScene Card = GD.Load<PackedScene>("res://scenes/card.tscn");
+        
         public const int HoverZ = 11;
         public const int SelectedZ = 10;
         
-        private static readonly PackedScene Card = GD.Load<PackedScene>("res://scenes/card.tscn");
-
         [Node] public CardHand CardHand;
         [Node] public CardHoverController CardHoverController;
         [Node] public CardSelectionController CardSelectionController;
@@ -66,6 +68,8 @@ namespace NeuralZeroProtocol.Scripts.Cards
             }
             
             Card centerCard = cards[cards.Count / 2];
+            
+            
             CardSelectionController.SetCenterCard(centerCard);
             
             CardSelectionController.SetCardHand(CardHand.GetChildren());

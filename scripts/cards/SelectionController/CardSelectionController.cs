@@ -25,6 +25,7 @@ public sealed partial class CardSelectionController : Node2D
     
     [Signal] public delegate void SelectionChangedEventHandler(Card oldSelectedCard, Card newSelectedCard);
     [Signal] public delegate void GetKeyboardHoveredCardEventHandler(Card card);
+    [Signal]  public delegate void GetCurrentSelectedCardEventHandler(Card currentSelectedCard);
     [Signal] public delegate void SwappingStateChangedEventHandler(bool isSwapping);
     [Signal] public delegate void KeyboardModeDeactivatedEventHandler();
     [Signal] public delegate void KeyboardModeCancelledEventHandler(bool isCancelled);
@@ -78,8 +79,12 @@ public sealed partial class CardSelectionController : Node2D
     }
     
     public void SetCardHand(Array<Node> cardHand) => CardHand = [.. cardHand.OfType<Card>()];
-    
-    public void SetCenterCard(Card centerCard) => (_keyboardHoveredCard, CenterCard) = (centerCard, centerCard);
+
+    public void SetCenterCard(Card centerCard)
+    {
+        (_keyboardHoveredCard, CenterCard) = (centerCard, centerCard);
+        EmitSignalGetCurrentSelectedCard(centerCard);
+    } 
     
     // Used in BattleScene.cs, Selects the Center Card when Action Menu shows up
     public void SelectCenterCard()

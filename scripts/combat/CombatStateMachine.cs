@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using Godot;
+using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Characters;
 using System.Linq;
 using System.Threading.Tasks;
+using NeuralZeroProtocol.Scripts.Resources.MoveData;
 using NeuralZeroProtocol.Scripts.Ui;
+using ActionType = NeuralZeroProtocol.Scripts.Ui.ActionType;
 
-// TODO: DON'T OPTIMIZE YET, USE THE NEW BATTLE MENU FIRST!
 namespace NeuralZeroProtocol.Scripts.Combat;
 
 public enum BattleState
@@ -18,25 +21,24 @@ public enum BattleState
     Defeat,
 }
 
-
+[Scene]
 public partial class CombatStateMachine : Node
 {
     [Signal] public delegate void StateChangedEventHandler(BattleState newState);
-
-    private BattleState _currentState;
+    [Node("ConfirmAttackHandler")]public ConfirmAttackHandler CharacterAttackHandler; 
+    
     private BattleScene _battleScene;
-
     private Character _currentCharacter;
-
-    public override void _Ready()
+    private BattleState _currentState;
+    
+    public override void _Notification(int what)
     {
-        _battleScene = GetNode<BattleScene>("..");
+        if (what == NotificationSceneInstantiated) WireNodes();
     }
+    
+    public override void _Ready() => _battleScene = GetNode<BattleScene>("..");
 
-    public async void StartBattle()
-    {
-        await ChangeState(BattleState.Initializing);
-    }
+    public async void StartBattle() => await ChangeState(BattleState.Initializing);
     
     public void SetCurrentCharacter(Character character) => _currentCharacter = character;
     
@@ -79,10 +81,11 @@ public partial class CombatStateMachine : Node
 
     private async void PlayerTurn()
     {
-        // Reminder: Decouple this shit later 
+        // Reminder: Decouple this shit later, Placeholder
         PlayerCharacter playerCharacter = (PlayerCharacter)_battleScene.TurnManager.GetCurrentUnit();
+
+        EnemyCharacter frontEnemyCharacter = (EnemyCharacter)_battleScene.TurnManager.EnemyCharacters[0];
         
-        // Decouple this too, bad practice
         SignalAwaiter awaiter = ToSignal(_battleScene.BattleMenu, BattleMenu.SignalName.ActionSelected);
         await awaiter;
 
@@ -90,6 +93,7 @@ public partial class CombatStateMachine : Node
 
         if (action == ActionType.Moves)
         {
+            GD.Print("Pressed Moves, Should go to the Action Menu.");
             PlayerTurn();
             return;
         }
@@ -113,7 +117,7 @@ public partial class CombatStateMachine : Node
                 GD.Print("Block Stance!");
                 break;
             case ActionType.Attack:
-                GD.Print("Attack card animation");
+                CharacterAttackHandler.SelectedCardData(playerCharacter, frontEnemyCharacter);
                 break;
             case ActionType.Evade:
                 GD.Print("EvadeStance!");
@@ -129,6 +133,7 @@ public partial class CombatStateMachine : Node
     private async Task EnemyTurn()
     {
         EnemyCharacter enemyCharacter = (EnemyCharacter)_battleScene.TurnManager.GetCurrentUnit();
+        
         GD.Print($"{enemyCharacter.Name}'s turn");
 
         GD.Print("Enemy did something!");

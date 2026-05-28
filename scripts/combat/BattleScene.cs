@@ -40,9 +40,10 @@ public partial class BattleScene : Node2D
         BattleMenu.ActionMenuState += OnActionMenuState;
         BattleMenu.MoveToCardSystem += CardSystem.CardSelectionController.OnMoveToCardSystem;
         CardSystem.CardSelectionController.KeyboardModeCancelled += BattleMenu.OnKeyboardModeCancelled;
+        CardSystem.CardSelectionController.GetCurrentSelectedCard += CombatStateMachine.CharacterAttackHandler.SetCurrentSelectedCard;
         
         // Passes the array to CardSystem so it can be used to update the card skins
-        CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromCurrentChar());
+        _ = CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromCurrentChar());
         
         TurnManager.StartBattleSequence();
     }

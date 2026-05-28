@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cyo4fis4ap8an" path="res://scenes/turn_manager.tscn" id="1_kinr6"]
 [ext_resource type="PackedScene" uid="uid://eob2rikglte3" path="res://scenes/characters/playercharacter.tscn" id="3_1i8jf"]
 [ext_resource type="PackedScene" uid="uid://dx71bhurninfj" path="res://scenes/characters/enemycharacter.tscn" id="4_svpld"]
-[ext_resource type="Script" uid="uid://crwko2qor3c5f" path="res://scripts/combat/CombatStateMachine.cs" id="6_1i8jf"]
+[ext_resource type="PackedScene" uid="uid://bvr5fxa3b3kmd" path="res://scenes/combat_state_machine.tscn" id="5_3oc74"]
 [ext_resource type="PackedScene" uid="uid://iabgt3a61ewp" path="res://scenes/battle_manager.tscn" id="7_svpld"]
 [ext_resource type="PackedScene" uid="uid://8ic6l8vm65v7" path="res://scenes/card_system.tscn" id="8_rum4d"]
 [ext_resource type="PackedScene" uid="uid://dqg1xji5e7e45" path="res://scenes/ui/battle_menu.tscn" id="9_0gp0h"]
@@ -25,8 +25,7 @@ EnemyTeam = NodePath("EnemyTeam")
 
 [node name="EnemyCharacter" parent="TurnManager/EnemyTeam" unique_id=1709186054 instance=ExtResource("4_svpld")]
 
-[node name="CombatStateMachine" type="Node" parent="." unique_id=1505035299]
-script = ExtResource("6_1i8jf")
+[node name="CombatStateMachine" parent="." unique_id=893457447 instance=ExtResource("5_3oc74")]
 
 [node name="BattleManager" parent="." unique_id=479983199 instance=ExtResource("7_svpld")]
 
@@ -37,5 +36,3 @@ position = Vector2(576, 744)
 layer = 0
 
 [node name="UiSelectionController" parent="." unique_id=1785561435 instance=ExtResource("9_3oc74")]
-
-[node name="UseCardController" type="Node" parent="." unique_id=1585935842]
