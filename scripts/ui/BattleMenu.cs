@@ -24,7 +24,7 @@ public partial class BattleMenu : Control
     private Tween _menuTween;
     private bool _isInitialMenuKeyboardMode;    // InitialMenu keyboard mode
     private bool _isActionMenuKeyboardMode;     // ActionMenu keyboard mode
-    private bool _isCardKeyboardMode;           // Card system has focus
+    private bool _isCardKeyboardMode;          
     
     public Control InitialMenuContainer;
     public Control ActionMenuContainer;

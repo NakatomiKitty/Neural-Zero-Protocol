@@ -73,8 +73,14 @@ public partial class CardSelectionController
         if (_keyboardHoveredCard == null) return; 
         if (_keyboardHoveredCard == CenterCard) return;
         
-        // Trigger the same swap logic as if the card was clicked
-        SwapWithCenter(_keyboardHoveredCard);
+        Card cardToSwap = _keyboardHoveredCard;
+    
+        // Deactivate keyboard mode and notify the battle menu
+        _isInActionMenu = true;
+        EmitSignal(SignalName.KeyboardModeCancelled, false);
+        DeactivateKeyboardMode();   
+        
+        SwapWithCenter(cardToSwap);
     }
     
     // Helper Functions
