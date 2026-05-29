@@ -25,6 +25,9 @@
   <component name="Git.Merge.Settings">
     <option name="BRANCH" value="features/CardSystem" />
   </component>
+  <component name="Git.Rebase.Settings">
+    <option name="NEW_BASE" value="main" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -206,7 +209,15 @@
       <option name="project" value="LOCAL" />
       <updated>1780033906219</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="misc">
+      <option name="closed" value="true" />
+      <created>1780053691117</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1780053691117</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -244,7 +255,8 @@
     <MESSAGE value="Successfully implemented BattleMenu to CombatStateMachine.cs and has started progress on battle logic" />
     <MESSAGE value="Forgot this too woops" />
     <MESSAGE value="Finally fixed that stupid battle menu bug AND optimized a lot of code in battle menu!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finally fixed that stupid battle menu bug AND optimized a lot of code in battle menu!" />
+    <MESSAGE value="misc" />
+    <option name="LAST_COMMIT_MESSAGE" value="misc" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
