@@ -29,6 +29,7 @@ public sealed partial class CardSelectionController : Node2D
     [Signal] public delegate void SwappingStateChangedEventHandler(bool isSwapping);
     [Signal] public delegate void KeyboardModeDeactivatedEventHandler();
     [Signal] public delegate void KeyboardModeCancelledEventHandler(bool isCancelled);
+    [Signal] public delegate void KeyboardModeActivatedEventHandler();
     
     private Dictionary<Card, Tween> _activePositionTweens = new();
     private CardSelectionState _state;
@@ -54,7 +55,7 @@ public sealed partial class CardSelectionController : Node2D
         {
             case InputEventMouseMotion when _state == CardSelectionState.KeyboardMode:
                 _isInActionMenu = true;
-                EmitSignal(SignalName.KeyboardModeCancelled, false);
+                EmitSignal(SignalName.KeyboardModeCancelled, true);
                 DeactivateKeyboardMode();
                 break;
             case InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true }:
@@ -67,7 +68,7 @@ public sealed partial class CardSelectionController : Node2D
                     {
                         // Clicked on empty space, which will deselect and return to Idle
                         _isInActionMenu = true;
-                        EmitSignal(SignalName.KeyboardModeCancelled, false);
+                        EmitSignal(SignalName.KeyboardModeCancelled, true);
                         DeactivateKeyboardMode();
                         ChangeState(CardSelectionState.Idle);
                     }

@@ -41,6 +41,8 @@ public partial class BattleScene : Node2D
         BattleMenu.MoveToCardSystem += CardSystem.CardSelectionController.OnMoveToCardSystem;
         CardSystem.CardSelectionController.KeyboardModeCancelled += BattleMenu.OnKeyboardModeCancelled;
         CardSystem.CardSelectionController.GetCurrentSelectedCard += CombatStateMachine.CharacterAttackHandler.SetCurrentSelectedCard;
+        CardSystem.CardSelectionController.KeyboardModeActivated += BattleMenu.OnCardKeyboardModeActivated;
+        CardSystem.CardSelectionController.KeyboardModeDeactivated += BattleMenu.OnCardKeyboardModeDeactivated;
         
         // Passes the array to CardSystem so it can be used to update the card skins
         _ = CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromCurrentChar());
@@ -79,7 +81,7 @@ public partial class BattleScene : Node2D
     {
         float buttonGlobalY = isTrue ? 
             BattleMenu.ActionMenuContainer.GlobalPosition.Y : 
-            BattleMenu.InitialButtonContainer.GlobalPosition.Y;
+            BattleMenu.InitialMenuContainer.GlobalPosition.Y;
         
         // Desired global position for CardSystem
         float targetGlobalY = buttonGlobalY + offset;

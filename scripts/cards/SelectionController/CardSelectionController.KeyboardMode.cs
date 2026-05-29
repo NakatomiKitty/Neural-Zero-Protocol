@@ -21,7 +21,7 @@ public partial class CardSelectionController
         } 
         else if (uiSelection is UiSelection.Down or UiSelection.Cancel)
         {
-            EmitSignal(SignalName.KeyboardModeCancelled, true);
+            EmitSignal(SignalName.KeyboardModeCancelled, false);
             
             _isInActionMenu = true;
             DeactivateKeyboardMode();
@@ -80,10 +80,10 @@ public partial class CardSelectionController
     // Helper Functions
     private void ActivateKeyboardMode()
     {
-        // Start keyboard highlight from the current center card
         _keyboardHoveredCard = CenterCard;
         EmitSignal(SignalName.GetKeyboardHoveredCard, _keyboardHoveredCard);
         ChangeState(CardSelectionState.KeyboardMode);
+        EmitSignal(SignalName.KeyboardModeActivated);
     }
     
     private void DeactivateKeyboardMode()

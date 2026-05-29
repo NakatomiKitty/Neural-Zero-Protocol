@@ -1,229 +1,382 @@
 using System;
 using Godot;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NeuralZeroProtocol.Scripts.Ui;
 
-public enum ActionType 
-{
-    Switch,
-    Moves,
-    Run,
-    Block,
-    Attack,
-    Evade
-}
+public enum ActionType { Switch, Moves, Run, Block, Attack, Evade }
+public enum MenuState { InitialMenu, Swapping, ActionMenu }
 
-public enum MenuState // TODO: ADD A STATE WHERE ON START ROUND OR ON NEXT TURN, THE INITIAL MENU APPEARS!
-{
-	InitialMenu,
-	Swapping,
-	ActionMenu
-}
 public partial class BattleMenu : Control
 {
-	private const float MenuSwapTween = 0.5f;
-	
-	[Signal] public delegate void MenuStateChangedEventHandler(MenuState newState);
-	[Signal] public delegate void ActionSelectedEventHandler(int actionType); // Rename to ActionType once replaced ActionPanel
-	[Signal] public delegate void ActionMenuStateEventHandler(bool isTrue);
-	[Signal] public delegate void MoveToCardSystemEventHandler();
-	
-	private MenuState _currentMenuState;
-	private MenuState _targetMenuState;
+    private const string InitialFocusButton = "MovesButton";
+    private const string ActionMenuDefaultFocus = "AttackButton";
+    private const float MenuSwapTween = 0.5f;
+    
+    [Signal] public delegate void MenuStateChangedEventHandler(MenuState newState);
+    [Signal] public delegate void ActionSelectedEventHandler(int actionType);
+    [Signal] public delegate void ActionMenuStateEventHandler(bool isTrue);
+    [Signal] public delegate void MoveToCardSystemEventHandler();
+    
+    private MenuState _currentMenuState;
+    private MenuState _targetMenuState;
+    private Tween _menuTween;
+    private bool _isInitialMenuKeyboardMode;    // InitialMenu keyboard mode
+    private bool _isActionMenuKeyboardMode;     // ActionMenu keyboard mode
+    private bool _isCardKeyboardMode;           // Card system has focus
+    
+    public Control InitialMenuContainer;
+    public Control ActionMenuContainer;
+    
+    private List<TextureButton> _actionButtons;
+    private bool _neighborsSetup = false;
+    
+    public override void _Ready()
+    {
+        InitialMenuContainer = GetNode<Control>("InitialButtonContainer");
+        ActionMenuContainer = GetNode<Control>("SecondaryButtonContainer");
+        
+        GetContainerChildren(InitialMenuContainer);
+        GetContainerChildren(ActionMenuContainer);
+        
+        _actionButtons = new List<TextureButton>();
+        
+        foreach (Node child in ActionMenuContainer.GetChildren())
+        {
+            if (child is TextureButton button)
+            {
+                _actionButtons.Add(button);
+            }
+        }
+        
+        ChangeState(MenuState.InitialMenu);
+    }
+    
+    #region Outside Signals
+    public void OnCardKeyboardModeActivated()
+    {
+        if (_currentMenuState == MenuState.ActionMenu)
+        {
+            _isCardKeyboardMode = true;
+            _isActionMenuKeyboardMode = false;
+            
+            SetMenuButtonsEnabled(ActionMenuContainer, false);
+        }
+    }
+    
+    public void OnCardKeyboardModeDeactivated()
+    {
+        if (_currentMenuState == MenuState.ActionMenu)
+        {
+            _isCardKeyboardMode = false;
+            
+            FocusOnAttackButton();
+        }
+    }
+    
+    public void OnKeyboardModeCancelled(bool isCancelledByMouse)
+    {
+        if (!isCancelledByMouse) return;
+        
+        if (_currentMenuState == MenuState.InitialMenu)
+        {
+            _isInitialMenuKeyboardMode = false;
+            
+            ReleaseFocusFromContainer(InitialMenuContainer);
+        }
+        else if (_currentMenuState == MenuState.ActionMenu)
+        {
+            _isCardKeyboardMode = false;
+            _isActionMenuKeyboardMode = false;
+            
+            ReleaseFocusFromContainer(ActionMenuContainer);
+        }
+    }
+    #endregion
 
-	private Tween _menuTween;
-	
-	public Control InitialButtonContainer;
-	public Control ActionMenuContainer;
-	
-	public override void _Ready()
-	{
-		InitialButtonContainer = GetNode<Control>("InitialButtonContainer");
-		ActionMenuContainer = GetNode<Control>("SecondaryButtonContainer");
-		
-		GetContainerChildren(InitialButtonContainer);
-		GetContainerChildren(ActionMenuContainer);
-		
-		ChangeState(MenuState.InitialMenu);
-	}
+    #region Public Methods
+    public void GetUiInput(UiSelection uiSelection)
+    {
+        if (uiSelection == UiSelection.None) return;
+        
+        switch (_currentMenuState)
+        {
+            case MenuState.InitialMenu:
+                HandleInitialMenuInput(uiSelection);
+                break;
+            case MenuState.ActionMenu:
+                HandleActionMenuInput(uiSelection);
+                break;
+        }
+    }
+    #endregion
 
-	public void GetUiInput(UiSelection uiSelection)
-	{
-		if (_currentMenuState != MenuState.ActionMenu) return;
+    #region State Machine and States
 
-		if (uiSelection == UiSelection.Up)
-		{
-			DisableActionMenuButtons(true);
-			EmitSignal(SignalName.MoveToCardSystem);
-		}
-	}
-	
-	public void OnKeyboardModeCancelled(bool isCancelled) 
-	{
-		if (_currentMenuState != MenuState.ActionMenu) return;
-		
-		DisableActionMenuButtons(false);
-		
-		if (isCancelled) GrabFocusOnButton(ActionMenuContainer, "AttackButton");
-	}
+    private void ChangeState(MenuState newState)
+    {
+        _currentMenuState = newState;
+        EmitSignal(SignalName.MenuStateChanged, (int)newState);
+        
+        switch (_currentMenuState)
+        {
+            case MenuState.InitialMenu:
+                EnterInitialMenu();
+                break;
+            case MenuState.Swapping:
+                SwapTheMenus();
+                break;
+            case MenuState.ActionMenu:
+                EnterSecondaryMenu();
+                break;
+        }
+    }
+    
+    private void EnterInitialMenu()
+    {
+        InitialMenuContainer.Visible = true;
+        ActionMenuContainer.Visible = false;
+        
+        GrabFocusOnButton(InitialMenuContainer, InitialFocusButton);
+    }
+    
+    private void EnterSecondaryMenu()
+    {
+        ActionMenuContainer.Visible = true;
+        InitialMenuContainer.Visible = false;
+        
+        SetMenuButtonsEnabled(ActionMenuContainer, false);
+        
+        _isCardKeyboardMode = false;
+        _isActionMenuKeyboardMode = false;
+    }
+    
+    private void SwapTheMenus()
+    {
+        Vector2 initialMenuPos = InitialMenuContainer.Position;
+        Vector2 actionMenuPos = ActionMenuContainer.Position;
 
-	public void OnAnyButtonHovered()
-	{
-		// Test
-		DisableActionMenuButtons(false);
-	}
-	
-	public void ChangeState(MenuState newState)
-	{
-		_currentMenuState = newState;
-		EmitSignal(SignalName.MenuStateChanged, (int)newState);
+        if (_targetMenuState == MenuState.InitialMenu)
+        {
+            EmitSignal(SignalName.ActionMenuState, false);
+        }
+        
+        InitialMenuContainer.Visible = true;
+        ActionMenuContainer.Visible = true;
+        
+        SwapMenuLerp(InitialMenuContainer, actionMenuPos);
+        SwapMenuLerp(ActionMenuContainer, initialMenuPos);
 
-		switch (_currentMenuState)
-		{
-			case MenuState.InitialMenu:
-				EnterInitialMenu();
-				break;
-			case MenuState.Swapping:
-				SwapTheMenus();
-				break;
-			case MenuState.ActionMenu:
-				EnterSecondaryMenu();
-				break;
-			default:
-				throw new ArgumentOutOfRangeException();
-		}
-	}
-	private void EnterInitialMenu()
-	{
-		// Hides the opposite container to prevent the keyboard accessing them
-		InitialButtonContainer.Visible = true;
-		ActionMenuContainer.Visible = false;
-		
-		// Set's the keyboard focus on the Moves Button
-		GrabFocusOnButton(InitialButtonContainer, "MovesButton");
-	}
-	
-	private void EnterSecondaryMenu()
-	{
-		// Hides the opposite container to prevent the keyboard accessing them
-		ActionMenuContainer.Visible = true;
-		InitialButtonContainer.Visible = false;
-		
-		DisableActionMenuButtons(true);
-	}
-	
-	private void SwapTheMenus()
-	{
-		
-		Vector2 initialBasePosition = InitialButtonContainer.Position;
-		Vector2 secondaryBasePosition = ActionMenuContainer.Position;
-		
-		if (_targetMenuState == MenuState.InitialMenu)
-		{
-			EmitSignal(SignalName.ActionMenuState, false);
-		}
-		
-		// Set's both of them to true while swapping
-		InitialButtonContainer.Visible = true;
-		ActionMenuContainer.Visible = true;
-		
-		// Swap the container's position with TWEEEEENNNNN
-		
-		SwapMenuLerp(InitialButtonContainer, secondaryBasePosition);
-		SwapMenuLerp(ActionMenuContainer, initialBasePosition);
+        _menuTween.Finished += OnSwapMenuTweenFinished;
+    }
 
-		_menuTween.Finished += () =>
-		{
-			if (_currentMenuState != MenuState.Swapping) return;
-			
-			if (_targetMenuState == MenuState.ActionMenu)
-			{
-				EmitSignal(SignalName.ActionMenuState, true);
-			}
-			
-			// Swap Z Indexes
-			(InitialButtonContainer.ZIndex, ActionMenuContainer.ZIndex) = 
-			(ActionMenuContainer.ZIndex, InitialButtonContainer.ZIndex);
-			
-			ChangeState(_targetMenuState);
-		};
-	}
-	private void OnAnyButtonPressed(TextureButton button)
-	{
-		if (_currentMenuState == MenuState.Swapping) return;
-		
-		ActionType action = button.Name.ToString() switch
-		{
-			"SwitchButton" => ActionType.Switch,
-			"MovesButton" => ActionType.Moves,
-			"RunButton" => ActionType.Run,
-			"BlockButton" => ActionType.Block,
-			"AttackButton" => ActionType.Attack,
-			"EvadeButton" => ActionType.Evade,
-			_ => ActionType.Moves
-		};
-		
-		EmitSignal(SignalName.ActionSelected, (int)action); // Will be hooked up to the CombatStateMachine and CardSystem
-		
-		switch (_currentMenuState)
-		{
-			case MenuState.InitialMenu when action == ActionType.Moves:
-				_targetMenuState = MenuState.ActionMenu;
-				ChangeState(MenuState.Swapping);
-				break;
-			// Placeholder, will be adding a back button
-			case MenuState.ActionMenu when action == ActionType.Block:
-				_targetMenuState = MenuState.InitialMenu;
-				ChangeState(MenuState.Swapping);
-				break;
-		}
-	}
+    #endregion
+    
+    #region Private Signals
 
-	#region Helper functions
+    private void OnSwapMenuTweenFinished()
+    {
+        if (_currentMenuState != MenuState.Swapping) return;
+        if (_targetMenuState == MenuState.ActionMenu)
+        {
+            EmitSignal(SignalName.ActionMenuState, true);
+        }
 
-	private void DisableActionMenuButtons(bool isTrue)
-	{
-		foreach (Node child in ActionMenuContainer.GetChildren())
-		{
-			if (child is TextureButton button)
-			{
-				button.ReleaseFocus();
-				button.Disabled = isTrue;
-			}
-		}
-	}
-	private void GetContainerChildren(Control buttonContainer)
-	{
-		foreach (Node child in buttonContainer.GetChildren())
-		{
-			if (child is TextureButton button)
-			{
-				button.Pressed += () => OnAnyButtonPressed(button);
-				button.MouseEntered += OnAnyButtonHovered;
-			}
-		}
-	}
+        (InitialMenuContainer.ZIndex, ActionMenuContainer.ZIndex) =
+        (ActionMenuContainer.ZIndex, InitialMenuContainer.ZIndex);
 
-	private void SwapMenuLerp(Control buttonContainer, Vector2 finalPosition)
-	{
-		_menuTween = CreateTween();
+        ChangeState(_targetMenuState);
+    }
+    
+    private void OnAnyButtonPressed(TextureButton button)
+    {
+        if (_currentMenuState == MenuState.Swapping) return;
+        
+        ActionType action = button.Name.ToString() switch
+        {
+            "SwitchButton" => ActionType.Switch,
+            "MovesButton"  => ActionType.Moves,
+            "RunButton"    => ActionType.Run,
+            "BlockButton"  => ActionType.Block,
+            "AttackButton" => ActionType.Attack,
+            "EvadeButton"  => ActionType.Evade,
+            _ => ActionType.Moves
+        };
+        
+        EmitSignal(SignalName.ActionSelected, (int)action);
+        
+        switch (_currentMenuState)
+        {
+            case MenuState.InitialMenu when action == ActionType.Moves:
+                _targetMenuState = MenuState.ActionMenu;
+                ChangeState(MenuState.Swapping);
+                break;
+            case MenuState.ActionMenu when action == ActionType.Block:
+                _targetMenuState = MenuState.InitialMenu;
+                ChangeState(MenuState.Swapping);
+                break;
+        }
+    }
+    
+    private void OnAnyButtonHovered(TextureButton button)
+    {
+        switch (_currentMenuState)
+        {
+            case MenuState.InitialMenu:
+                _isInitialMenuKeyboardMode = false;
+                ReleaseFocusFromContainer(InitialMenuContainer);
+                break;
+            case MenuState.ActionMenu:
+                _isCardKeyboardMode = false;
+                _isActionMenuKeyboardMode = false;
+                
+                // When the mouse hovers any action button, exit keyboard mode and ensure buttons are interactive.
+                ReleaseFocusFromContainer(ActionMenuContainer);
+                SetMenuButtonsEnabled(ActionMenuContainer, true);
+                break;
+        }
+    }
 
-		_menuTween.TweenProperty(buttonContainer, "position", finalPosition, MenuSwapTween)
-			.SetTrans(Tween.TransitionType.Quint)
-			.SetEase(Tween.EaseType.Out);
-	}
-	
-	private static void GrabFocusOnButton(Control container, string buttonName)
-	{
-		foreach (Node child in container.GetChildren())
-		{
-			if (child is TextureButton button && button.Name == buttonName)
-			{
-				button.GrabFocus();
-				break;
-			}
-		}
-	}
-	#endregion 
+    #endregion
+    
+    #region Helper Functions
+
+    #region Initialization Helpers
+
+    private void GetContainerChildren(Control container)
+    {
+        foreach (Node child in container.GetChildren())
+        {
+            if (child is TextureButton button)
+            {
+                button.Pressed += () => OnAnyButtonPressed(button);
+                button.MouseEntered += () => OnAnyButtonHovered(button);
+            }
+        }
+    }
+        
+    private static void GrabFocusOnButton(Control container, string buttonName)
+    {
+        foreach (Node child in container.GetChildren())
+        {
+            if (child is TextureButton button && button.Name == buttonName)
+            {
+                button.GrabFocus();
+            }
+        }
+    }
+    
+    private void ReleaseFocusFromContainer(Control container)
+    {
+        foreach (Node child in container.GetChildren())
+        {
+            if (child is TextureButton button && button.HasFocus())
+            {
+                button.ReleaseFocus();
+            }
+        }
+    }
+
+    #endregion
+
+    #region Focus Helpers
+
+    private void FocusOnAttackButton()
+    {
+        SetMenuButtonsEnabled(ActionMenuContainer, true);
+        if (!_neighborsSetup)
+        {
+            SetupActionMenuFocusNeighbors();
+            _neighborsSetup = true;
+        }
+        
+        ReleaseFocusFromContainer(ActionMenuContainer);
+        GrabFocusOnButton(ActionMenuContainer, ActionMenuDefaultFocus);
+        _isActionMenuKeyboardMode = true;
+        _isCardKeyboardMode = false;
+    }
+    
+    private void SetupActionMenuFocusNeighbors()
+    {
+        if (_actionButtons.Count < 2) return;
+        
+        _actionButtons.Sort((a,b) => a.GlobalPosition.X.CompareTo(b.GlobalPosition.X));
+        
+        for (int i = 0; i < _actionButtons.Count; i++)
+        {
+            TextureButton button = _actionButtons[i];
+            int leftIndex = WrapIndex(i - 1, _actionButtons.Count);
+            int rightIndex = WrapIndex(i + 1, _actionButtons.Count);
+            
+            button.FocusNeighborLeft  = _actionButtons[leftIndex].GetPath();
+            button.FocusNeighborRight = _actionButtons[rightIndex].GetPath();
+            
+            // ignore this
+            button.FocusNeighborTop   = button.GetPath();
+            button.FocusNeighborBottom = button.GetPath();
+        }
+    }
+    
+    private static int WrapIndex(int index, int count) => (index + count) % count;
+    
+    private TextureButton GetFocusedButton() => _actionButtons.FirstOrDefault(button => button.HasFocus());
+
+    #endregion
+
+    #region Input Handling
+
+    private void HandleInitialMenuInput(UiSelection uiSelection)
+    {
+        if (!_isInitialMenuKeyboardMode)
+        {
+            _isInitialMenuKeyboardMode = true;
+            GrabFocusOnButton(InitialMenuContainer, InitialFocusButton);
+        }
+    }
+    
+    private void HandleActionMenuInput(UiSelection uiSelection)
+    {
+        if (_isCardKeyboardMode) return;
+    
+        if (uiSelection == UiSelection.Up)
+        {
+            SetMenuButtonsEnabled(ActionMenuContainer, false);
+            EmitSignal(SignalName.MoveToCardSystem);
+            return;
+        }
+    
+        if (!_isActionMenuKeyboardMode) FocusOnAttackButton();
+
+        if (uiSelection == UiSelection.Confirm && GetFocusedButton() is { } focused)
+        {
+            focused.EmitSignal(BaseButton.SignalName.Pressed);
+        }
+    }
+
+    #endregion
+    
+    private void SetMenuButtonsEnabled(Control container, bool enabled)
+    {
+        foreach (Node child in container.GetChildren())
+        {
+            if (child is TextureButton button)
+            {
+                if (!enabled) button.ReleaseFocus();
+                button.Disabled = !enabled;
+            }
+        }
+    }
+    
+    private void SwapMenuLerp(Control buttonContainer, Vector2 finalPos)
+    {
+        _menuTween = CreateTween();
+        
+        _menuTween.TweenProperty(buttonContainer, "position", finalPos, MenuSwapTween)
+            .SetTrans(Tween.TransitionType.Quint)
+            .SetEase(Tween.EaseType.Out);
+    }
+    
+    
+    #endregion
 }
-
