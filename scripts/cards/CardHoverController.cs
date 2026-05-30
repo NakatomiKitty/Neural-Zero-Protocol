@@ -1,186 +1,250 @@
 using Godot;
-using System;
+using GodotUtilities;
 using System.Collections.Generic;
 
-namespace NeuralZeroProtocol.Scripts.Cards
+namespace NeuralZeroProtocol.Scripts.Cards;
+
+/// <summary>
+/// Manages hover effects (scale tweening + ZIndex changes) for the cards.
+/// Only the topmost unselected card under the mouse gets the effect.
+/// </summary>
+[Scene]
+public partial class CardHoverController : Node
 {
-	/// <summary>
-	/// Manages hover effects (scale tweening + ZIndex changes) for the cards.
-	/// Only the topmost unselected card under the mouse gets the effect.
-	/// </summary>
-	public partial class CardHoverController : Node
+	[Node("CardBorder")] private Sprite2D _cardBorder;
+	
+	private static readonly Vector2 CardHoveredScale = new(1.1f, 1.1f);
+	private static readonly Vector2 CardBorderSubtract = new(.7f, .7f);
+	private const float HoverTweenDuration = 0.4f;
+	private const float CardBorderTweenDuration = 0.15f;
+	private const float CardBorderFadeDuration = 0.15f;
+
+    private readonly Dictionary<Card, Tween> _activeHoverTweens = new();
+    private readonly HashSet<Card> _cardsUnderMouse = new();
+    
+    private Vector2 _cardBorderOriginalScale;
+
+	private CardSystem _cardSystem;
+	
+    private Card _keyboardHoveredCard; // Used for selecting with keyboard
+    private Card _mouseHoveredCard; // Used for selecting with mouse 
+	private Card _selectedCard;
+	
+    private bool _isSwapping;
+    private bool _hasLeftMenuMode = true;
+
+    public override void _Notification(int what)
+    {
+        if (what == NotificationSceneInstantiated) WireNodes();
+    }
+    
+	public override void _Ready()
 	{
-        private const float HoverTweenDuration = 0.4f;
-
-        private readonly Dictionary<Card, Tween> _activeHoverTweens = new();
-        private readonly HashSet<Card> _cardsUnderMouse = new();
-
-		private CardSystem _cardSystem;
-		private Card _selectedCard;
-
-		private Card _mouseHoveredCard; // Used for selecting with mouse 
-        private Card _keyboardHoveredCard; // Used for selecting with keyboard
-
-        private bool _isSwapping;
-        
-		public override void _Ready() => _cardSystem = GetNode<CardSystem>("..");
-        
-        public void OnSwappingStateChanged(bool isSwapping) => _isSwapping = isSwapping;
-
-		public void OnCardSelected(Card card)
-		{
-			// Selected card no longer gets the hover effect 
-            _cardsUnderMouse.Remove(card);
-
-            if (_mouseHoveredCard == card)
-			{
-				if (_mouseHoveredCard != null)
-
-					// If the selected card was hovered, remove the hover effect immediately.
-					ApplyHoverEffect(_mouseHoveredCard, false);
-
-				_mouseHoveredCard = null;
-			}
-
-            // Stop any ongoing tweens on this card
-            KillAndRemoveTween(card);
-
-			_selectedCard = card;
-
-			// Re‑evaluate the hover effect (the selected card is now ignored)
-			UpdateHoverEffect();
-		}
-
-		public void OnCardDeselected()
-		{
-			_selectedCard = null;
-			UpdateHoverEffect();
-		}
-
-
-		public void OnHoveredOverCard(Card card)
-        {
-            if (_isSwapping) return;
-            if (card == _keyboardHoveredCard) return;
-            if (card == _selectedCard) return;   // Never hover the selected card
-
-            _cardsUnderMouse.Add(card);
-            UpdateHoverEffect();
-        }
-
-        public void OnHoveredOffCard(Card card)
-        {
-            if (_isSwapping) return;
-            if (card == _keyboardHoveredCard) return;
-            if (card == _selectedCard) return; 
-
-            _cardsUnderMouse.Remove(card);
-            UpdateHoverEffect();
-        }
-
-        public void ForceHighlight(Card card)
-        {
-            ClearForcedHighlight();
-
-            if (card == _keyboardHoveredCard) return;
-            if (card == _selectedCard) return;
-
-           _keyboardHoveredCard = card;
-           ApplyHoverEffect(_keyboardHoveredCard, true);
-        }
-
-        public void ClearForcedHighlight()
-        {
-            if (_keyboardHoveredCard == null) return;
-
-            Card highlightedCard = _keyboardHoveredCard;
-            _keyboardHoveredCard = null;
-
-            UpdateHoverEffect();
-            ApplyHoverEffect(highlightedCard, false);
-        }
-        
-        // Re‑evaluates which card (if there is any) should receive the hover effect.
-        // The effect is given to the highest‑ZIndex card that is NOT selected.
-        private void UpdateHoverEffect()
-        {
-            if (_isSwapping) return;
-            if (_keyboardHoveredCard != null) return;
-            if (_cardsUnderMouse.Count == 0)
-            {
-                if (_mouseHoveredCard != null)
-                {
-                    ApplyHoverEffect(_mouseHoveredCard, false);
-                    _mouseHoveredCard = null;
-                }
-                return;
-            }
-
-            Card highestCard = null;
-            int highestZ = int.MinValue;
-
-            foreach (Card card in _cardsUnderMouse)
-            {
-
-				if (card == null) continue;
-                if (card == _selectedCard) continue;
-                if (card.ZIndex > highestZ)
-                {
-                    highestCard = card;
-                    highestZ = card.ZIndex;
-                }
-            }
-
-            if (highestCard != _mouseHoveredCard)
-            {
-                if(_mouseHoveredCard != null) ApplyHoverEffect(_mouseHoveredCard, false);
-                
-                if (highestCard != null) ApplyHoverEffect(highestCard, true);
-
-                _mouseHoveredCard = highestCard;
-            }
-        }
-        
-		// Removes and Kill any ongoing tween
-		private void KillAndRemoveTween(Card card)
-		{
-			if (_activeHoverTweens.ContainsKey(card) && _activeHoverTweens[card].IsRunning())
-                _activeHoverTweens[card].Kill();
-
-			_activeHoverTweens.Remove(card);
-		}
-
-		// Also a helper function!
-		// Store a tween for later cleanup.
-		private void AddTween(Card card, Tween tween)
-		{
-			KillAndRemoveTween(card);
-
-			_activeHoverTweens[card] = tween;
-            tween.Finished += () => _activeHoverTweens.Remove(card);
-		}
-
-		// The main brain! 
-		// this actually applies (or removes) the hover effect: scale tweening + ZIndex change.
-        private void ApplyHoverEffect(Card card, bool isHovered)
-        {
-            KillAndRemoveTween(card);
-
-            Vector2 cardScale = isHovered ? new Vector2(1.1f, 1.1f) : Vector2.One;
-            
-            Tween tween = CreateTween();
-            
-            tween.TweenProperty(card, "scale", cardScale, HoverTweenDuration)
-                .SetTrans(Tween.TransitionType.Elastic)
-                .SetEase(Tween.EaseType.Out);
-
-            AddTween(card, tween);
-
-            card.ZIndex = isHovered ? CardSystem.HoverZ : // Hovered goes above base (5)
-	            _cardSystem.OriginalZIndexes[card];
-
-            card.UpdatePriority();
-        }
+		_cardSystem = GetNode<CardSystem>("..");
+		
+		_cardBorder.Visible = true;
+		_cardBorderOriginalScale = _cardBorder.Scale;
+		
 	}
+    
+    public void OnSwappingStateChanged(bool isSwapping) => _isSwapping = isSwapping;
+
+    public void SetCenterCard(Card centerCard)
+    {
+	    _cardBorder.GlobalPosition = centerCard.GlobalPosition;
+	    GD.Print(centerCard.GlobalPosition);
+    }
+
+    
+
+	public void OnCardSelected(Card card)
+	{
+		// Selected card no longer gets the hover effect 
+        _cardsUnderMouse.Remove(card);
+
+        if (_mouseHoveredCard == card)
+		{
+			if (_mouseHoveredCard != null)
+			{
+				ApplyHoverEffect(_mouseHoveredCard, false, false);
+			}
+			_mouseHoveredCard = null;
+		}
+        
+        KillAndRemoveTween(card);
+
+		_selectedCard = card;
+		if (_hasLeftMenuMode)
+		{
+			LeftMenuMode();
+		}
+		UpdateHoverEffect();
+	}
+
+	public void OnCardDeselected()
+	{
+		_selectedCard = null;
+		UpdateHoverEffect();
+	}
+
+	
+	public void OnHoveredOverCard(Card card)
+    {
+        if (_isSwapping) return;
+        if (card == _keyboardHoveredCard) return;
+        if (card == _selectedCard) return;   // Never hover the selected card
+
+        _cardsUnderMouse.Add(card);
+        UpdateHoverEffect();
+    }
+
+    public void OnHoveredOffCard(Card card)
+    {
+        if (_isSwapping) return;
+        if (card == _keyboardHoveredCard) return;
+        if (card == _selectedCard) return; 
+
+        _cardsUnderMouse.Remove(card);
+        UpdateHoverEffect();
+    }
+
+    public void ForceHighlight(Card card)
+    {
+        ClearForcedHighlight();
+        
+        if (card == _keyboardHoveredCard) return;
+        if (card == _selectedCard)
+        {
+	        ApplyBorderEffect(_selectedCard, _selectedCard.Scale);
+	        return;
+        }
+
+        _keyboardHoveredCard = card;
+        ApplyHoverEffect(_keyboardHoveredCard, true, true);
+    }
+
+    public void ClearForcedHighlight()
+    {
+        if (_keyboardHoveredCard == null) return;
+        
+        Card highlightedCard = _keyboardHoveredCard;
+        _keyboardHoveredCard = null;
+
+        UpdateHoverEffect();
+        ApplyHoverEffect(highlightedCard, false, true);
+    }
+    
+    private void UpdateHoverEffect()
+    {
+        if (_isSwapping) return;
+        if (_keyboardHoveredCard != null) return;
+        if (_cardsUnderMouse.Count == 0)
+        {
+            if (_mouseHoveredCard != null)
+            {
+                ApplyHoverEffect(_mouseHoveredCard, false, false);
+                _mouseHoveredCard = null;
+            }
+            return;
+        }
+
+        Card highestCard = null;
+        int highestZ = int.MinValue;
+
+        foreach (Card card in _cardsUnderMouse)
+        {
+
+			if (card == null) continue;
+            if (card == _selectedCard) continue;
+            if (card.ZIndex > highestZ)
+            {
+                highestCard = card;
+                highestZ = card.ZIndex;
+            }
+        }
+
+        if (highestCard != _mouseHoveredCard)
+        {
+            if(_mouseHoveredCard != null) ApplyHoverEffect(_mouseHoveredCard, false, false);
+            
+            if (highestCard != null) ApplyHoverEffect(highestCard, true, false);
+
+            _mouseHoveredCard = highestCard;
+        }
+    }
+
+    private async void LeftMenuMode()
+    {
+	    await ToSignal(GetTree().CreateTimer(0.1f), SceneTreeTimer.SignalName.Timeout);
+	    
+	    Tween tween = CreateTween().SetParallel();
+	    
+	    tween.TweenProperty(_cardBorder, "modulate:a", 1.0f, CardBorderFadeDuration);
+	    
+	    ApplyBorderEffect(_selectedCard, _selectedCard.Scale);
+	    
+	    _hasLeftMenuMode = false;
+    }
+	private void KillAndRemoveTween(Card card)
+	{
+		if (_activeHoverTweens.ContainsKey(card) && _activeHoverTweens[card].IsRunning())
+            _activeHoverTweens[card].Kill();
+
+		_activeHoverTweens.Remove(card);
+	}
+	
+	private void AddTween(Card card, Tween tween)
+	{
+		KillAndRemoveTween(card);
+
+		_activeHoverTweens[card] = tween;
+        tween.Finished += () => _activeHoverTweens.Remove(card);
+	}
+	
+    private void ApplyHoverEffect(Card card, bool isHovered, bool isFromKeyboardMode)
+    {
+        KillAndRemoveTween(card);
+        Vector2 cardScale = isHovered ? CardHoveredScale : Vector2.One;
+        
+        Tween tween = CreateTween();
+        
+        tween.TweenProperty(card, "scale", cardScale, HoverTweenDuration)
+            .SetTrans(Tween.TransitionType.Elastic)
+            .SetEase(Tween.EaseType.Out);
+        
+        if (isFromKeyboardMode)
+        {
+	        tween = ApplyBorderEffect(card, CardHoveredScale);
+        }
+        
+        AddTween(card, tween);
+
+        card.ZIndex = isHovered ? CardSystem.HoverZ : _cardSystem.OriginalZIndexes[card];
+
+        card.UpdatePriority();
+    }
+	
+	private Tween ApplyBorderEffect(Card card, Vector2 cardScale)
+    {
+	    Vector2 newCardBorderScale = cardScale - CardBorderSubtract;
+        
+	    float cardBorderClampedX = Mathf.Clamp(newCardBorderScale.X, _cardBorderOriginalScale.X, float.MaxValue);
+	    float cardBorderClampedY = Mathf.Clamp(newCardBorderScale.Y, _cardBorderOriginalScale.Y, float.MaxValue);
+		
+	    Tween tween = CreateTween().SetParallel();
+	    
+	    tween.TweenProperty(_cardBorder, "global_rotation", card.GlobalRotation, CardBorderTweenDuration);
+        
+	    tween.TweenProperty(_cardBorder, "global_position", card.GlobalPosition, CardBorderTweenDuration)
+		    .SetTrans(Tween.TransitionType.Quint)
+		    .SetEase(Tween.EaseType.Out);
+
+	    GD.Print(card.GlobalPosition  );
+	    
+	    tween.TweenProperty(_cardBorder, "scale", new Vector2(cardBorderClampedX, cardBorderClampedY), CardBorderTweenDuration);
+
+	    return tween;
+    }
 }
+
 

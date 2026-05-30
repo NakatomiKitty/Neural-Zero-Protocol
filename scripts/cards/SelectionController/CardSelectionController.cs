@@ -84,7 +84,7 @@ public sealed partial class CardSelectionController : Node2D
     public void SetCenterCard(Card centerCard)
     {
         (_keyboardHoveredCard, CenterCard) = (centerCard, centerCard);
-        EmitSignalGetCurrentSelectedCard(centerCard);
+        EmitSignal(SignalName.GetCurrentSelectedCard, centerCard);
     } 
     
     // Used in BattleScene.cs, Selects the Center Card when Action Menu shows up

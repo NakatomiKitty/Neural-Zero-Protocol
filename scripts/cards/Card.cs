@@ -17,7 +17,8 @@ namespace NeuralZeroProtocol.Scripts.Cards
         [Signal] public delegate void NotHoveredEventHandler(Card card);
         [Signal] public delegate void ClickedEventHandler(Card card);
         [Node] private Area2D _area2D;
-        [Node] private Sprite2D _cardImage;
+        [Node("CardImage")] private Sprite2D _cardImage;
+
 
         public MoveResource MoveData;
 

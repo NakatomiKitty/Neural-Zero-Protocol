@@ -48,7 +48,7 @@ public partial class CardSelectionController
 
         // Swap Z indexes
         (_cardSystem.OriginalZIndexes[clickedCard], _cardSystem.OriginalZIndexes[oldCenter]) =
-            (_cardSystem.OriginalZIndexes[oldCenter], _cardSystem.OriginalZIndexes[clickedCard]);
+        (_cardSystem.OriginalZIndexes[oldCenter], _cardSystem.OriginalZIndexes[clickedCard]);
 
         int clickedIndex = CardHand.IndexOf(clickedCard);
         int centerIndex = CardHand.IndexOf(oldCenter);
@@ -66,7 +66,7 @@ public partial class CardSelectionController
         // Don't forget to update the _centerCard value to the new _centerCard!
         CenterCard = clickedCard;
         
-        EmitSignalGetCurrentSelectedCard(CenterCard);
+        EmitSignal(SignalName.GetCurrentSelectedCard, CenterCard);
         
         EmitSignal(SignalName.GetKeyboardHoveredCard, CenterCard);
 

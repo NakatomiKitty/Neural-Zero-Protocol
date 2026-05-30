@@ -4,7 +4,7 @@ using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
 using System;
 
-namespace NeuralZeroProtocol.Scripts.Combat;
+namespace NeuralZeroProtocol.Autoloads;
 
 /// <summary>
 /// Handles all combat math: Evasion, Damage, CritDamage, CritChance, and Blocking

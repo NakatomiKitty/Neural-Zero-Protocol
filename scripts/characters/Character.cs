@@ -1,9 +1,9 @@
 using Godot;
 using Godot.Collections;
-using GodotUtilities;
-using NeuralZeroProtocol.Scripts.Combat;
+using NeuralZeroProtocol.Autoloads;
 using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 using System;
+
 
 namespace NeuralZeroProtocol.Scripts.Characters;
 

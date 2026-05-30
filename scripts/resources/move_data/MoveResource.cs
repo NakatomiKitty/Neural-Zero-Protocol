@@ -1,5 +1,5 @@
 using Godot;
-using NeuralZeroProtocol.Scripts.Combat;
+using NeuralZeroProtocol.Autoloads;
 
 namespace NeuralZeroProtocol.Scripts.Resources.MoveData;
 

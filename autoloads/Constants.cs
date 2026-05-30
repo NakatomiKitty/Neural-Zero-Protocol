@@ -1,4 +1,4 @@
-namespace NeuralZeroProtocol.Scripts.Combat;
+namespace NeuralZeroProtocol.Autoloads;
 
 public enum ElementType
 {

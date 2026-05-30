@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
-using NeuralZeroProtocol.Scripts.Combat;
+using NeuralZeroProtocol.Autoloads;
 
 namespace NeuralZeroProtocol.Scripts.Resources.CharacterData;
 

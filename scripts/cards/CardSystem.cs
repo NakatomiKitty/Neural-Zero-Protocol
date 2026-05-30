@@ -29,8 +29,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
         public Dictionary<Card, int> OriginalZIndexes = new();
 
         public Dictionary<Card, Vector2> CardBasePositions = new();
-
-
+        
         public override void _Notification(int what)
         {
             if (what == NotificationSceneInstantiated) WireNodes();
@@ -38,7 +37,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
         public override void _Ready()
         {
-            float designWidth = 1152f; // the resolution you designed the hand for
+            float designWidth = 1152f;
             
             float scale = GetViewport().GetVisibleRect().Size.X / designWidth;
             
@@ -71,6 +70,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
             
             
             CardSelectionController.SetCenterCard(centerCard);
+            CardHoverController.SetCenterCard(centerCard);
             
             CardSelectionController.SetCardHand(CardHand.GetChildren());
         }
