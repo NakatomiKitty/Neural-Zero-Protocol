@@ -39,6 +39,8 @@ public sealed partial class CardSelectionController : Node2D
     private Card _keyboardHoveredCard; // Used for selecting with keyboard
     private bool _isInActionMenu;
     
+    private Vector2 _activationMousePos;
+    private bool _ignoreMouseMotion = false;
     public Array<Card> CardHand { get; private set; }
     public Card CenterCard { get; private set; }
 
@@ -53,7 +55,13 @@ public sealed partial class CardSelectionController : Node2D
     {
         switch (@event)
         {
-            case InputEventMouseMotion when _state == CardSelectionState.KeyboardMode:
+            case InputEventMouseMotion motion when _state == CardSelectionState.KeyboardMode:
+                if (!_ignoreMouseMotion && _activationMousePos.DistanceTo(motion.GlobalPosition) < 5.0f)
+                {
+                    return;   
+                }
+                _ignoreMouseMotion = true;
+                
                 _isInActionMenu = true;
                 EmitSignal(SignalName.KeyboardModeCancelled, true);
                 DeactivateKeyboardMode();

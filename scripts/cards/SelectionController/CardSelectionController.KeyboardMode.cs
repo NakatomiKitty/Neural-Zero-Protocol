@@ -90,6 +90,9 @@ public partial class CardSelectionController
         EmitSignal(SignalName.GetKeyboardHoveredCard, _keyboardHoveredCard);
         ChangeState(CardSelectionState.KeyboardMode);
         EmitSignal(SignalName.KeyboardModeActivated);
+        
+        _activationMousePos = GetGlobalMousePosition();
+        _ignoreMouseMotion = false;
     }
     
     private void DeactivateKeyboardMode()
@@ -100,5 +103,6 @@ public partial class CardSelectionController
         
         ChangeState(CardSelectionState.Idle);
         _keyboardHoveredCard = null;
+        _ignoreMouseMotion = false;
     }
 }
