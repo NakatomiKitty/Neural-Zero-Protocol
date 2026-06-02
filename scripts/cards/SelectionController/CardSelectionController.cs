@@ -1,7 +1,6 @@
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using NeuralZeroProtocol.Scripts.Ui;
 
 namespace NeuralZeroProtocol.Scripts.Cards;
 
@@ -20,12 +19,19 @@ public enum CardSelectionState
 
 public sealed partial class CardSelectionController : Node2D
 {
+    private const float MouseMovementThreshold = 5.0f;
+    
     private const float SelectionTweenDuration = 0.15f;
     private const float SwapTweenDuration = 0.15f;
     
+    private const float SelectedCardSizeMultiplier = 1.15f;
+    private const int SelectedCardVerticalOffset = -20;
+    
     [Signal] public delegate void SelectionChangedEventHandler(Card oldSelectedCard, Card newSelectedCard);
-    [Signal] public delegate void GetKeyboardHoveredCardEventHandler(Card card);
-    [Signal]  public delegate void GetCurrentSelectedCardEventHandler(Card currentSelectedCard);
+    
+    //
+    [Signal] public delegate void KeyboardHoveredCardChangedEventHandler(Card card);
+    [Signal] public delegate void CurrentSelectedCardChangedEventHandler(Card currentSelectedCard);
     [Signal] public delegate void SwappingStateChangedEventHandler(bool isSwapping);
     [Signal] public delegate void KeyboardModeDeactivatedEventHandler();
     [Signal] public delegate void KeyboardModeCancelledEventHandler(bool isCancelled);
@@ -33,22 +39,35 @@ public sealed partial class CardSelectionController : Node2D
     
     private Dictionary<Card, Tween> _activePositionTweens = new();
     private CardSelectionState _state;
-    private CardSystem _cardSystem;
+    
     private Tween _swapCardTween;
+        
     private Card _selectedCard; // Used for selecting with mouse
     private Card _keyboardHoveredCard; // Used for selecting with keyboard
+    
     private bool _isInActionMenu;
     
     private Vector2 _activationMousePos;
-    private bool _ignoreMouseMotion = false;
-    public Array<Card> CardHand { get; private set; }
-    public Card CenterCard { get; private set; }
+    private bool _ignoreMouseMotion;
 
-    public override void _Ready()
+    
+    
+    public Dictionary<Card, Vector2> CardBasePositions = new();
+    public Dictionary<Card, int> OriginalZIndexes = new();
+    
+    public Array<Card> CardHand = new();
+    public Card CenterCard;
+
+    public override void _Notification(int what)
     {
-        _cardSystem = GetNode<CardSystem>("..");
-        
-        _isInActionMenu = true;
+        if (what == NotificationPredelete)
+        {
+            _swapCardTween?.Kill();
+            
+            foreach (Tween tween in _activePositionTweens.Values) tween?.Kill();
+            
+            _activePositionTweens.Clear();
+        }
     }
     
     public override void _Input(InputEvent @event)
@@ -56,7 +75,7 @@ public sealed partial class CardSelectionController : Node2D
         switch (@event)
         {
             case InputEventMouseMotion motion when _state == CardSelectionState.KeyboardMode:
-                if (!_ignoreMouseMotion && _activationMousePos.DistanceTo(motion.GlobalPosition) < 5.0f)
+                if (!_ignoreMouseMotion && _activationMousePos.DistanceTo(motion.GlobalPosition) < MouseMovementThreshold)
                 {
                     return;   
                 }
@@ -71,7 +90,6 @@ public sealed partial class CardSelectionController : Node2D
                 // If we're in a state that allows deselection (e.g., not swapping)
                 if (_state != CardSelectionState.SwapTheCards)
                 {
-                    // Check if any card was clicked
                     if (!IsAnyCardUnderMouse())
                     {
                         // Clicked on empty space, which will deselect and return to Idle
@@ -86,13 +104,19 @@ public sealed partial class CardSelectionController : Node2D
             }
         }
     }
-    
-    public void SetCardHand(Array<Node> cardHand) => CardHand = [.. cardHand.OfType<Card>()];
+
+    public void SetCardHand(Array<Node> cardHand)
+    {
+        foreach (Node node in cardHand)
+        {
+            if (node is Card card) CardHand.Add(card);
+        }
+    }
 
     public void SetCenterCard(Card centerCard)
     {
         (_keyboardHoveredCard, CenterCard) = (centerCard, centerCard);
-        EmitSignal(SignalName.GetCurrentSelectedCard, centerCard);
+        EmitSignal(SignalName.CurrentSelectedCardChanged, centerCard);
     } 
     
     // Used in BattleScene.cs, Selects the Center Card when Action Menu shows up
@@ -100,8 +124,6 @@ public sealed partial class CardSelectionController : Node2D
     {
         _isInActionMenu = false;
         SelectCard(CenterCard);
-        
-        ChangeState(CardSelectionState.Idle);
     }
     
     // Used in BattleScene.cs, Deselects the Center Card when Action Menu leaves
@@ -120,7 +142,7 @@ public sealed partial class CardSelectionController : Node2D
 
         _selectedCard = null;
         
-        EmitSignal(SignalName.GetKeyboardHoveredCard, CenterCard);
+        EmitSignal(SignalName.KeyboardHoveredCardChanged, CenterCard);
 
         EmitSignal(SignalName.SelectionChanged, oldSelected, _selectedCard);
     }
@@ -140,5 +162,3 @@ public sealed partial class CardSelectionController : Node2D
         }
     }
 }
-
-

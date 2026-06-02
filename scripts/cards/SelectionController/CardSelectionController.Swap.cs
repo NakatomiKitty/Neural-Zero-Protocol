@@ -14,8 +14,8 @@ public partial class CardSelectionController
         _swapCardTween?.Kill();
 
         Card oldCenter = CenterCard;
-        Vector2 clickedBase = _cardSystem.CardBasePositions[clickedCard];
-        Vector2 centerBase = _cardSystem.CardBasePositions[oldCenter];
+        Vector2 clickedBase = CardBasePositions[clickedCard];
+        Vector2 centerBase = CardBasePositions[oldCenter];
         
         KillPositionTween(clickedCard);
         KillPositionTween(oldCenter);
@@ -43,12 +43,12 @@ public partial class CardSelectionController
         if (_state != CardSelectionState.SwapTheCards) return;
 
         // Swap base positions
-        (_cardSystem.CardBasePositions[clickedCard], _cardSystem.CardBasePositions[oldCenter]) =
+        (CardBasePositions[clickedCard], CardBasePositions[oldCenter]) =
             (centerBase, clickedBase);
 
         // Swap Z indexes
-        (_cardSystem.OriginalZIndexes[clickedCard], _cardSystem.OriginalZIndexes[oldCenter]) =
-        (_cardSystem.OriginalZIndexes[oldCenter], _cardSystem.OriginalZIndexes[clickedCard]);
+        (OriginalZIndexes[clickedCard], OriginalZIndexes[oldCenter]) =
+        (OriginalZIndexes[oldCenter], OriginalZIndexes[clickedCard]);
 
         int clickedIndex = CardHand.IndexOf(clickedCard);
         int centerIndex = CardHand.IndexOf(oldCenter);
@@ -66,9 +66,9 @@ public partial class CardSelectionController
         // Don't forget to update the _centerCard value to the new _centerCard!
         CenterCard = clickedCard;
         
-        EmitSignal(SignalName.GetCurrentSelectedCard, CenterCard);
+        EmitSignal(SignalName.CurrentSelectedCardChanged, CenterCard);
         
-        EmitSignal(SignalName.GetKeyboardHoveredCard, CenterCard);
+        EmitSignal(SignalName.KeyboardHoveredCardChanged, CenterCard);
 
         clickedCard.UpdatePriority();
         oldCenter.UpdatePriority();

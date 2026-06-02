@@ -16,16 +16,12 @@
       <change beforePath="$PROJECT_DIR$/scripts/cards/Card.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/Card.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Helpers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Helpers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.KeyboardMode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.KeyboardMode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.MouseMode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.MouseMode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Swap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Swap.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/characters/Character.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/characters/Character.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/combat/ConfirmAttackHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/ConfirmAttackHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/combat/Constants.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/combat/Constants.cs.uid" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/combat/DamageCalculator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/combat/DamageCalculator.cs.uid" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/resources/character_data/CharacterStatResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/resources/character_data/CharacterStatResource.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/resources/move_data/MoveResource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/resources/move_data/MoveResource.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,10 +32,10 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="18" />
+    <option name="cachedIndexableFilesCount" value="36" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="features/CardSystem" />
+    <option name="BRANCH" value="main" />
   </component>
   <component name="Git.Rebase.Settings">
     <option name="NEW_BASE" value="main" />
@@ -53,9 +49,13 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;state&quot;: &quot;OPEN&quot;
+    }
+  ],
   &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;Zerrrook&quot;
+    &quot;state&quot;: &quot;OPEN&quot;
   }
 }</component>
   <component name="GithubPullRequestsUISettings">{
@@ -67,6 +67,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptMethodsGenerator/NeuralZeroProtocol.Scripts.Characters.ActionValidatorComponent_ScriptMethods.generated.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptSignalsGenerator/NeuralZeroProtocol.Scripts.Cards.CardSelectionController_ScriptSignals.generated.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/71f134c2c07aaaaf17b017ca3da7e8c67a1e5e113930899908632c45926e465/GodotObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9d6d226110fec0f17d8164c66de3653eba4a8960812067d534e02cfdb23ffa/Tween.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Helpers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.MouseMode.cs" root0="FORCE_HIGHLIGHTING" />
@@ -78,6 +79,9 @@
     <urls />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="AISelfReview" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8,
   &quot;fromUser&quot;: false
@@ -95,6 +99,7 @@
     &quot;.NET Executable.Player.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
@@ -109,7 +114,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.customizations&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -189,6 +194,8 @@
       <workItem from="1780053833725" duration="7834000" />
       <workItem from="1780125314441" duration="2377000" />
       <workItem from="1780147330301" duration="4907000" />
+      <workItem from="1780314686402" duration="6344000" />
+      <workItem from="1780392801749" duration="5209000" />
     </task>
     <task id="LOCAL-00001" summary="Test">
       <option name="closed" value="true" />
@@ -277,7 +284,8 @@
     <MESSAGE value="Forgot this too woops" />
     <MESSAGE value="Finally fixed that stupid battle menu bug AND optimized a lot of code in battle menu!" />
     <MESSAGE value="misc" />
-    <option name="LAST_COMMIT_MESSAGE" value="misc" />
+    <MESSAGE value="Fixed the KeyboardMode and Mouse mode bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed the KeyboardMode and Mouse mode bug" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

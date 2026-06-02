@@ -25,7 +25,6 @@ public partial class CardSelectionController
             
             _isInActionMenu = true;
             DeactivateKeyboardMode();
-            ChangeState(CardSelectionState.Idle);
         }
         else if (uiSelection is UiSelection.Confirm)
         {
@@ -51,7 +50,7 @@ public partial class CardSelectionController
         if (toLeftCardIndex < 0) toLeftCardIndex = CardHand.Count - 1;
 
         _keyboardHoveredCard = CardHand[toLeftCardIndex];
-        EmitSignal(SignalName.GetKeyboardHoveredCard, _keyboardHoveredCard);
+        EmitSignal(SignalName.KeyboardHoveredCardChanged, _keyboardHoveredCard);
     }
 
     private void KeyboardMoveRight()
@@ -63,7 +62,7 @@ public partial class CardSelectionController
         if(toRightCardIndex >= CardHand.Count) toRightCardIndex = 0;
 
         _keyboardHoveredCard = CardHand[toRightCardIndex];
-        EmitSignal(SignalName.GetKeyboardHoveredCard, _keyboardHoveredCard);
+        EmitSignal(SignalName.KeyboardHoveredCardChanged, _keyboardHoveredCard);
     }
 
     private void ConfirmCard()
@@ -87,7 +86,7 @@ public partial class CardSelectionController
     private void ActivateKeyboardMode()
     {
         _keyboardHoveredCard = CenterCard;
-        EmitSignal(SignalName.GetKeyboardHoveredCard, _keyboardHoveredCard);
+        EmitSignal(SignalName.KeyboardHoveredCardChanged, _keyboardHoveredCard);
         ChangeState(CardSelectionState.KeyboardMode);
         EmitSignal(SignalName.KeyboardModeActivated);
         

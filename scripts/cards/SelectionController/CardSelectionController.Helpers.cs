@@ -1,6 +1,5 @@
 using Godot;
 using Godot.Collections;
-using NeuralZeroProtocol.Scripts.Ui;
 
 namespace NeuralZeroProtocol.Scripts.Cards;
 
@@ -9,11 +8,11 @@ public partial class CardSelectionController
     private void ApplyVisualState(Card card, bool selected)
     {
         KillPositionTween(card);
-
+        
         Tween tween = CreateTween();
-        Vector2 basePosition = _cardSystem.CardBasePositions[card];
-        Vector2 targetScale = selected ? Vector2.One * 1.15f : Vector2.One;
-        Vector2 targetPosition = selected ? basePosition + Vector2.Down * -20 : basePosition;
+        Vector2 basePosition = CardBasePositions[card];
+        Vector2 targetScale = selected ? Vector2.One * SelectedCardSizeMultiplier : Vector2.One;
+        Vector2 targetPosition = selected ? basePosition + Vector2.Down * SelectedCardVerticalOffset : basePosition;
 
         tween.Parallel()
             .TweenProperty(card, "scale", targetScale, SelectionTweenDuration)
@@ -27,7 +26,7 @@ public partial class CardSelectionController
 
         _activePositionTweens[card] = tween;
         
-        card.ZIndex = selected ? CardSystem.SelectedZ : _cardSystem.OriginalZIndexes[card];
+        card.ZIndex = selected ? CardSystem.SelectedZ : OriginalZIndexes[card];
         
         card.UpdatePriority();
     }
@@ -39,18 +38,20 @@ public partial class CardSelectionController
         
         foreach (Dictionary result in MouseQuery())
         {
-            if (result["collider"].As<Area2D>()?.GetParent<Card>() is Card card && card.ZIndex > highestZ)
+            if (result["collider"].As<Area2D>() is Area2D area && area.GetParent<Card>() is Card card && card.ZIndex > highestZ)
             {
                 highestCard = card;
                 highestZ = card.ZIndex;
             }
         }
+        
+        
         return highestCard == clickedCard;
     }
     
     private bool IsAnyCardUnderMouse()
     {
-        foreach (var result in MouseQuery())
+        foreach (Dictionary result in MouseQuery())
         {
             if (result["collider"].As<Area2D>()?.GetParent<Card>() is Card)
                 return true;

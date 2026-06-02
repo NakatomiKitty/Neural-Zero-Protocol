@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ckl3r5sn55yqu" path="res://scripts/cards/CardSystem.cs" id="1_vn21b"]
 [ext_resource type="Script" uid="uid://cdu00buuwu2iw" path="res://scripts/cards/CardHand.cs" id="2_vn21b"]
-[ext_resource type="PackedScene" uid="uid://b81nfw40hqnfs" path="res://scenes/card_hover_controller.tscn" id="3_rf4ta"]
+[ext_resource type="PackedScene" path="res://scenes/card_hover_controller.tscn" id="3_rf4ta"]
 [ext_resource type="Script" uid="uid://t3ph6jyvpvyx" path="res://scripts/cards/SelectionController/CardSelectionController.cs" id="4_rf4ta"]
 
 [sub_resource type="Curve2D" id="Curve2D_gagc2"]

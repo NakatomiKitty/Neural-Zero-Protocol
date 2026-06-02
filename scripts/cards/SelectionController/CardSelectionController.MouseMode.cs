@@ -1,7 +1,3 @@
-using Godot;
-using Godot.Collections;
-using NeuralZeroProtocol.Scripts.Ui;
-
 namespace NeuralZeroProtocol.Scripts.Cards;
 
 public partial class CardSelectionController
@@ -22,7 +18,7 @@ public partial class CardSelectionController
     }
     
     // Makes the given card the selected one. Deselects any previous selection.
-    public void SelectCard(Card card)
+    private void SelectCard(Card card)
     {
         // Deselect previous card if there is one
         if (_selectedCard != null) ApplyVisualState(_selectedCard, false);

@@ -1,7 +1,6 @@
 using Godot;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
-using System;
 
 namespace NeuralZeroProtocol.Scripts.Cards
 {
