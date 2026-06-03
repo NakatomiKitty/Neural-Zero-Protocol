@@ -154,7 +154,7 @@ public partial class CardHoverController : Node
 	#endregion
 	
 	#region Keyboard Mode Functions
-
+	
     public void KeyboardHover(Card card)
     {
         ClearKeyboardHover();

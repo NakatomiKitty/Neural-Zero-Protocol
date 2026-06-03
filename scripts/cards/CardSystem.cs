@@ -78,12 +78,15 @@ namespace NeuralZeroProtocol.Scripts.Cards
             CardSelectionController.SetCardHand(CardHand.GetChildren());
         }
 
+        public void OnMoveToCardSystem()
+        {
+            CardHoverController.EnteredCardSelection();
+            CardSelectionController.MoveToCardSystem();
+        }
+
         private void ConnectCardSignals(Card card) => ConnectCard(card);
 
-        private void OnKeyboardHoveredCardReceived(Card card)
-        {
-            CardHoverController.KeyboardHover(card);
-        }
+        private void OnKeyboardHoveredCardReceived(Card card) => CardHoverController.KeyboardHover(card);
         
         private void OnKeyboardModeDeactivated()
         {

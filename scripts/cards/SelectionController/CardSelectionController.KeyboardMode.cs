@@ -33,7 +33,7 @@ public partial class CardSelectionController
         }
     }
 
-    public void OnMoveToCardSystem()
+    public void MoveToCardSystem()
     {
         if (_state == CardSelectionState.KeyboardMode) return;
         

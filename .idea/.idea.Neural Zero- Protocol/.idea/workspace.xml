@@ -10,13 +10,7 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Swap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Swap.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" afterDir="false" />
-    </list>
+    <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,6 +55,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptMethodsGenerator/NeuralZeroProtocol.Scripts.Characters.ActionValidatorComponent_ScriptMethods.generated.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptSignalsGenerator/NeuralZeroProtocol.Scripts.Cards.CardSelectionController_ScriptSignals.generated.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptSignalsGenerator/NeuralZeroProtocol.Scripts.Ui.BattleMenu_ScriptSignals.generated.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/71f134c2c07aaaaf17b017ca3da7e8c67a1e5e113930899908632c45926e465/GodotObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9d6d226110fec0f17d8164c66de3653eba4a8960812067d534e02cfdb23ffa/Tween.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Helpers.cs" root0="FORCE_HIGHLIGHTING" />
@@ -190,6 +185,7 @@
       <workItem from="1780147330301" duration="4907000" />
       <workItem from="1780314686402" duration="6344000" />
       <workItem from="1780392801749" duration="8485000" />
+      <workItem from="1780468515016" duration="303000" />
     </task>
     <task id="LOCAL-00001" summary="Test">
       <option name="closed" value="true" />
