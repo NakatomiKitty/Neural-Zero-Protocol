@@ -212,22 +212,28 @@ public partial class CardHoverController : Node
     #region CardBorder-Related Functions
     
     // Makes the Border appear when you enter Card Selection
-    private async void EnteredCardSelection()
+    public async void EnteredCardSelection(bool fromMenu = false)
     {
 	    await ToSignal(GetTree().CreateTimer(0.1f), SceneTreeTimer.SignalName.Timeout);
 	    
 	    Tween tween = CreateTween().SetParallel();
-	    
 	    tween.TweenProperty(_cardBorder, "modulate:a", 1.0f, CardBorderFadeDuration);
 	    
-	    ApplyBorderEffect(_selectedCard, _selectedCard.Scale);
+	    if (fromMenu) return;
 	    
+	    ApplyBorderEffect(_selectedCard, _selectedCard.Scale);
 	    _hasLeftMenuMode = false;
     }
 
     public void ExitCardSelection()
     {
-	    ApplyBorderEffectOnSelectedCard();
+	    _hasLeftMenuMode = true;
+	    
+	    Tween tween = CreateTween().SetParallel();
+	    
+	    tween.TweenProperty(_cardBorder, "modulate:a", 0.0f, CardBorderFadeDuration);
+		
+	    tween.Finished += ApplyBorderEffectOnSelectedCard;
     }
 
     private void ApplyBorderEffectOnSelectedCard()

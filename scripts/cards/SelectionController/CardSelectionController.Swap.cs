@@ -22,18 +22,18 @@ public partial class CardSelectionController
 
         // Tween shit
         
-        _swapCardTween = CreateTween();
+        _swapCardTween = CreateTween().SetParallel();
         
-        _swapCardTween.Parallel().TweenProperty(clickedCard, "position", centerBase, SwapTweenDuration)
+        _swapCardTween.TweenProperty(clickedCard, "position", centerBase, SwapTweenDuration)
             .SetTrans(Tween.TransitionType.Back)
             .SetEase(Tween.EaseType.InOut);
-        _swapCardTween.Parallel().TweenProperty(clickedCard, "rotation", oldCenter.Rotation, SwapTweenDuration);
+        _swapCardTween.TweenProperty(clickedCard, "rotation", oldCenter.Rotation, SwapTweenDuration);
         
-        _swapCardTween.Parallel().TweenProperty(oldCenter, "position", clickedBase, SwapTweenDuration)
+        _swapCardTween.TweenProperty(oldCenter, "position", clickedBase, SwapTweenDuration)
             .SetTrans(Tween.TransitionType.Back)
             .SetEase(Tween.EaseType.InOut);
         
-        _swapCardTween.Parallel().TweenProperty(oldCenter, "rotation", clickedCard.Rotation, SwapTweenDuration);
+        _swapCardTween.TweenProperty(oldCenter, "rotation", clickedCard.Rotation, SwapTweenDuration);
         
         _swapCardTween.Finished += () => OnSwapCardTweenFinished(clickedCard, oldCenter, clickedBase, centerBase);
     }

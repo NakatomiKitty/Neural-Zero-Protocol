@@ -103,7 +103,7 @@ public partial class BattleMenu : Control
         switch (_currentMenuState)
         {
             case MenuState.InitialMenu:
-                HandleInitialMenuInput(uiSelection);
+                HandleInitialMenuInput();
                 break;
             case MenuState.ActionMenu:
                 HandleActionMenuInput(uiSelection);
@@ -326,7 +326,7 @@ public partial class BattleMenu : Control
 
     #region Input Handling
 
-    private void HandleInitialMenuInput(UiSelection uiSelection)
+    private void HandleInitialMenuInput()
     {
         if (!_isInitialMenuKeyboardMode)
         {

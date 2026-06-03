@@ -82,7 +82,6 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
         private void OnKeyboardHoveredCardReceived(Card card)
         {
-            GD.Print(card.Name);
             CardHoverController.KeyboardHover(card);
         }
         
@@ -90,6 +89,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
         {
             CardHoverController.ExitCardSelection();
             CardHoverController.ClearKeyboardHover();
+            
         }
         private void OnSelectionChanged(Card oldCard, Card newCard)
         {
