@@ -49,8 +49,6 @@ public sealed partial class CardSelectionController : Node2D
     
     private Vector2 _activationMousePos;
     private bool _ignoreMouseMotion;
-
-    
     
     public Dictionary<Card, Vector2> CardBasePositions = new();
     public Dictionary<Card, int> OriginalZIndexes = new();

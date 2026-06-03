@@ -10,27 +10,32 @@ public enum MenuState { InitialMenu, Swapping, ActionMenu }
 
 public partial class BattleMenu : Control
 {
-    private const string InitialFocusButton = "MovesButton";
-    private const string ActionMenuDefaultFocus = "AttackButton";
-    private const float MenuSwapTween = 0.5f;
-    
     [Signal] public delegate void MenuStateChangedEventHandler(MenuState newState);
     [Signal] public delegate void ActionSelectedEventHandler(int actionType);
     [Signal] public delegate void ActionMenuStateEventHandler(bool isTrue);
     [Signal] public delegate void MoveToCardSystemEventHandler();
     
-    private MenuState _currentMenuState;
-    private MenuState _targetMenuState;
-    private Tween _menuTween;
-    private bool _isInitialMenuKeyboardMode;    // InitialMenu keyboard mode
-    private bool _isActionMenuKeyboardMode;     // ActionMenu keyboard mode
-    private bool _isCardKeyboardMode;          
-    
-    public Control InitialMenuContainer;
     public Control ActionMenuContainer;
+    public Control InitialMenuContainer;
+    
+    private const float MenuSwapTween = 0.5f;
+    private Tween _menuTween;
+    
+    private MenuState _currentMenuState;
+    
+    private const string InitialFocusButton = "MovesButton";
+    
+    private MenuState _targetMenuState;
+    
+    private const string ActionMenuDefaultFocus = "AttackButton";
     
     private List<TextureButton> _actionButtons;
-    private bool _neighborsSetup = false;
+    
+    private bool _isInitialMenuKeyboardMode;    // InitialMenu keyboard mode
+    private bool _isActionMenuKeyboardMode;     // ActionMenu keyboard mode
+    private bool _isCardKeyboardMode;
+    
+    private bool _neighborsSetup;
     
     public override void _Ready()
     {
@@ -65,10 +70,12 @@ public partial class BattleMenu : Control
         }
     }
     
-    public void OnCardKeyboardModeDeactivated()
+    public async void OnCardKeyboardModeDeactivated()
     {
         if (_currentMenuState == MenuState.ActionMenu)
         {
+            await ToSignal(GetTree().CreateTimer(1f), SceneTreeTimer.SignalName.Timeout);
+            
             _isCardKeyboardMode = false;
             
             FocusOnAttackButton();
@@ -285,6 +292,7 @@ public partial class BattleMenu : Control
     private void FocusOnAttackButton()
     {
         SetMenuButtonsEnabled(ActionMenuContainer, true);
+        
         if (!_neighborsSetup)
         {
             SetupActionMenuFocusNeighbors();
@@ -345,9 +353,12 @@ public partial class BattleMenu : Control
             EmitSignal(SignalName.MoveToCardSystem);
             return;
         }
-    
-        if (!_isActionMenuKeyboardMode) FocusOnAttackButton();
 
+        if (!_isActionMenuKeyboardMode)
+        {
+            FocusOnAttackButton();
+        }
+        
         if (uiSelection == UiSelection.Confirm && GetFocusedButton() is { } focused)
         {
             focused.EmitSignal(BaseButton.SignalName.Pressed);
