@@ -3,6 +3,7 @@ using GodotUtilities;
 using Godot.Collections;
 using System.Collections.Generic;
 
+// TODO: MAKE THIS MORE READABLE, HAVE SOMEONE CODE REVIEW IT
 namespace NeuralZeroProtocol.Scripts.Cards;
 
 /// <summary>

@@ -10,7 +10,11 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="" />
+    <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -185,7 +189,7 @@
       <workItem from="1780147330301" duration="4907000" />
       <workItem from="1780314686402" duration="6344000" />
       <workItem from="1780392801749" duration="8485000" />
-      <workItem from="1780468515016" duration="303000" />
+      <workItem from="1780468515016" duration="919000" />
     </task>
     <task id="LOCAL-00001" summary="Test">
       <option name="closed" value="true" />
@@ -243,7 +247,15 @@
       <option name="project" value="LOCAL" />
       <updated>1780398577837</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Final Bug Fixes for CardBorder implementation">
+      <option name="closed" value="true" />
+      <created>1780469126373</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1780469126373</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -284,7 +296,8 @@
     <MESSAGE value="misc" />
     <MESSAGE value="Fixed the KeyboardMode and Mouse mode bug" />
     <MESSAGE value="Selection Border effect and fading out" />
-    <option name="LAST_COMMIT_MESSAGE" value="Selection Border effect and fading out" />
+    <MESSAGE value="Final Bug Fixes for CardBorder implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Final Bug Fixes for CardBorder implementation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

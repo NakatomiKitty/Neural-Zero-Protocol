@@ -5,6 +5,7 @@ using Godot.Collections;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
 
+
 namespace NeuralZeroProtocol.Scripts.Cards
 {
     /// <summary>
