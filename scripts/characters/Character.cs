@@ -29,7 +29,6 @@ public partial class Character : Node2D
 	public ElementType PrimaryElement => _characterStatsResources.PrimaryElement;
 	public ElementType SecondaryElement => _characterStatsResources.SecondaryElement;
 	
-
 	public override void _EnterTree()
 	{
 		GD.Print(PrimaryElement);
@@ -40,12 +39,6 @@ public partial class Character : Node2D
 
 	public override void _Ready() 
 	{
-		if (StatsComponent == null) GD.PushError("StatsComponent not found");
-
-		if (_characterStatsResources == null)
-		{
-			GD.PushWarning("CharacterStatsResources not loaded lmao");
-		}
 		int maxHp = StatsComponent.GetStat(StatType.Hp);
 
 		HealthComponent.InitializeHealth(maxHp);
@@ -73,7 +66,7 @@ public partial class Character : Node2D
 			int baseValue = resource.GetBaseValues(stat); 
 			
 			// Makes Lck's value constant (2) AND makes Nrg either 5 or 10 depending on it's tier of rarity
-			if (stat == StatType.Lck || stat == StatType.Nrg) 
+			if (stat is StatType.Lck or StatType.Nrg) 
 			{
 				if (stat == StatType.Nrg && resource.IsHighTierRarity())
 				{
@@ -91,6 +84,12 @@ public partial class Character : Node2D
 
 		// Debug Print
 		GD.Print(resource.SelectedRarity);
+	}
+
+	public override void _ExitTree()
+	{
+		StatsComponent.StatZeroed -= DisabilityComponent.OnStatZeroed;
+		StatsComponent.StatRecovered -= DisabilityComponent.OnStatRecovered;
 	}
 }
 

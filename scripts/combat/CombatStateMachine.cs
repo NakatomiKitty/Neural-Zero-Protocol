@@ -22,7 +22,7 @@ public enum BattleState
 [Scene]
 public partial class CombatStateMachine : Node
 {
-    [Signal] public delegate void StateChangedEventHandler(BattleState newState);
+    public event Action<BattleState> StateChanged; // newState
     
     [Node("ConfirmAttackHandler")]public ConfirmAttackHandler CharacterAttackHandler; 
     
@@ -44,7 +44,8 @@ public partial class CombatStateMachine : Node
     public async Task ChangeState(BattleState newState)
     {
         _currentState = newState;
-        EmitSignal(SignalName.StateChanged, (int)newState);
+        
+        StateChanged?.Invoke(newState);
 
         switch (_currentState)
         {

@@ -13,10 +13,12 @@ namespace NeuralZeroProtocol.Scripts.Characters;
 [GlobalClass]
 public partial class StatsComponent : Node
 {
-	// Declaration of Signals
-	[Signal] public delegate void StatChangedEventHandler(int stat, int currentValue);
-	[Signal] public delegate void StatZeroedEventHandler(int stat);
-	[Signal] public delegate void StatRecoveredEventHandler(int stat);
+	// Declaration of events
+
+	// TODO: THIS IS FOR CHECKING STATS INGAME
+	public event Action<int, int> StatChanged; // int stat, int currentValue 
+	public event Action<int> StatZeroed; // int stat
+	public event Action<int> StatRecovered; 
 
 	private Character _character;
 
@@ -29,11 +31,11 @@ public partial class StatsComponent : Node
 			GD.PushWarning($"Character is not loaded in!");
 		}
 		
-		DebugPrintAllStats();
+		// DebugPrintAllStats();
         // if you want to debug, put ModifyStat(StatTypes.Key, value)
 	}
 	
-	public int GetStat(StatType stat) // this retrieves the old value
+	public int GetStat(StatType stat)
 	{
 		return _character.CurrentStats.GetValueOrDefault(stat, 5);
 	}
@@ -42,26 +44,26 @@ public partial class StatsComponent : Node
 	{
 		
 		int oldValue = GetStat(stat);
-		int currentValue = Math.Max(0, oldValue + changeValue); // Clamp to prevent going past below zero
+		int currentValue = Math.Max(0, oldValue + changeValue);
 		
 		GD.Print($"Stat changed: {stat} ({oldValue} → {currentValue}) [changeValue: {changeValue}]");
 
 		_character.CurrentStats[stat] = currentValue;
 		
-		EmitSignal(SignalName.StatChanged, (int)stat, currentValue);
+		StatChanged?.Invoke((int)stat, currentValue);
 
-		// If the stat was positive and now becomes exactly zero, it means the character just entered the "DeadZone".
+		// Enter DeadZone
 		if (stat != StatType.Hp && oldValue > 0 && currentValue == 0) 
 		{   
 			GD.Print($"{stat} reached zero! Activating disability!");
-			EmitSignal(SignalName.StatZeroed, (int)stat);
+			StatZeroed?.Invoke((int)stat);
 		}
-
-		// If the stat was zero and was recently recovered, it means the character has gotten out of the "DeadZone"
+		
+		// Leave DeadZone
 		else if (oldValue == 0 && currentValue > 0) 
 		{
 			GD.Print($"{stat} recovered! Deactivating disability!");
-			EmitSignal(SignalName.StatRecovered, (int)stat);
+			StatRecovered?.Invoke((int)stat);
 		}
 	}
 

@@ -12,8 +12,6 @@ public partial class ConfirmAttackHandler : Node
 
 	public void SelectedCardData(Character  playerCharacter, EnemyCharacter chosenEnemy)
 	{
-		int damageDealt;
-
 		GD.Print($"Card Power: {_selectedCard.MoveData.Power}");
 		GD.Print($"Card Cost: {_selectedCard.MoveData.Cost}");
 		
@@ -25,7 +23,7 @@ public partial class ConfirmAttackHandler : Node
 			return;
 		}
 		
-		(bool isDodged, bool isEnemyImmune, bool isCrit, damageDealt) = DamageCalculator.CalculateDamage(playerCharacter, chosenEnemy, _selectedCard.MoveData);
+		(bool isDodged, bool isEnemyImmune, bool isCrit, int damageDealt) = DamageCalculator.CalculateDamage(playerCharacter, chosenEnemy, _selectedCard.MoveData);
 
 		if (isDodged)
 		{

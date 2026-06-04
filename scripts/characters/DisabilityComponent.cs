@@ -18,7 +18,7 @@ public enum DisabilityTypes
 [GlobalClass]
 public partial class DisabilityComponent : Node
 {
-	private readonly HashSet<DisabilityTypes> _currentDisabilities = new HashSet<DisabilityTypes>();
+	private readonly HashSet<DisabilityTypes> _currentDisabilities = new();
 
     // Links StatTypes to DisabilityTypes
     private static DisabilityTypes ToDisability(StatType statTypes) => statTypes switch

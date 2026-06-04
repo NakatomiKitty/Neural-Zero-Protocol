@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace NeuralZeroProtocol.Scripts.Characters;
 
 public partial class TurnManager : Node
 {
-	[Signal] public delegate void StartBattleEventHandler();
+	public event Action StartBattle;
 	
 	[Export] public Node PlayerTeam;
 	[Export] public Node EnemyTeam;
@@ -50,7 +51,7 @@ public partial class TurnManager : Node
 	public void StartBattleSequence()
     {
         GenerateTurnOrder();  // only generates order, no emit
-        EmitSignal(SignalName.StartBattle);
+        StartBattle?.Invoke();
     }
 	
 	private void GenerateTurnOrder()

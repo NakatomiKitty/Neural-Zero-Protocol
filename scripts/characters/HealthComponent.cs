@@ -6,8 +6,9 @@ namespace NeuralZeroProtocol.Scripts.Characters;
 [GlobalClass]
 public partial class HealthComponent : Node
 {
-    [Signal] public delegate void HealthChangedEventHandler(int currentHealth, int maxHealth);
-	[Signal] public delegate void DiedEventHandler(Character parent);
+    // TODO: USED FOR HEALTHBAR!
+    public event Action<int, int> HealthChanged; // int currentHealth, int maxHealth
+    public event Action<Character> Died; // Character parent
 
     private int _maxHealth;
     private int _currentHealth;
@@ -17,7 +18,7 @@ public partial class HealthComponent : Node
     {
         _maxHealth = maxHealth;
         _currentHealth = maxHealth;
-        EmitSignal(SignalName.HealthChanged, _currentHealth, _maxHealth);
+        HealthChanged?.Invoke(_currentHealth, _maxHealth);
     }
 
     public void TakeDamage(int damage)
@@ -28,13 +29,13 @@ public partial class HealthComponent : Node
 
         GD.Print($"{GetParent().Name} got hit! ({oldHealth} → {_currentHealth}) [Received: {damage} damage!]");
 
-        EmitSignal(SignalName.HealthChanged, _currentHealth, _maxHealth);
+        HealthChanged?.Invoke(_currentHealth, _maxHealth);
 
         if (_currentHealth <= 0)
         {
             GD.Print("Health reached zero! You died!");
-
-			EmitSignal(SignalName.Died, GetParent());
+            
+            Died?.Invoke((Character)GetParent());
         }
     }
 
@@ -48,7 +49,7 @@ public partial class HealthComponent : Node
 
         GD.Print($"Health got healed! ({oldHealth} → {_currentHealth}) [Healed: {heal } hp!]");
 
-        EmitSignal(SignalName.HealthChanged, _currentHealth, _maxHealth);
+        HealthChanged?.Invoke(_currentHealth, _maxHealth);
     }
 }
 

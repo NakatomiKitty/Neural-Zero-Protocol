@@ -40,8 +40,8 @@ public partial class BattleScene : Node2D
         BattleMenu.ActionMenuState += OnActionMenuState;
         BattleMenu.MoveToCardSystem += CardSystem.OnMoveToCardSystem;
         
-        CardSystem.CardSelectionController.KeyboardModeCancelled += BattleMenu.OnKeyboardModeCancelled;
         CardSystem.CardSelectionController.CurrentSelectedCardChanged += CombatStateMachine.CharacterAttackHandler.SetCurrentSelectedCard;
+        CardSystem.CardSelectionController.KeyboardModeCancelled += BattleMenu.OnKeyboardModeCancelled;
         CardSystem.CardSelectionController.KeyboardModeActivated += BattleMenu.OnCardKeyboardModeActivated;
         CardSystem.CardSelectionController.KeyboardModeDeactivated += BattleMenu.OnCardKeyboardModeDeactivated;
         
@@ -69,10 +69,7 @@ public partial class BattleScene : Node2D
     {
         float offset = isTrue ? -32 : 32;
 
-        if (!isTrue)
-        {
-            CardSystem.CardSelectionController.DeselectCenterCard();
-        }
+        if (!isTrue) CardSystem.CardSelectionController.DeselectCenterCard();
         
         MoveCardSystemRelativeToButtonContainer(offset, isTrue);
     }
@@ -111,11 +108,20 @@ public partial class BattleScene : Node2D
         {
             CardSystem.Visible = isTrue;
 
-            if (isTrue)
-            {
-                CardSystem.CardSelectionController.SelectCenterCard();
-            }
+            if (isTrue) CardSystem.CardSelectionController.SelectCenterCard();
         };
+    }
+
+    public override void _ExitTree()
+    {
+        TurnManager.StartBattle -= OnBattleStart;
+        BattleMenu.ActionMenuState -= OnActionMenuState;
+        BattleMenu.MoveToCardSystem -= CardSystem.OnMoveToCardSystem;
+        
+        CardSystem.CardSelectionController.CurrentSelectedCardChanged -= CombatStateMachine.CharacterAttackHandler.SetCurrentSelectedCard;
+        CardSystem.CardSelectionController.KeyboardModeCancelled -= BattleMenu.OnKeyboardModeCancelled;
+        CardSystem.CardSelectionController.KeyboardModeActivated -= BattleMenu.OnCardKeyboardModeActivated;
+        CardSystem.CardSelectionController.KeyboardModeDeactivated -= BattleMenu.OnCardKeyboardModeDeactivated;
     }
 }
 

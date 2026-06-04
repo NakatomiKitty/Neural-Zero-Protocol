@@ -11,8 +11,9 @@ public enum MenuState { InitialMenu, Swapping, ActionMenu }
 public partial class BattleMenu : Control
 {
     [Signal] public delegate void ActionSelectedEventHandler(int actionType);
-    [Signal] public delegate void ActionMenuStateEventHandler(bool isTrue);
-    [Signal] public delegate void MoveToCardSystemEventHandler();
+
+    public event Action<bool> ActionMenuState;
+    public event Action MoveToCardSystem;
     
     public Control ActionMenuContainer;
     public Control InitialMenuContainer;
@@ -164,7 +165,7 @@ public partial class BattleMenu : Control
 
         if (_targetMenuState == MenuState.InitialMenu)
         {
-            EmitSignal(SignalName.ActionMenuState, false);
+            ActionMenuState?.Invoke(false);
         }
         
         InitialMenuContainer.Visible = true;
@@ -185,7 +186,7 @@ public partial class BattleMenu : Control
         if (_currentMenuState != MenuState.Swapping) return;
         if (_targetMenuState == MenuState.ActionMenu)
         {
-            EmitSignal(SignalName.ActionMenuState, true);
+            ActionMenuState?.Invoke(true);
         }
 
         (InitialMenuContainer.ZIndex, ActionMenuContainer.ZIndex) =
@@ -348,7 +349,7 @@ public partial class BattleMenu : Control
         if (uiSelection == UiSelection.Up)
         {
             SetMenuButtonsEnabled(ActionMenuContainer, false);
-            EmitSignal(SignalName.MoveToCardSystem);
+            MoveToCardSystem?.Invoke();
             return;
         }
 
@@ -388,4 +389,5 @@ public partial class BattleMenu : Control
     
     
     #endregion
+    
 }
