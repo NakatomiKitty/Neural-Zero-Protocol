@@ -11,13 +11,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/scripts/cards/Card.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/Card.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/CardHand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardHand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.KeyboardMode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.KeyboardMode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.MouseMode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.MouseMode.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Swap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Swap.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/combat/CombatStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/CombatStateMachine.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +65,7 @@
     <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptMethodsGenerator/NeuralZeroProtocol.Scripts.Characters.ActionValidatorComponent_ScriptMethods.generated.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptSignalsGenerator/NeuralZeroProtocol.Scripts.Cards.CardSelectionController_ScriptSignals.generated.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptSignalsGenerator/NeuralZeroProtocol.Scripts.Ui.BattleMenu_ScriptSignals.generated.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/71246fd56f7999d0787c963da3362569a1129b41237bf6d1930bffe452552/Node.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/71f134c2c07aaaaf17b017ca3da7e8c67a1e5e113930899908632c45926e465/GodotObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9d6d226110fec0f17d8164c66de3653eba4a8960812067d534e02cfdb23ffa/Tween.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Helpers.cs" root0="FORCE_HIGHLIGHTING" />
@@ -104,7 +106,7 @@
     "cidr.known.project.marker": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "Optimization/ChangeGodotSignalsToEvents",
+    "git-widget-placeholder": "BattleSystem/MenuAnimationAfterAttacking",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",

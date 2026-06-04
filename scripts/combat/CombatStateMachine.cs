@@ -23,6 +23,7 @@ public enum BattleState
 public partial class CombatStateMachine : Node
 {
     public event Action<BattleState> StateChanged; // newState
+    public event Action AttackTriggered;
     
     [Node("ConfirmAttackHandler")]public ConfirmAttackHandler CharacterAttackHandler; 
     
@@ -118,6 +119,7 @@ public partial class CombatStateMachine : Node
                 break;
             case ActionType.Attack:
                 CharacterAttackHandler.SelectedCardData(playerCharacter, frontEnemyCharacter);
+                AttackTriggered?.Invoke();
                 break;
             case ActionType.Evade:
                 GD.Print("EvadeStance!");

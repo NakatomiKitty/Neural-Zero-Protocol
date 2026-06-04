@@ -13,7 +13,7 @@ public partial class CardSelectionController
 
         _swapCardTween?.Kill();
 
-        Card oldCenter = CenterCard;
+        Card oldCenter = _centerCard;
         Vector2 clickedBase = CardBasePositions[clickedCard];
         Vector2 centerBase = CardBasePositions[oldCenter];
         
@@ -50,12 +50,12 @@ public partial class CardSelectionController
         (OriginalZIndexes[clickedCard], OriginalZIndexes[oldCenter]) =
         (OriginalZIndexes[oldCenter], OriginalZIndexes[clickedCard]);
 
-        int clickedIndex = CardHand.IndexOf(clickedCard);
-        int centerIndex = CardHand.IndexOf(oldCenter);
+        int clickedIndex = _cardHand.IndexOf(clickedCard);
+        int centerIndex = _cardHand.IndexOf(oldCenter);
         if (clickedIndex != -1 && centerIndex != -1)
         {
-            CardHand[clickedIndex] = oldCenter;
-            CardHand[centerIndex] = clickedCard;
+            _cardHand[clickedIndex] = oldCenter;
+            _cardHand[centerIndex] = clickedCard;
         }
 
         // First, deselect the current centerCard
@@ -64,10 +64,10 @@ public partial class CardSelectionController
         SelectCard(clickedCard);
 
         // Don't forget to update the _centerCard value to the new _centerCard!
-        CenterCard = clickedCard;
+        _centerCard = clickedCard;
         
-        CurrentSelectedCardChanged?.Invoke(CenterCard);
-        KeyboardHoveredCardChanged?.Invoke(CenterCard);
+        CurrentSelectedCardChanged?.Invoke(_centerCard);
+        KeyboardHoveredCardChanged?.Invoke(_centerCard);
 
         clickedCard.UpdatePriority();
         oldCenter.UpdatePriority();

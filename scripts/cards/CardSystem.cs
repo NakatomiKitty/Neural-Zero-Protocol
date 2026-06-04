@@ -25,9 +25,8 @@ namespace NeuralZeroProtocol.Scripts.Cards
         [Node] public CardSelectionController CardSelectionController;
 
         private Dictionary<Card, int> _originalZIndexes = new();
-
         private Dictionary<Card, Vector2> _cardBasePositions = new();
-        
+        private Card _centerCard;
         public override void _Notification(int what)
         {
             if (what == NotificationSceneInstantiated) WireNodes();
@@ -43,6 +42,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
             
             CardSelectionController.SelectionChanged += OnSelectionChanged;
             CardSelectionController.KeyboardHoveredCardChanged += OnKeyboardHoveredCardReceived;
+            CardSelectionController.CurrentSelectedCardChanged += OnCurrentSelectedCardChanged;
             CardSelectionController.SwappingStateChanged += CardHoverController.OnSwappingStateChanged;
             CardSelectionController.KeyboardModeDeactivated += OnKeyboardModeDeactivated;
             
@@ -68,10 +68,10 @@ namespace NeuralZeroProtocol.Scripts.Cards
             CardSelectionController.OriginalZIndexes = _originalZIndexes;
             CardSelectionController.CardBasePositions = _cardBasePositions;
             
-            Card centerCard = cards[cards.Count / 2];
+            _centerCard = cards[cards.Count / 2];
             
-            CardSelectionController.SetCenterCard(centerCard);
-            CardHoverController.SetCenterCard(centerCard);
+            CardSelectionController.SetCenterCard(_centerCard);
+            CardHoverController.SetCenterCard(_centerCard);
             
             CardSelectionController.SetCardHand(CardHand.GetChildren());
         }
@@ -83,7 +83,8 @@ namespace NeuralZeroProtocol.Scripts.Cards
         }
 
         private void ConnectCardSignals(Card card) => ConnectCard(card);
-
+        
+        private void OnCurrentSelectedCardChanged(Card centerCard) => _centerCard = centerCard;
         private void OnKeyboardHoveredCardReceived(Card card) => CardHoverController.KeyboardHover(card);
         
         private void OnKeyboardModeDeactivated()
@@ -92,6 +93,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
             CardHoverController.ClearKeyboardHover();
             
         }
+        
         private void OnSelectionChanged(Card oldCard, Card newCard)
         {
             CardHoverController.OnCardDeselected();
@@ -120,6 +122,22 @@ namespace NeuralZeroProtocol.Scripts.Cards
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
         }
 
+        public Card DuplicateCenterCard()
+        {
+            Vector2 clonedCenterGlobalPosition = _centerCard.GlobalPosition;
+            Vector2 clonedCenterGlobalScale = _centerCard.GlobalScale;
+            float clonedCenterRotation = _centerCard.GlobalRotation;
+            
+            Card clonedCenterCard = (Card)_centerCard.Duplicate();
+            
+            clonedCenterCard.GlobalPosition = clonedCenterGlobalPosition;
+            clonedCenterCard.GlobalScale = clonedCenterGlobalScale;
+            clonedCenterCard.GlobalRotation = clonedCenterRotation;
+
+            _centerCard.Visible = false;
+
+            return clonedCenterCard;
+        }
         public override void _ExitTree()
         {
             CardSelectionController.SelectionChanged -= OnSelectionChanged;
