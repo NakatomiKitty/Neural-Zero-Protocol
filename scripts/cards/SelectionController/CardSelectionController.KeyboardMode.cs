@@ -21,7 +21,7 @@ public partial class CardSelectionController
         } 
         else if (uiSelection is UiSelection.Down or UiSelection.Cancel)
         {
-            EmitSignal(SignalName.KeyboardModeCancelled, false);
+            KeyboardModeCancelled?.Invoke(false);
             
             _isInActionMenu = true;
             DeactivateKeyboardMode();
@@ -50,7 +50,7 @@ public partial class CardSelectionController
         if (toLeftCardIndex < 0) toLeftCardIndex = CardHand.Count - 1;
 
         _keyboardHoveredCard = CardHand[toLeftCardIndex];
-        EmitSignal(SignalName.KeyboardHoveredCardChanged, _keyboardHoveredCard);
+        KeyboardHoveredCardChanged?.Invoke(_keyboardHoveredCard);
     }
 
     private void KeyboardMoveRight()
@@ -62,7 +62,7 @@ public partial class CardSelectionController
         if(toRightCardIndex >= CardHand.Count) toRightCardIndex = 0;
 
         _keyboardHoveredCard = CardHand[toRightCardIndex];
-        EmitSignal(SignalName.KeyboardHoveredCardChanged, _keyboardHoveredCard);
+        KeyboardHoveredCardChanged?.Invoke(_keyboardHoveredCard);
     }
 
     private void ConfirmCard()
@@ -76,7 +76,7 @@ public partial class CardSelectionController
     
         // Deactivate keyboard mode and notify the battle menu
         _isInActionMenu = true;
-        EmitSignal(SignalName.KeyboardModeCancelled, false);
+        KeyboardModeCancelled?.Invoke(false);
         DeactivateKeyboardMode();   
         
         SwapWithCenter(cardToSwap);
@@ -86,9 +86,9 @@ public partial class CardSelectionController
     private void ActivateKeyboardMode()
     {
         _keyboardHoveredCard = CenterCard;
-        EmitSignal(SignalName.KeyboardHoveredCardChanged, _keyboardHoveredCard);
+        KeyboardHoveredCardChanged?.Invoke(_keyboardHoveredCard);
         ChangeState(CardSelectionState.KeyboardMode);
-        EmitSignal(SignalName.KeyboardModeActivated);
+        KeyboardModeActivated?.Invoke();
         
         _activationMousePos = GetGlobalMousePosition();
         _ignoreMouseMotion = false;
@@ -98,7 +98,7 @@ public partial class CardSelectionController
     {
         if (_state != CardSelectionState.KeyboardMode) return;
         
-        EmitSignal(SignalName.KeyboardModeDeactivated);
+        KeyboardModeDeactivated?.Invoke();
         
         ChangeState(CardSelectionState.Idle);
         _keyboardHoveredCard = null;

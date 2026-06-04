@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Godot;
 using Godot.Collections;
@@ -27,15 +28,13 @@ public sealed partial class CardSelectionController : Node2D
     private const float SelectedCardSizeMultiplier = 1.15f;
     private const int SelectedCardVerticalOffset = -20;
     
-    [Signal] public delegate void SelectionChangedEventHandler(Card oldSelectedCard, Card newSelectedCard);
-    
-    //
-    [Signal] public delegate void KeyboardHoveredCardChangedEventHandler(Card card);
-    [Signal] public delegate void CurrentSelectedCardChangedEventHandler(Card currentSelectedCard);
-    [Signal] public delegate void SwappingStateChangedEventHandler(bool isSwapping);
-    [Signal] public delegate void KeyboardModeDeactivatedEventHandler();
-    [Signal] public delegate void KeyboardModeCancelledEventHandler(bool isCancelled);
-    [Signal] public delegate void KeyboardModeActivatedEventHandler();
+    public event Action<Card, Card> SelectionChanged; // Card oldSelectedCard, Card newSelectedCard
+    public event Action<Card> KeyboardHoveredCardChanged;
+    public event Action<Card> CurrentSelectedCardChanged; // Card currentSelectedCard
+    public event Action<bool> SwappingStateChanged; // bool isSwapping
+    public event Action KeyboardModeDeactivated;
+    public event Action KeyboardModeActivated;
+    public event Action<bool> KeyboardModeCancelled; // bool isCancelled
     
     private Dictionary<Card, Tween> _activePositionTweens = new();
     private CardSelectionState _state;
@@ -80,7 +79,7 @@ public sealed partial class CardSelectionController : Node2D
                 _ignoreMouseMotion = true;
                 
                 _isInActionMenu = true;
-                EmitSignal(SignalName.KeyboardModeCancelled, true);
+                KeyboardModeCancelled?.Invoke(true);
                 DeactivateKeyboardMode();
                 break;
             case InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true }:
@@ -92,7 +91,7 @@ public sealed partial class CardSelectionController : Node2D
                     {
                         // Clicked on empty space, which will deselect and return to Idle
                         _isInActionMenu = true;
-                        EmitSignal(SignalName.KeyboardModeCancelled, true);
+                        KeyboardModeCancelled?.Invoke(true);
                         DeactivateKeyboardMode();
                         ChangeState(CardSelectionState.Idle);
                     }
@@ -114,7 +113,7 @@ public sealed partial class CardSelectionController : Node2D
     public void SetCenterCard(Card centerCard)
     {
         (_keyboardHoveredCard, CenterCard) = (centerCard, centerCard);
-        EmitSignal(SignalName.CurrentSelectedCardChanged, centerCard);
+        CurrentSelectedCardChanged?.Invoke(centerCard);
     } 
     
     // Used in BattleScene.cs, Selects the Center Card when Action Menu shows up
@@ -140,9 +139,8 @@ public sealed partial class CardSelectionController : Node2D
 
         _selectedCard = null;
         
-        EmitSignal(SignalName.KeyboardHoveredCardChanged, CenterCard);
-
-        EmitSignal(SignalName.SelectionChanged, oldSelected, _selectedCard);
+        KeyboardHoveredCardChanged?.Invoke(CenterCard);
+        SelectionChanged?.Invoke(oldSelected, _selectedCard);
     }
     
     private void ChangeState(CardSelectionState newState)
@@ -151,11 +149,11 @@ public sealed partial class CardSelectionController : Node2D
         switch (_state)
         {
             case CardSelectionState.SwapTheCards:
-                EmitSignal(SignalName.SwappingStateChanged, true);
+                SwappingStateChanged?.Invoke(true);
                 break;
             default:
                 if (_state != CardSelectionState.SwapTheCards)
-                    EmitSignal(SignalName.SwappingStateChanged, false);
+                    SwappingStateChanged?.Invoke(false);
                 break;
         }
     }

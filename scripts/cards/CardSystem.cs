@@ -5,7 +5,6 @@ using Godot.Collections;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
 
-
 namespace NeuralZeroProtocol.Scripts.Cards
 {
     /// <summary>
@@ -16,8 +15,6 @@ namespace NeuralZeroProtocol.Scripts.Cards
     [Scene]
     public partial class CardSystem : Node2D
     {
-        
-        
         private static readonly PackedScene Card = GD.Load<PackedScene>("res://scenes/card.tscn");
         
         public const int HoverZ = 11;
@@ -121,6 +118,14 @@ namespace NeuralZeroProtocol.Scripts.Cards
             }
 
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+        }
+
+        public override void _ExitTree()
+        {
+            CardSelectionController.SelectionChanged -= OnSelectionChanged;
+            CardSelectionController.SwappingStateChanged -= CardHoverController.OnSwappingStateChanged;
+            CardSelectionController.KeyboardHoveredCardChanged -= OnKeyboardHoveredCardReceived;
+            CardSelectionController.KeyboardModeDeactivated -= OnKeyboardModeDeactivated;
         }
     }
 }

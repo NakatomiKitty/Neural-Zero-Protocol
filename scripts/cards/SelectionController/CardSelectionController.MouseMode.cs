@@ -27,7 +27,7 @@ public partial class CardSelectionController
         _selectedCard = card;
 
         ChangeState(CardSelectionState.MouseMode);
-        EmitSignal(SignalName.SelectionChanged, oldCard, card);
+        SelectionChanged?.Invoke(oldCard, card);
         
         // Apply visual effects for the new selected card
         ApplyVisualState(card, true);

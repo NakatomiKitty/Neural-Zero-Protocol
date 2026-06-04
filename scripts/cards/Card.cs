@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
@@ -12,13 +13,12 @@ namespace NeuralZeroProtocol.Scripts.Cards
     [Scene]
     public partial class Card : Node2D
     {
-        [Signal] public delegate void HoveredEventHandler(Card card);
-        [Signal] public delegate void NotHoveredEventHandler(Card card);
-        [Signal] public delegate void ClickedEventHandler(Card card);
+        public event Action<Card> Hovered;
+        public event Action<Card> NotHovered;
+        public event Action<Card> Clicked;
         [Node] private Area2D _area2D;
         [Node("CardImage")] private Sprite2D _cardImage;
-
-
+        
         public MoveResource MoveData;
 
         public override void _Notification(int what)
@@ -35,8 +35,8 @@ namespace NeuralZeroProtocol.Scripts.Cards
             UpdatePriority();
         }
         
-        private void OnMouseEntered() => EmitSignal(SignalName.Hovered, this);
-        private void OnMouseExited() => EmitSignal(SignalName.NotHovered, this);
+        private void OnMouseEntered() => Hovered?.Invoke(this);
+        private void OnMouseExited() => NotHovered?.Invoke(this);
         
         // Higher ZIndex means higher priority which means it receives clicks first.
 
@@ -53,10 +53,15 @@ namespace NeuralZeroProtocol.Scripts.Cards
             if (@event is InputEventMouseButton mouseButton && mouseButton.ButtonIndex == MouseButton.Left && mouseButton.IsPressed())
             {
                 // Passes itself to the signal
-                EmitSignal(SignalName.Clicked, this);
+                Clicked?.Invoke(this);
             }
         }
         
-        
+        public override void _ExitTree()
+        {
+            _area2D.MouseEntered -= OnMouseEntered;
+            _area2D.MouseExited -= OnMouseExited;
+            _area2D.InputEvent -= OnMouseClicked;
+        }
     }
 }

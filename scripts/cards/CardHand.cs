@@ -8,7 +8,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
 {
     public partial class CardHand : Node2D
     {
-        [Signal] public delegate void CardAddedEventHandler(Card card);
+        public event Action<Card> CardAdded;
 
         private Path2D _path2D;
 
@@ -53,9 +53,8 @@ namespace NeuralZeroProtocol.Scripts.Cards
                 card.Rotation = normalized * maxRotation;
 
                 cards.Add(card);
-                EmitSignal(SignalName.CardAdded, card);
+                CardAdded?.Invoke(card);
             }
-            
             
             // Assign Z indexes: Example. 3, 4, 5, 4, 3
             int centerIndex = cardCount / 2;

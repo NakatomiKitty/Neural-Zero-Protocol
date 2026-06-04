@@ -66,9 +66,8 @@ public partial class CardSelectionController
         // Don't forget to update the _centerCard value to the new _centerCard!
         CenterCard = clickedCard;
         
-        EmitSignal(SignalName.CurrentSelectedCardChanged, CenterCard);
-        
-        EmitSignal(SignalName.KeyboardHoveredCardChanged, CenterCard);
+        CurrentSelectedCardChanged?.Invoke(CenterCard);
+        KeyboardHoveredCardChanged?.Invoke(CenterCard);
 
         clickedCard.UpdatePriority();
         oldCenter.UpdatePriority();
