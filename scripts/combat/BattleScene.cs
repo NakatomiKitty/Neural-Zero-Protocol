@@ -39,6 +39,7 @@ public partial class BattleScene : Node2D
         TurnManager.StartBattle += OnBattleStart;
         BattleMenu.ActionMenuState += OnActionMenuState;
         BattleMenu.MoveToCardSystem += CardSystem.OnMoveToCardSystem;
+        
         CardSystem.CardSelectionController.KeyboardModeCancelled += BattleMenu.OnKeyboardModeCancelled;
         CardSystem.CardSelectionController.CurrentSelectedCardChanged += CombatStateMachine.CharacterAttackHandler.SetCurrentSelectedCard;
         CardSystem.CardSelectionController.KeyboardModeActivated += BattleMenu.OnCardKeyboardModeActivated;

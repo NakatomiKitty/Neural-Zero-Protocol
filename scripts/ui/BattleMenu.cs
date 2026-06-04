@@ -10,7 +10,6 @@ public enum MenuState { InitialMenu, Swapping, ActionMenu }
 
 public partial class BattleMenu : Control
 {
-    [Signal] public delegate void MenuStateChangedEventHandler(MenuState newState);
     [Signal] public delegate void ActionSelectedEventHandler(int actionType);
     [Signal] public delegate void ActionMenuStateEventHandler(bool isTrue);
     [Signal] public delegate void MoveToCardSystemEventHandler();
@@ -74,7 +73,7 @@ public partial class BattleMenu : Control
     {
         if (_currentMenuState == MenuState.ActionMenu)
         {
-            await ToSignal(GetTree().CreateTimer(1f), SceneTreeTimer.SignalName.Timeout);
+            await ToSignal(GetTree().CreateTimer(0.1f), SceneTreeTimer.SignalName.Timeout);
             
             _isCardKeyboardMode = false;
             
@@ -124,7 +123,6 @@ public partial class BattleMenu : Control
     private void ChangeState(MenuState newState)
     {
         _currentMenuState = newState;
-        EmitSignal(SignalName.MenuStateChanged, (int)newState);
         
         switch (_currentMenuState)
         {

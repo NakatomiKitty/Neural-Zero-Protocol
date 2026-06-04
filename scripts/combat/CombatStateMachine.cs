@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using Godot;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Characters;
 using System.Linq;
 using System.Threading.Tasks;
-using NeuralZeroProtocol.Scripts.Resources.MoveData;
 using NeuralZeroProtocol.Scripts.Ui;
 using ActionType = NeuralZeroProtocol.Scripts.Ui.ActionType;
 
@@ -25,6 +23,7 @@ public enum BattleState
 public partial class CombatStateMachine : Node
 {
     [Signal] public delegate void StateChangedEventHandler(BattleState newState);
+    
     [Node("ConfirmAttackHandler")]public ConfirmAttackHandler CharacterAttackHandler; 
     
     private BattleScene _battleScene;
@@ -228,4 +227,3 @@ public partial class CombatStateMachine : Node
         else if (character is EnemyCharacter) await ChangeState(BattleState.EnemyTurn);
     }
 }
-
