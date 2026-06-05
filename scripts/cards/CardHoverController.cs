@@ -23,7 +23,8 @@ public partial class CardHoverController : Node
     
     private static readonly Vector2 CardBorderSubtract = new(.7f, .7f);
     private const float CardBorderTweenDuration = 0.15f;
-    private const float CardBorderFadeDuration = 0.15f;
+    private const float CardBorderFadeDuration = 0.10f;
+    
     private Vector2 _cardBorderSelectedPosition; // Border will go here instead of selected card's position
     private Vector2 _cardBorderOriginalScale;
     

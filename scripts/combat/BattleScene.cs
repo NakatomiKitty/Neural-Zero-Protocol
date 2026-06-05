@@ -113,7 +113,7 @@ public partial class BattleScene : Node2D
     {
         // Removes the border
         CardSystem.CardHoverController.ExitCardSelection();
-        MoveCardSystemRelativeToButtonContainer(-32, false);
+        OnActionMenuState(false);
         BattleMenu.ForceMenuToOriginalPositions();
         
         Card clonedCenterCard = CardSystem.DuplicateCenterCard();
