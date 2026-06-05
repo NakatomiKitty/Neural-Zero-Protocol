@@ -15,7 +15,7 @@ public enum UiSelection
 
 public partial class UiSelectionController : Node
 {
-	public static UiSelection GetUiSelect()
+	public UiSelection GetUiSelect()
 	{
 		if (Input.IsActionJustPressed("ui_left")) return UiSelection.Left;
 		if (Input.IsActionJustPressed("ui_right")) return UiSelection.Right;

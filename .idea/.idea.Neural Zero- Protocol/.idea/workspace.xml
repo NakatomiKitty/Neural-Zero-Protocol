@@ -11,6 +11,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scenes/battle_scene.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/battle_scene.tscn" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scenes/ui/ui_selection_controller.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/ui/ui_selection_controller.tscn" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/ui/UISelectionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ui/UiSelectionController.cs" afterDir="false" />
@@ -25,7 +26,7 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="36" />
+    <option name="cachedIndexableFilesCount" value="35" />
   </component>
   <component name="Git.Merge.Settings">
     <option name="BRANCH" value="main" />
@@ -59,9 +60,8 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptMethodsGenerator/NeuralZeroProtocol.Scripts.Characters.ActionValidatorComponent_ScriptMethods.generated.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptSignalsGenerator/NeuralZeroProtocol.Scripts.Cards.CardSelectionController_ScriptSignals.generated.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptSignalsGenerator/NeuralZeroProtocol.Scripts.Cards.CardSelectionController_ScriptSignals.generated.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/59AA2153EFCE6E87C8B17782/Godot.SourceGenerators/Godot.SourceGenerators.ScriptSignalsGenerator/NeuralZeroProtocol.Scripts.Ui.BattleMenu_ScriptSignals.generated.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/71246fd56f7999d0787c963da3362569a1129b41237bf6d1930bffe452552/Node.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/71f134c2c07aaaaf17b017ca3da7e8c67a1e5e113930899908632c45926e465/GodotObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9d6d226110fec0f17d8164c66de3653eba4a8960812067d534e02cfdb23ffa/Tween.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/scripts/cards/SelectionController/CardSelectionController.Helpers.cs" root0="FORCE_HIGHLIGHTING" />
@@ -102,7 +102,7 @@
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;BattleSystem/MenuAnimationAfterAttacking&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -192,6 +192,7 @@
       <workItem from="1780314686402" duration="6344000" />
       <workItem from="1780392801749" duration="8485000" />
       <workItem from="1780468515016" duration="919000" />
+      <workItem from="1780664660460" duration="155000" />
     </task>
     <task id="LOCAL-00001" summary="Test">
       <option name="closed" value="true" />
@@ -317,8 +318,25 @@
     <MESSAGE value="Final Bug Fixes for CardBorder implementation" />
     <MESSAGE value="Added Buffer" />
     <MESSAGE value="Changed Signals to C# events in folders: UI, COMBAT, CHARACTERS" />
-    <MESSAGE value="ugh fixed that bug agan" />
-    <option name="LAST_COMMIT_MESSAGE" value="ugh fixed that bug agan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed Signals to C# events in folders: UI, COMBAT, CHARACTERS" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.Tasks.TaskCanceledException" breakIfHandledByOtherCode="false" displayValue="System.Threading.Tasks.TaskCanceledException" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
