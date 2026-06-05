@@ -32,6 +32,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
             _area2D.MouseExited += OnMouseExited;
             _area2D.InputEvent += OnMouseClicked;
             
+            AddToGroup("Cards");
             UpdatePriority();
         }
         

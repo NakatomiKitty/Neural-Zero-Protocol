@@ -122,23 +122,21 @@ namespace NeuralZeroProtocol.Scripts.Cards
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
         }
 
-        public void DuplicateCenterCard(Node newParent)
+        public Card DuplicateCenterCard()
         {
-            _centerCard.Reparent(newParent, keepGlobalTransform: true);
-            // Let me try the reparent function shit again
-            // Vector2 clonedCenterGlobalPosition = _centerCard.GlobalPosition;
-            // Vector2 clonedCenterGlobalScale = _centerCard.GlobalScale;
-            // float clonedCenterRotation = _centerCard.GlobalRotation;
-            //
-            // Card clonedCenterCard = (Card)_centerCard.Duplicate();
-            //
-            // clonedCenterCard.GlobalPosition = clonedCenterGlobalPosition;
-            // clonedCenterCard.GlobalScale = clonedCenterGlobalScale;
-            // clonedCenterCard.GlobalRotation = clonedCenterRotation;
-            //
-            // _centerCard.Visible = false;
-            //
-            // return clonedCenterCard;
+            Vector2 clonedCenterGlobalPosition = _centerCard.GlobalPosition;
+            Vector2 clonedCenterGlobalScale = _centerCard.GlobalScale;
+            float clonedCenterRotation = _centerCard.GlobalRotation;
+            
+            Card clonedCenterCard = (Card)_centerCard.Duplicate();
+            
+            clonedCenterCard.GlobalPosition = clonedCenterGlobalPosition;
+            clonedCenterCard.GlobalScale = clonedCenterGlobalScale;
+            clonedCenterCard.GlobalRotation = clonedCenterRotation;
+            
+            _centerCard.QueueFree();
+            
+            return clonedCenterCard;
         }
         public override void _ExitTree()
         {

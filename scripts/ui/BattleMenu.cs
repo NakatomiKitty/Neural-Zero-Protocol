@@ -11,23 +11,23 @@ public enum MenuState { InitialMenu, Swapping, ActionMenu }
 public partial class BattleMenu : Control
 {
     [Signal] public delegate void ActionSelectedEventHandler(int actionType);
-
     public event Action<bool> ActionMenuState;
     public event Action MoveToCardSystem;
     
     public Control ActionMenuContainer;
     public Control InitialMenuContainer;
+    private Vector2 _originalActionMenuPosition;
+    private Vector2 _originalInitialMenuPosition;
     
     private const float MenuSwapTween = 0.5f;
+    private const float MenuForceExitTween = 2f;
     private Tween _menuTween;
     
-    private MenuState _currentMenuState;
-    
     private const string InitialFocusButton = "MovesButton";
-    
-    private MenuState _targetMenuState;
-    
     private const string ActionMenuDefaultFocus = "AttackButton";
+    
+    private MenuState _currentMenuState;
+    private MenuState _targetMenuState;
     
     private List<TextureButton> _actionButtons;
     
@@ -41,6 +41,8 @@ public partial class BattleMenu : Control
     {
         InitialMenuContainer = GetNode<Control>("InitialButtonContainer");
         ActionMenuContainer = GetNode<Control>("SecondaryButtonContainer");
+        _originalActionMenuPosition = ActionMenuContainer.GlobalPosition;
+        _originalInitialMenuPosition = InitialMenuContainer.GlobalPosition;
         
         GetContainerChildren(InitialMenuContainer);
         GetContainerChildren(ActionMenuContainer);
@@ -117,6 +119,14 @@ public partial class BattleMenu : Control
                 break;
         }
     }
+
+    public void ForceMenuToOriginalPositions()
+    {
+        _menuTween?.Kill();
+        
+        MenuLerp(InitialMenuContainer, _originalInitialMenuPosition, MenuForceExitTween);
+        MenuLerp(ActionMenuContainer, _originalActionMenuPosition, MenuForceExitTween);
+    }
     #endregion
 
     #region State Machine and States
@@ -163,6 +173,8 @@ public partial class BattleMenu : Control
         Vector2 initialMenuPos = InitialMenuContainer.Position;
         Vector2 actionMenuPos = ActionMenuContainer.Position;
 
+        _menuTween?.Kill();
+        
         if (_targetMenuState == MenuState.InitialMenu)
         {
             ActionMenuState?.Invoke(false);
@@ -171,8 +183,8 @@ public partial class BattleMenu : Control
         InitialMenuContainer.Visible = true;
         ActionMenuContainer.Visible = true;
         
-        SwapMenuLerp(InitialMenuContainer, actionMenuPos);
-        SwapMenuLerp(ActionMenuContainer, initialMenuPos);
+        MenuLerp(InitialMenuContainer, actionMenuPos, MenuSwapTween);
+        MenuLerp(ActionMenuContainer, initialMenuPos, MenuSwapTween);
 
         _menuTween.Finished += OnSwapMenuTweenFinished;
     }
@@ -378,11 +390,11 @@ public partial class BattleMenu : Control
         }
     }
     
-    private void SwapMenuLerp(Control buttonContainer, Vector2 finalPos)
+    private void MenuLerp(Control buttonContainer, Vector2 finalPos, float duration)
     {
         _menuTween = CreateTween();
         
-        _menuTween.TweenProperty(buttonContainer, "position", finalPos, MenuSwapTween)
+        _menuTween.TweenProperty(buttonContainer, "position", finalPos, duration)
             .SetTrans(Tween.TransitionType.Quint)
             .SetEase(Tween.EaseType.Out);
     }

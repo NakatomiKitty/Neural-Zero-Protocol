@@ -95,7 +95,6 @@ public partial class BattleScene : Node2D
     {
         _cardSystemTween?.Kill();
         _cardSystemTween = CreateTween();
-        
         CardSystem.Visible = true;
         
         _cardSystemTween.TweenProperty(CardSystem, "position", newCardSystemPosition, MoveTweenDuration)
@@ -112,9 +111,14 @@ public partial class BattleScene : Node2D
 
     private void OnAttackTriggeredPlayMenuSequence()
     {
-        CardSystem.DuplicateCenterCard(BattleMenu);
-        // Card clonedCenterCard = CardSystem.DuplicateCenterCard();
-        // AddChild(clonedCenterCard);
+        // Removes the border
+        CardSystem.CardHoverController.ExitCardSelection();
+        MoveCardSystemRelativeToButtonContainer(-32, false);
+        BattleMenu.ForceMenuToOriginalPositions();
+        
+        Card clonedCenterCard = CardSystem.DuplicateCenterCard();
+        AddChild(clonedCenterCard);
+        
     }
     
     public override void _ExitTree()
