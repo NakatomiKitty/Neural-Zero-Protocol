@@ -8,7 +8,7 @@ public partial class CardSelectionController
         if (!IsTopmostCard(clickedCard)) return;
         
         // Swap with center card
-        if (clickedCard != CenterCard)
+        if (clickedCard != _centerCard)
         {
             SwapWithCenter(clickedCard);
             return;

@@ -44,6 +44,8 @@ public partial class BattleScene : Node2D
         CardSystem.CardSelectionController.KeyboardModeCancelled += BattleMenu.OnKeyboardModeCancelled;
         CardSystem.CardSelectionController.KeyboardModeActivated += BattleMenu.OnCardKeyboardModeActivated;
         CardSystem.CardSelectionController.KeyboardModeDeactivated += BattleMenu.OnCardKeyboardModeDeactivated;
+
+        CombatStateMachine.AttackTriggered += OnAttackTriggeredPlayMenuSequence;
         
         // Passes the array to CardSystem so it can be used to update the card skins
         _ = CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromCurrentChar());
@@ -59,7 +61,6 @@ public partial class BattleScene : Node2D
 
     private void OnBattleStart()
     {
-        GD.Print("BATTLE STARTEDDD");
         Character firstUnit = TurnManager.GetCurrentUnit();
         CombatStateMachine.SetCurrentCharacter(firstUnit);
         CombatStateMachine.StartBattle();
@@ -68,13 +69,10 @@ public partial class BattleScene : Node2D
     private void OnActionMenuState(bool isTrue)
     {
         float offset = isTrue ? -32 : 32;
-
         if (!isTrue) CardSystem.CardSelectionController.DeselectCenterCard();
-        
         MoveCardSystemRelativeToButtonContainer(offset, isTrue);
     }
     
-
     private void MoveCardSystemRelativeToButtonContainer(float offset,  bool isTrue)
     {
         float buttonGlobalY = isTrue ? 
@@ -112,6 +110,13 @@ public partial class BattleScene : Node2D
         };
     }
 
+    private void OnAttackTriggeredPlayMenuSequence()
+    {
+        CardSystem.DuplicateCenterCard(BattleMenu);
+        // Card clonedCenterCard = CardSystem.DuplicateCenterCard();
+        // AddChild(clonedCenterCard);
+    }
+    
     public override void _ExitTree()
     {
         TurnManager.StartBattle -= OnBattleStart;

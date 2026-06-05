@@ -51,9 +51,9 @@ public sealed partial class CardSelectionController : Node2D
     
     public Dictionary<Card, Vector2> CardBasePositions = new();
     public Dictionary<Card, int> OriginalZIndexes = new();
-    
-    public Array<Card> CardHand = new();
-    public Card CenterCard;
+
+    private Array<Card> _cardHand = new();
+    private Card _centerCard;
 
     public override void _Notification(int what)
     {
@@ -106,13 +106,13 @@ public sealed partial class CardSelectionController : Node2D
     {
         foreach (Node node in cardHand)
         {
-            if (node is Card card) CardHand.Add(card);
+            if (node is Card card) _cardHand.Add(card);
         }
     }
 
     public void SetCenterCard(Card centerCard)
     {
-        (_keyboardHoveredCard, CenterCard) = (centerCard, centerCard);
+        (_keyboardHoveredCard, _centerCard) = (centerCard, centerCard);
         CurrentSelectedCardChanged?.Invoke(centerCard);
     } 
     
@@ -120,13 +120,13 @@ public sealed partial class CardSelectionController : Node2D
     public void SelectCenterCard()
     {
         _isInActionMenu = false;
-        SelectCard(CenterCard);
+        SelectCard(_centerCard);
     }
     
     // Used in BattleScene.cs, Deselects the Center Card when Action Menu leaves
     public void DeselectCenterCard()
     {
-        ApplyVisualState(CenterCard, false);
+        ApplyVisualState(_centerCard, false);
     }
     
     public void DeselectCard()
@@ -139,7 +139,7 @@ public sealed partial class CardSelectionController : Node2D
 
         _selectedCard = null;
         
-        KeyboardHoveredCardChanged?.Invoke(CenterCard);
+        KeyboardHoveredCardChanged?.Invoke(_centerCard);
         SelectionChanged?.Invoke(oldSelected, _selectedCard);
     }
     

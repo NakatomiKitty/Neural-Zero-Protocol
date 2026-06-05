@@ -43,34 +43,34 @@ public partial class CardSelectionController
     
     private void KeyboardMoveLeft()
     {
-        if (CardHand == null || CardHand.Count == 0) return;
+        if (_cardHand == null || _cardHand.Count == 0) return;
 
-        int centerIndex = CardHand.IndexOf(_keyboardHoveredCard);
+        int centerIndex = _cardHand.IndexOf(_keyboardHoveredCard);
         int toLeftCardIndex = centerIndex - 1;
-        if (toLeftCardIndex < 0) toLeftCardIndex = CardHand.Count - 1;
+        if (toLeftCardIndex < 0) toLeftCardIndex = _cardHand.Count - 1;
 
-        _keyboardHoveredCard = CardHand[toLeftCardIndex];
+        _keyboardHoveredCard = _cardHand[toLeftCardIndex];
         KeyboardHoveredCardChanged?.Invoke(_keyboardHoveredCard);
     }
 
     private void KeyboardMoveRight()
     {
-        if (CardHand == null || CardHand.Count == 0) return;
+        if (_cardHand == null || _cardHand.Count == 0) return;
         
-        int centerIndex = CardHand.IndexOf(_keyboardHoveredCard);
+        int centerIndex = _cardHand.IndexOf(_keyboardHoveredCard);
         int toRightCardIndex = centerIndex + 1;
-        if(toRightCardIndex >= CardHand.Count) toRightCardIndex = 0;
+        if(toRightCardIndex >= _cardHand.Count) toRightCardIndex = 0;
 
-        _keyboardHoveredCard = CardHand[toRightCardIndex];
+        _keyboardHoveredCard = _cardHand[toRightCardIndex];
         KeyboardHoveredCardChanged?.Invoke(_keyboardHoveredCard);
     }
 
     private void ConfirmCard()
     {
         if (_state != CardSelectionState.KeyboardMode) return;
-        if (CardHand == null || CardHand.Count == 0) return;
+        if (_cardHand == null || _cardHand.Count == 0) return;
         if (_keyboardHoveredCard == null) return; 
-        if (_keyboardHoveredCard == CenterCard) return;
+        if (_keyboardHoveredCard == _centerCard) return;
         
         Card cardToSwap = _keyboardHoveredCard;
     
@@ -85,7 +85,7 @@ public partial class CardSelectionController
     // Helper Functions
     private void ActivateKeyboardMode()
     {
-        _keyboardHoveredCard = CenterCard;
+        _keyboardHoveredCard = _centerCard;
         KeyboardHoveredCardChanged?.Invoke(_keyboardHoveredCard);
         ChangeState(CardSelectionState.KeyboardMode);
         KeyboardModeActivated?.Invoke();
