@@ -112,9 +112,9 @@ public partial class BattleScene : Node2D
 
     private void OnAttackTriggeredPlayMenuSequence()
     {
-        Card clonedCenterCard = CardSystem.DuplicateCenterCard();
-        AddChild(clonedCenterCard);
-        
+        CardSystem.DuplicateCenterCard(BattleMenu);
+        // Card clonedCenterCard = CardSystem.DuplicateCenterCard();
+        // AddChild(clonedCenterCard);
     }
     
     public override void _ExitTree()
