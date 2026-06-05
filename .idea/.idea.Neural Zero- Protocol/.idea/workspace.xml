@@ -11,9 +11,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/battle_scene.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/battle_scene.tscn" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scenes/ui/ui_selection_controller.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/ui/ui_selection_controller.tscn" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/ui/UISelectionController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ui/UiSelectionController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/ui/UiSelectionController.cs.uid" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -316,7 +317,8 @@
     <MESSAGE value="Final Bug Fixes for CardBorder implementation" />
     <MESSAGE value="Added Buffer" />
     <MESSAGE value="Changed Signals to C# events in folders: UI, COMBAT, CHARACTERS" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed Signals to C# events in folders: UI, COMBAT, CHARACTERS" />
+    <MESSAGE value="ugh fixed that bug agan" />
+    <option name="LAST_COMMIT_MESSAGE" value="ugh fixed that bug agan" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
