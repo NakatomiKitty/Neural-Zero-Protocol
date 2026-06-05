@@ -126,6 +126,10 @@ public partial class BattleMenu : Control
         
         MenuLerp(InitialMenuContainer, _originalInitialMenuPosition, MenuForceExitTween);
         MenuLerp(ActionMenuContainer, _originalActionMenuPosition, MenuForceExitTween);
+        
+        /// TODO: MAKE AN "INITIALIZE" STATE AND AN "EXIT" STATE
+        /// INITIALIZE STATE = INITIAL MENU SHOWS UP
+        /// EXIT STATE = MAKES THE MENUS HIDE OFFSCREEN (SHOULD BE THIS)
     }
     #endregion
 
@@ -398,8 +402,5 @@ public partial class BattleMenu : Control
             .SetTrans(Tween.TransitionType.Quint)
             .SetEase(Tween.EaseType.Out);
     }
-    
-    
     #endregion
-    
 }

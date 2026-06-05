@@ -232,7 +232,6 @@ public partial class CardHoverController : Node
 	    _hasLeftMenuMode = true;
 	    
 	    Tween tween = CreateTween().SetParallel();
-	    
 	    tween.TweenProperty(_cardBorder, "modulate:a", 0.0f, CardBorderFadeDuration);
 		
 	    tween.Finished += ApplyBorderEffectOnSelectedCard;

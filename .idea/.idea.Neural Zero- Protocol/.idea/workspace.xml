@@ -12,9 +12,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7744d8c4-a88d-4eab-89a4-502bd5e1ff21" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Neural Zero- Protocol/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scenes/card_system.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/scenes/card_system.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/Card.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/Card.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cards/CardHoverController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/BattleScene.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ui/BattleMenu.cs" afterDir="false" />
     </list>
@@ -276,7 +274,23 @@
       <option name="project" value="LOCAL" />
       <updated>1780579788172</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Done the second step:&#10;Made the battle menu and card system move away when attackin">
+      <option name="closed" value="true" />
+      <created>1780667665114</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1780667665114</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Used ActionMenuState instead of MoveCardSystemRelativeToButtonContainer.&#10;&#10;And also changed some tween durations in CardHover">
+      <option name="closed" value="true" />
+      <created>1780667855511</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1780667855511</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -320,7 +334,9 @@
     <MESSAGE value="Final Bug Fixes for CardBorder implementation" />
     <MESSAGE value="Added Buffer" />
     <MESSAGE value="Changed Signals to C# events in folders: UI, COMBAT, CHARACTERS" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed Signals to C# events in folders: UI, COMBAT, CHARACTERS" />
+    <MESSAGE value="Done the second step:&#10;Made the battle menu and card system move away when attackin" />
+    <MESSAGE value="Used ActionMenuState instead of MoveCardSystemRelativeToButtonContainer.&#10;&#10;And also changed some tween durations in CardHover" />
+    <option name="LAST_COMMIT_MESSAGE" value="Used ActionMenuState instead of MoveCardSystemRelativeToButtonContainer.&#10;&#10;And also changed some tween durations in CardHover" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

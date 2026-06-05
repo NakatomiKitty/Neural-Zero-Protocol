@@ -10,7 +10,8 @@ namespace NeuralZeroProtocol.Scripts.Combat;
 [Scene]
 public partial class BattleScene : Node2D
 {
-    private const float MoveTweenDuration = 0.5f;
+    private const float MenuAndCardSystemMoveTweenDuration = 0.5f;
+    private const float ClonedCardMoveTweenDuration = 0.6f;
     
     [Node] public TurnManager TurnManager;
     [Node] public CombatStateMachine CombatStateMachine;
@@ -97,7 +98,7 @@ public partial class BattleScene : Node2D
         _cardSystemTween = CreateTween();
         CardSystem.Visible = true;
         
-        _cardSystemTween.TweenProperty(CardSystem, "position", newCardSystemPosition, MoveTweenDuration)
+        _cardSystemTween.TweenProperty(CardSystem, "position", newCardSystemPosition, MenuAndCardSystemMoveTweenDuration)
             .SetTrans(Tween.TransitionType.Expo)
             .SetEase(Tween.EaseType.Out);
 
@@ -119,8 +120,42 @@ public partial class BattleScene : Node2D
         Card clonedCenterCard = CardSystem.DuplicateCenterCard();
         AddChild(clonedCenterCard);
         
+        CardUsedUpAnimation(clonedCenterCard);
     }
-    
+
+    private async void CardUsedUpAnimation(Card clonedCenterCard)
+    {
+        // wait I can use await here
+        Viewport viewport = GetViewport();
+        Rect2 visibleRect = viewport.GetVisibleRect();
+        
+        Sprite2D sprite = clonedCenterCard.GetNode<Sprite2D>("CardImage");
+        float cardHeight = sprite.GetRect().Size.Y;
+        
+        // This makes the card's bottom edge exactly at the top of the screen (Hence, off screen)
+        float targetGlobalY = visibleRect.Position.Y - cardHeight;
+        
+        Tween tween1 = CreateTween();
+        
+        tween1.TweenProperty(clonedCenterCard, "global_position:y", targetGlobalY, ClonedCardMoveTweenDuration)
+            .SetTrans(Tween.TransitionType.Back)
+            .SetEase(Tween.EaseType.In);
+        
+        await ToSignal(tween1, Tween.SignalName.Finished);
+        
+        float thirdWidth = visibleRect.Size.X / 3f;
+        float leftEdgeOfThird = visibleRect.Position.X + (2f * thirdWidth); // left edge of the 3rd third
+        float targetGlobalX = leftEdgeOfThird + (thirdWidth / 2f);          
+            
+        clonedCenterCard.Scale -= Vector2.One * 0.075f;
+        clonedCenterCard.GlobalPosition = new Vector2(targetGlobalX, -cardHeight);
+            
+        float targetY = visibleRect.Position.Y + (visibleRect.Size.Y / 2f);
+        Tween tween2 = CreateTween();
+        tween2.TweenProperty(clonedCenterCard, "global_position:y", targetY, ClonedCardMoveTweenDuration)
+            .SetTrans(Tween.TransitionType.Expo)
+            .SetEase(Tween.EaseType.Out);
+    }
     public override void _ExitTree()
     {
         TurnManager.StartBattle -= OnBattleStart;
