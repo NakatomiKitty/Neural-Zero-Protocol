@@ -125,7 +125,7 @@ public partial class BattleScene : Node2D
 
     private async void CardUsedUpAnimation(Card clonedCenterCard)
     {
-        // wait I can use await here
+        // alright end of stream
         Viewport viewport = GetViewport();
         Rect2 visibleRect = viewport.GetVisibleRect();
         
