@@ -2,6 +2,8 @@ using System;
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+
 // ReSharper disable All
 
 namespace NeuralZeroProtocol.Scripts.Ui;
@@ -22,6 +24,8 @@ public partial class BattleMenu : Control
     private const float MenuSwapTween = 0.5f;
     private const float MenuForceExitTween = 2f;
     
+    private readonly Dictionary<ActionButton, Action> _pressHandlers = new();
+    private readonly Dictionary<ActionButton, Action> _hoverHandlers = new();
     private const string InitialFocusButton = "MovesButton";
     private const string ActionMenuDefaultFocus = "AttackButton";
     
@@ -125,7 +129,7 @@ public partial class BattleMenu : Control
         switch (_currentMenuState)
         {
             case MenuState.PlayerTurnStart:
-                BattleCommandInitialAppear();
+                _ = BattleCommandInitialAppear();
                 break;
             case MenuState.BattleCommandMenu:
                 EnterBattleCommandMenu();
@@ -142,7 +146,7 @@ public partial class BattleMenu : Control
         }
     }
 
-    private async void BattleCommandInitialAppear()
+    private async Task BattleCommandInitialAppear()
     {
         await ToSignal(GetTree().CreateTimer(0.5f), SceneTreeTimer.SignalName.Timeout);
         
@@ -189,7 +193,7 @@ public partial class BattleMenu : Control
         MenuLerp(BattleCommandMenuContainer, actionMenuPos, MenuSwapTween, tween);
         MenuLerp(ActionMenuContainer, battleCommandMenuPos, MenuSwapTween, tween);
 
-        tween.Connect(Tween.SignalName.Finished, new Callable(this, MethodName.OnSwapMenuTweenFinished));
+        tween.Finished += OnSwapMenuTweenFinished;
     }
 
     #endregion
@@ -262,8 +266,17 @@ public partial class BattleMenu : Control
         {
             if (child is ActionButton button)
             {
-                button.Connect(TextureButton.SignalName.Pressed, Callable.From(() => OnAnyButtonPressed(button)));
-                button.Connect(TextureButton.SignalName.MouseEntered, Callable.From(() => OnAnyButtonHovered(button)));
+                _pressHandlers.Clear();
+                _hoverHandlers.Clear();
+                
+                Action press = () => OnAnyButtonPressed(button);
+                Action hover = () => OnAnyButtonHovered(button);
+
+                _pressHandlers[button] = press;
+                _hoverHandlers[button] = hover;
+                
+                button.Pressed += press;
+                button.MouseEntered += hover;
                 
                 if (container == ActionMenuContainer) _actionMenuButtons.Add(button);
             }
@@ -403,4 +416,12 @@ public partial class BattleMenu : Control
             .SetEase(Tween.EaseType.Out);
     }
     #endregion
+
+    
+    public override void _ExitTree()
+    {
+        foreach (var pair in _pressHandlers) pair.Key.Pressed -= pair.Value;
+
+        foreach (var pair in _hoverHandlers) pair.Key.MouseEntered -= pair.Value;
+    }
 }
