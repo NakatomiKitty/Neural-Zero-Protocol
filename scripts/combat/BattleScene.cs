@@ -78,7 +78,7 @@ public partial class BattleScene : Node2D
     {
         float buttonGlobalY = isTrue ? 
             BattleMenu.ActionMenuContainer.GlobalPosition.Y : 
-            BattleMenu.InitialMenuContainer.GlobalPosition.Y;
+            BattleMenu.BattleCommandMenuContainer.GlobalPosition.Y;
         
         // Desired global position for CardSystem
         float targetGlobalY = buttonGlobalY + offset;
@@ -115,7 +115,7 @@ public partial class BattleScene : Node2D
         // Removes the border
         CardSystem.CardHoverController.ExitCardSelection();
         OnActionMenuState(false);
-        BattleMenu.ForceMenuToOriginalPositions();
+        BattleMenu.ChangeState(MenuState.PlayerTurnEnd);
         
         Card clonedCenterCard = CardSystem.DuplicateCenterCard();
         AddChild(clonedCenterCard);
@@ -125,9 +125,7 @@ public partial class BattleScene : Node2D
 
     private async void CardUsedUpAnimation(Card clonedCenterCard)
     {
-        // alright end of stream
-        Viewport viewport = GetViewport();
-        Rect2 visibleRect = viewport.GetVisibleRect();
+        Rect2 visibleRect = GetViewport().GetVisibleRect();
         
         Sprite2D sprite = clonedCenterCard.GetNode<Sprite2D>("CardImage");
         float cardHeight = sprite.GetRect().Size.Y;

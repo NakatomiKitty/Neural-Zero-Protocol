@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Neural Zero: Protocol"
-run/main_scene="uid://cdk27rxcby8ld"
+run/main_scene="uid://utsaoi0q8prq"
 config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 

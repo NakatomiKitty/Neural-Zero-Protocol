@@ -6,7 +6,7 @@ using System.Linq;
 namespace NeuralZeroProtocol.Scripts.Ui;
 
 public enum ActionType { Switch, Moves, Run, Block, Attack, Evade }
-public enum MenuState { InitialMenu, Swapping, ActionMenu }
+public enum MenuState { PlayerTurnStart, BattleCommandMenu, Swapping, ActionMenu, PlayerTurnEnd }
 
 public partial class BattleMenu : Control
 {
@@ -15,13 +15,12 @@ public partial class BattleMenu : Control
     public event Action MoveToCardSystem;
     
     public Control ActionMenuContainer;
-    public Control InitialMenuContainer;
-    private Vector2 _originalActionMenuPosition;
-    private Vector2 _originalInitialMenuPosition;
+    public Control BattleCommandMenuContainer;
+    private Vector2 _originalMenuPosition;
+    private float _targetMenuPositionY;
     
     private const float MenuSwapTween = 0.5f;
     private const float MenuForceExitTween = 2f;
-    private Tween _menuTween;
     
     private const string InitialFocusButton = "MovesButton";
     private const string ActionMenuDefaultFocus = "AttackButton";
@@ -31,7 +30,7 @@ public partial class BattleMenu : Control
     
     private List<TextureButton> _actionButtons;
     
-    private bool _isInitialMenuKeyboardMode;    // InitialMenu keyboard mode
+    private bool _isBattleCommandMenuKeyboardMode;    // BattleCommandMenu keyboard mode
     private bool _isActionMenuKeyboardMode;     // ActionMenu keyboard mode
     private bool _isCardKeyboardMode;
     
@@ -39,25 +38,16 @@ public partial class BattleMenu : Control
     
     public override void _Ready()
     {
-        InitialMenuContainer = GetNode<Control>("InitialButtonContainer");
+        BattleCommandMenuContainer = GetNode<Control>("InitialButtonContainer");
         ActionMenuContainer = GetNode<Control>("SecondaryButtonContainer");
-        _originalActionMenuPosition = ActionMenuContainer.GlobalPosition;
-        _originalInitialMenuPosition = InitialMenuContainer.GlobalPosition;
+        _originalMenuPosition = ActionMenuContainer.GlobalPosition;
         
-        GetContainerChildren(InitialMenuContainer);
+        GetContainerChildren(BattleCommandMenuContainer);
         GetContainerChildren(ActionMenuContainer);
+        GetTargetMenuPosition();
+        SetUpActionButtons();
         
-        _actionButtons = new List<TextureButton>();
-        
-        foreach (Node child in ActionMenuContainer.GetChildren())
-        {
-            if (child is TextureButton button)
-            {
-                _actionButtons.Add(button);
-            }
-        }
-        
-        ChangeState(MenuState.InitialMenu);
+        ChangeState(MenuState.PlayerTurnStart);
     }
     
     #region Outside Signals
@@ -88,11 +78,11 @@ public partial class BattleMenu : Control
     {
         if (!isCancelledByMouse) return;
         
-        if (_currentMenuState == MenuState.InitialMenu)
+        if (_currentMenuState == MenuState.BattleCommandMenu)
         {
-            _isInitialMenuKeyboardMode = false;
+            _isBattleCommandMenuKeyboardMode = false;
             
-            ReleaseFocusFromContainer(InitialMenuContainer);
+            ReleaseFocusFromContainer(BattleCommandMenuContainer);
         }
         else if (_currentMenuState == MenuState.ActionMenu)
         {
@@ -111,8 +101,8 @@ public partial class BattleMenu : Control
         
         switch (_currentMenuState)
         {
-            case MenuState.InitialMenu:
-                HandleInitialMenuInput();
+            case MenuState.BattleCommandMenu:
+                HandleBattleCommandMenuInput();
                 break;
             case MenuState.ActionMenu:
                 HandleActionMenuInput(uiSelection);
@@ -122,27 +112,26 @@ public partial class BattleMenu : Control
 
     public void ForceMenuToOriginalPositions()
     {
-        _menuTween?.Kill();
+        Tween tween = CreateTween().SetParallel();
         
-        MenuLerp(InitialMenuContainer, _originalInitialMenuPosition, MenuForceExitTween);
-        MenuLerp(ActionMenuContainer, _originalActionMenuPosition, MenuForceExitTween);
-        
-        /// TODO: MAKE AN "INITIALIZE" STATE AND AN "EXIT" STATE
-        /// INITIALIZE STATE = INITIAL MENU SHOWS UP
-        /// EXIT STATE = MAKES THE MENUS HIDE OFFSCREEN (SHOULD BE THIS)
+        MenuLerp(BattleCommandMenuContainer, _originalMenuPosition, MenuForceExitTween, tween);
+        MenuLerp(ActionMenuContainer, _originalMenuPosition, MenuForceExitTween, tween);
     }
     #endregion
 
     #region State Machine and States
 
-    private void ChangeState(MenuState newState)
+    public void ChangeState(MenuState newState)
     {
         _currentMenuState = newState;
         
         switch (_currentMenuState)
         {
-            case MenuState.InitialMenu:
-                EnterInitialMenu();
+            case MenuState.PlayerTurnStart:
+                BattleCommandInitialAppear();
+                break;
+            case MenuState.BattleCommandMenu:
+                EnterBattleCommandMenu();
                 break;
             case MenuState.Swapping:
                 SwapTheMenus();
@@ -150,21 +139,37 @@ public partial class BattleMenu : Control
             case MenuState.ActionMenu:
                 EnterSecondaryMenu();
                 break;
+            case MenuState.PlayerTurnEnd:
+                ForceMenuToOriginalPositions();
+                break;
         }
     }
-    
-    private void EnterInitialMenu()
+
+    private async void BattleCommandInitialAppear()
     {
-        InitialMenuContainer.Visible = true;
+        await ToSignal(GetTree().CreateTimer(0.5f), SceneTreeTimer.SignalName.Timeout);
+        
+        Tween tween = CreateTween();
+        
+        tween.TweenProperty(BattleCommandMenuContainer, "global_position:y", _targetMenuPositionY, MenuSwapTween)
+            .SetTrans(Tween.TransitionType.Quint)
+            .SetEase(Tween.EaseType.Out);
+        
+        ChangeState(MenuState.BattleCommandMenu);
+    }
+    
+    private void EnterBattleCommandMenu()
+    {
+        BattleCommandMenuContainer.Visible = true;
         ActionMenuContainer.Visible = false;
         
-        GrabFocusOnButton(InitialMenuContainer, InitialFocusButton);
+        GrabFocusOnButton(BattleCommandMenuContainer, InitialFocusButton);
     }
     
     private void EnterSecondaryMenu()
     {
         ActionMenuContainer.Visible = true;
-        InitialMenuContainer.Visible = false;
+        BattleCommandMenuContainer.Visible = false;
         
         SetMenuButtonsEnabled(ActionMenuContainer, false);
         
@@ -174,23 +179,20 @@ public partial class BattleMenu : Control
     
     private void SwapTheMenus()
     {
-        Vector2 initialMenuPos = InitialMenuContainer.Position;
+        Vector2 battleCommandMenuPos = BattleCommandMenuContainer.Position;
         Vector2 actionMenuPos = ActionMenuContainer.Position;
-
-        _menuTween?.Kill();
         
-        if (_targetMenuState == MenuState.InitialMenu)
-        {
-            ActionMenuState?.Invoke(false);
-        }
+        if (_targetMenuState == MenuState.BattleCommandMenu) ActionMenuState?.Invoke(false);
         
-        InitialMenuContainer.Visible = true;
+        BattleCommandMenuContainer.Visible = true;
         ActionMenuContainer.Visible = true;
-        
-        MenuLerp(InitialMenuContainer, actionMenuPos, MenuSwapTween);
-        MenuLerp(ActionMenuContainer, initialMenuPos, MenuSwapTween);
 
-        _menuTween.Finished += OnSwapMenuTweenFinished;
+        Tween tween = CreateTween().SetParallel();
+        
+        MenuLerp(BattleCommandMenuContainer, actionMenuPos, MenuSwapTween, tween);
+        MenuLerp(ActionMenuContainer, battleCommandMenuPos, MenuSwapTween, tween);
+
+        tween.Finished += OnSwapMenuTweenFinished;
     }
 
     #endregion
@@ -205,8 +207,8 @@ public partial class BattleMenu : Control
             ActionMenuState?.Invoke(true);
         }
 
-        (InitialMenuContainer.ZIndex, ActionMenuContainer.ZIndex) =
-        (ActionMenuContainer.ZIndex, InitialMenuContainer.ZIndex);
+        (BattleCommandMenuContainer.ZIndex, ActionMenuContainer.ZIndex) =
+        (ActionMenuContainer.ZIndex, BattleCommandMenuContainer.ZIndex);
 
         ChangeState(_targetMenuState);
     }
@@ -230,12 +232,12 @@ public partial class BattleMenu : Control
         
         switch (_currentMenuState)
         {
-            case MenuState.InitialMenu when action == ActionType.Moves:
+            case MenuState.BattleCommandMenu when action == ActionType.Moves:
                 _targetMenuState = MenuState.ActionMenu;
                 ChangeState(MenuState.Swapping);
                 break;
             case MenuState.ActionMenu when action == ActionType.Block:
-                _targetMenuState = MenuState.InitialMenu;
+                _targetMenuState = MenuState.BattleCommandMenu;
                 ChangeState(MenuState.Swapping);
                 break;
         }
@@ -245,9 +247,9 @@ public partial class BattleMenu : Control
     {
         switch (_currentMenuState)
         {
-            case MenuState.InitialMenu:
-                _isInitialMenuKeyboardMode = false;
-                ReleaseFocusFromContainer(InitialMenuContainer);
+            case MenuState.BattleCommandMenu:
+                _isBattleCommandMenuKeyboardMode = false;
+                ReleaseFocusFromContainer(BattleCommandMenuContainer);
                 break;
             case MenuState.ActionMenu:
                 _isCardKeyboardMode = false;
@@ -277,7 +279,26 @@ public partial class BattleMenu : Control
             }
         }
     }
+
+    private void SetUpActionButtons()
+    {
+        _actionButtons = new List<TextureButton>();
         
+        foreach (Node child in ActionMenuContainer.GetChildren())
+        {
+            if (child is TextureButton button) _actionButtons.Add(button);
+        }
+    }
+    
+    private void GetTargetMenuPosition()
+    {
+        Rect2 visibleRect = GetViewport().GetVisibleRect();
+        float menuHeight = BattleCommandMenuContainer.GetRect().Size.Y;
+        
+        float screenBottomY = visibleRect.Position.Y + visibleRect.Size.Y;
+        _targetMenuPositionY = screenBottomY - menuHeight;
+    }
+    
     private static void GrabFocusOnButton(Control container, string buttonName)
     {
         foreach (Node child in container.GetChildren())
@@ -349,12 +370,12 @@ public partial class BattleMenu : Control
 
     #region Input Handling
 
-    private void HandleInitialMenuInput()
+    private void HandleBattleCommandMenuInput()
     {
-        if (!_isInitialMenuKeyboardMode)
+        if (!_isBattleCommandMenuKeyboardMode)
         {
-            _isInitialMenuKeyboardMode = true;
-            GrabFocusOnButton(InitialMenuContainer, InitialFocusButton);
+            _isBattleCommandMenuKeyboardMode = true;
+            GrabFocusOnButton(BattleCommandMenuContainer, InitialFocusButton);
         }
     }
     
@@ -394,11 +415,9 @@ public partial class BattleMenu : Control
         }
     }
     
-    private void MenuLerp(Control buttonContainer, Vector2 finalPos, float duration)
+    private void MenuLerp(Control buttonContainer, Vector2 finalPos, float duration, Tween tween)
     {
-        _menuTween = CreateTween();
-        
-        _menuTween.TweenProperty(buttonContainer, "position", finalPos, duration)
+        tween.TweenProperty(buttonContainer, "position", finalPos, duration)
             .SetTrans(Tween.TransitionType.Quint)
             .SetEase(Tween.EaseType.Out);
     }
