@@ -8,10 +8,11 @@
 [ext_resource type="BitMap" uid="uid://u6uresi6h72" path="res://assets/sprites/battle_menu_sidebutton_click_mask.tres" id="4_6cr2r"]
 [ext_resource type="FontFile" uid="uid://bgbwt5redqcht" path="res://assets/fonts/Kragx-XGR79.ttf" id="5_xdl0l"]
 [ext_resource type="BitMap" uid="uid://fp2x2eixx3oq" path="res://assets/sprites/battle_menu_middlebutton_click_mask.tres" id="6_rlk1y"]
+[ext_resource type="Script" uid="uid://dt43j38chkxs7" path="res://scripts/ui/ActionButton.cs" id="6_rstu5"]
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=1663848318]
 
-[node name="BattleMenu" type="Control" parent="." unique_id=1313041352]
+[node name="BattleMenu" type="Control" parent="." unique_id=1313041352 node_paths=PackedStringArray("BattleCommandMenuContainer", "ActionMenuContainer")]
 layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
@@ -25,8 +26,10 @@ offset_bottom = 313.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("3_luyfx")
+BattleCommandMenuContainer = NodePath("BattleCommandButtonContainer")
+ActionMenuContainer = NodePath("ActionMenuButtonContainer")
 
-[node name="InitialButtonContainer" type="Control" parent="BattleMenu" unique_id=1652206944]
+[node name="BattleCommandButtonContainer" type="Control" parent="BattleMenu" unique_id=1652206944]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -40,7 +43,7 @@ offset_bottom = -0.9998474
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="BackgroundPanel" type="Panel" parent="BattleMenu/InitialButtonContainer" unique_id=468300506]
+[node name="BackgroundPanel" type="Panel" parent="BattleMenu/BattleCommandButtonContainer" unique_id=468300506]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 7
@@ -55,7 +58,7 @@ offset_bottom = -1.0001526
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="BackgroundPanelTexture" type="TextureRect" parent="BattleMenu/InitialButtonContainer/BackgroundPanel" unique_id=1110789496]
+[node name="BackgroundPanelTexture" type="TextureRect" parent="BattleMenu/BattleCommandButtonContainer/BackgroundPanel" unique_id=1110789496]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -67,7 +70,7 @@ texture = ExtResource("1_dx6n2")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="BackgroundPanelGlowOverlay" type="TextureRect" parent="BattleMenu/InitialButtonContainer/BackgroundPanel" unique_id=2058424052]
+[node name="BackgroundPanelGlowOverlay" type="TextureRect" parent="BattleMenu/BattleCommandButtonContainer/BackgroundPanel" unique_id=2058424052]
 z_index = 1
 layout_mode = 1
 anchors_preset = 15
@@ -83,7 +86,7 @@ texture = ExtResource("1_j6r35")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="SwitchButton" type="TextureButton" parent="BattleMenu/InitialButtonContainer" unique_id=1056024126]
+[node name="SwitchButton" type="TextureButton" parent="BattleMenu/BattleCommandButtonContainer" unique_id=1056024126]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.20500001
@@ -101,8 +104,9 @@ texture_click_mask = ExtResource("4_6cr2r")
 ignore_texture_size = true
 stretch_mode = 4
 flip_h = true
+script = ExtResource("6_rstu5")
 
-[node name="Switch" type="Label" parent="BattleMenu/InitialButtonContainer/SwitchButton" unique_id=1632230722]
+[node name="Switch" type="Label" parent="BattleMenu/BattleCommandButtonContainer/SwitchButton" unique_id=1632230722]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.49500003
@@ -119,7 +123,7 @@ theme_override_fonts/font = ExtResource("5_xdl0l")
 theme_override_font_sizes/font_size = 24
 text = "Switch"
 
-[node name="RunButton" type="TextureButton" parent="BattleMenu/InitialButtonContainer" unique_id=1086765727]
+[node name="RunButton" type="TextureButton" parent="BattleMenu/BattleCommandButtonContainer" unique_id=1086765727]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.79
@@ -136,8 +140,10 @@ texture_focused = ExtResource("3_pbjb5")
 texture_click_mask = ExtResource("4_6cr2r")
 ignore_texture_size = true
 stretch_mode = 4
+script = ExtResource("6_rstu5")
+Action = 2
 
-[node name="Run" type="Label" parent="BattleMenu/InitialButtonContainer/RunButton" unique_id=1663893831]
+[node name="Run" type="Label" parent="BattleMenu/BattleCommandButtonContainer/RunButton" unique_id=1663893831]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.504
@@ -154,7 +160,7 @@ theme_override_fonts/font = ExtResource("5_xdl0l")
 theme_override_font_sizes/font_size = 24
 text = "Run"
 
-[node name="MovesButton" type="TextureButton" parent="BattleMenu/InitialButtonContainer" unique_id=140088613]
+[node name="MovesButton" type="TextureButton" parent="BattleMenu/BattleCommandButtonContainer" unique_id=140088613]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -171,8 +177,10 @@ texture_focused = ExtResource("4_2u76h")
 texture_click_mask = ExtResource("6_rlk1y")
 ignore_texture_size = true
 stretch_mode = 4
+script = ExtResource("6_rstu5")
+Action = 1
 
-[node name="Moves" type="Label" parent="BattleMenu/InitialButtonContainer/MovesButton" unique_id=492723281]
+[node name="Moves" type="Label" parent="BattleMenu/BattleCommandButtonContainer/MovesButton" unique_id=492723281]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.49800003
@@ -189,8 +197,7 @@ theme_override_fonts/font = ExtResource("5_xdl0l")
 theme_override_font_sizes/font_size = 30
 text = "Moves"
 
-[node name="SecondaryButtonContainer" type="Control" parent="BattleMenu" unique_id=155882363]
-visible = false
+[node name="ActionMenuButtonContainer" type="Control" parent="BattleMenu" unique_id=155882363]
 z_index = 2
 layout_mode = 1
 anchors_preset = 7
@@ -205,7 +212,7 @@ offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="BackgroundPanel" type="Panel" parent="BattleMenu/SecondaryButtonContainer" unique_id=564868484]
+[node name="BackgroundPanel" type="Panel" parent="BattleMenu/ActionMenuButtonContainer" unique_id=564868484]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 7
@@ -220,7 +227,7 @@ offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="BackgroundPanelTexture" type="TextureRect" parent="BattleMenu/SecondaryButtonContainer/BackgroundPanel" unique_id=1387349911]
+[node name="BackgroundPanelTexture" type="TextureRect" parent="BattleMenu/ActionMenuButtonContainer/BackgroundPanel" unique_id=1387349911]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -232,7 +239,7 @@ texture = ExtResource("1_dx6n2")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="BackgroundPanelGlowOverlay" type="TextureRect" parent="BattleMenu/SecondaryButtonContainer/BackgroundPanel" unique_id=72076875]
+[node name="BackgroundPanelGlowOverlay" type="TextureRect" parent="BattleMenu/ActionMenuButtonContainer/BackgroundPanel" unique_id=72076875]
 z_index = 1
 layout_mode = 1
 anchors_preset = 15
@@ -248,7 +255,7 @@ texture = ExtResource("1_j6r35")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="BlockButton" type="TextureButton" parent="BattleMenu/SecondaryButtonContainer" unique_id=1073432444]
+[node name="BlockButton" type="TextureButton" parent="BattleMenu/ActionMenuButtonContainer" unique_id=1073432444]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.20500001
@@ -266,8 +273,10 @@ texture_click_mask = ExtResource("4_6cr2r")
 ignore_texture_size = true
 stretch_mode = 4
 flip_h = true
+script = ExtResource("6_rstu5")
+Action = 3
 
-[node name="Block" type="Label" parent="BattleMenu/SecondaryButtonContainer/BlockButton" unique_id=964471309]
+[node name="Block" type="Label" parent="BattleMenu/ActionMenuButtonContainer/BlockButton" unique_id=964471309]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -284,7 +293,7 @@ theme_override_fonts/font = ExtResource("5_xdl0l")
 theme_override_font_sizes/font_size = 24
 text = "	BLOCK"
 
-[node name="EvadeButton" type="TextureButton" parent="BattleMenu/SecondaryButtonContainer" unique_id=1649469184]
+[node name="EvadeButton" type="TextureButton" parent="BattleMenu/ActionMenuButtonContainer" unique_id=1649469184]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.79
@@ -301,8 +310,10 @@ texture_focused = ExtResource("3_pbjb5")
 texture_click_mask = ExtResource("4_6cr2r")
 ignore_texture_size = true
 stretch_mode = 4
+script = ExtResource("6_rstu5")
+Action = 5
 
-[node name="Evade" type="Label" parent="BattleMenu/SecondaryButtonContainer/EvadeButton" unique_id=1315730494]
+[node name="Evade" type="Label" parent="BattleMenu/ActionMenuButtonContainer/EvadeButton" unique_id=1315730494]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -319,7 +330,7 @@ theme_override_fonts/font = ExtResource("5_xdl0l")
 theme_override_font_sizes/font_size = 24
 text = "Evade"
 
-[node name="AttackButton" type="TextureButton" parent="BattleMenu/SecondaryButtonContainer" unique_id=279704888]
+[node name="AttackButton" type="TextureButton" parent="BattleMenu/ActionMenuButtonContainer" unique_id=279704888]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -336,8 +347,10 @@ texture_focused = ExtResource("4_2u76h")
 texture_click_mask = ExtResource("6_rlk1y")
 ignore_texture_size = true
 stretch_mode = 4
+script = ExtResource("6_rstu5")
+Action = 4
 
-[node name="Attack" type="Label" parent="BattleMenu/SecondaryButtonContainer/AttackButton" unique_id=1617715370]
+[node name="Attack" type="Label" parent="BattleMenu/ActionMenuButtonContainer/AttackButton" unique_id=1617715370]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.49600002

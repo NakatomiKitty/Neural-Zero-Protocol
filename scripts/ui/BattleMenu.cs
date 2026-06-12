@@ -2,10 +2,10 @@ using System;
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
+// ReSharper disable All
 
 namespace NeuralZeroProtocol.Scripts.Ui;
 
-public enum ActionType { Switch, Moves, Run, Block, Attack, Evade }
 public enum MenuState { PlayerTurnStart, BattleCommandMenu, Swapping, ActionMenu, PlayerTurnEnd }
 
 public partial class BattleMenu : Control
@@ -14,8 +14,8 @@ public partial class BattleMenu : Control
     public event Action<bool> ActionMenuState;
     public event Action MoveToCardSystem;
     
-    public Control ActionMenuContainer;
-    public Control BattleCommandMenuContainer;
+    [Export] public Control BattleCommandMenuContainer;
+    [Export] public Control ActionMenuContainer;
     private Vector2 _originalMenuPosition;
     private float _targetMenuPositionY;
     
@@ -28,7 +28,7 @@ public partial class BattleMenu : Control
     private MenuState _currentMenuState;
     private MenuState _targetMenuState;
     
-    private List<TextureButton> _actionButtons;
+    private List<TextureButton> _actionMenuButtons;
     
     private bool _isBattleCommandMenuKeyboardMode;    // BattleCommandMenu keyboard mode
     private bool _isActionMenuKeyboardMode;     // ActionMenu keyboard mode
@@ -38,15 +38,12 @@ public partial class BattleMenu : Control
     
     public override void _Ready()
     {
-        BattleCommandMenuContainer = GetNode<Control>("InitialButtonContainer");
-        ActionMenuContainer = GetNode<Control>("SecondaryButtonContainer");
         _originalMenuPosition = ActionMenuContainer.GlobalPosition;
+        _actionMenuButtons = new List<TextureButton>();
         
         GetContainerChildren(BattleCommandMenuContainer);
         GetContainerChildren(ActionMenuContainer);
         GetTargetMenuPosition();
-        SetUpActionButtons();
-        
         ChangeState(MenuState.PlayerTurnStart);
     }
     
@@ -192,7 +189,7 @@ public partial class BattleMenu : Control
         MenuLerp(BattleCommandMenuContainer, actionMenuPos, MenuSwapTween, tween);
         MenuLerp(ActionMenuContainer, battleCommandMenuPos, MenuSwapTween, tween);
 
-        tween.Finished += OnSwapMenuTweenFinished;
+        tween.Connect(Tween.SignalName.Finished, new Callable(this, MethodName.OnSwapMenuTweenFinished));
     }
 
     #endregion
@@ -213,20 +210,11 @@ public partial class BattleMenu : Control
         ChangeState(_targetMenuState);
     }
     
-    private void OnAnyButtonPressed(TextureButton button)
+    private void OnAnyButtonPressed(ActionButton button)
     {
         if (_currentMenuState == MenuState.Swapping) return;
-        
-        ActionType action = button.Name.ToString() switch
-        {
-            "SwitchButton" => ActionType.Switch,
-            "MovesButton"  => ActionType.Moves,
-            "RunButton"    => ActionType.Run,
-            "BlockButton"  => ActionType.Block,
-            "AttackButton" => ActionType.Attack,
-            "EvadeButton"  => ActionType.Evade,
-            _ => ActionType.Moves
-        };
+
+        ActionType action = button.Action;
         
         EmitSignal(SignalName.ActionSelected, (int)action);
         
@@ -272,23 +260,16 @@ public partial class BattleMenu : Control
     {
         foreach (Node child in container.GetChildren())
         {
-            if (child is TextureButton button)
+            if (child is ActionButton button)
             {
-                button.Pressed += () => OnAnyButtonPressed(button);
-                button.MouseEntered += () => OnAnyButtonHovered(button);
+                button.Connect(TextureButton.SignalName.Pressed, Callable.From(() => OnAnyButtonPressed(button)));
+                button.Connect(TextureButton.SignalName.MouseEntered, Callable.From(() => OnAnyButtonHovered(button)));
+                
+                if (container == ActionMenuContainer) _actionMenuButtons.Add(button);
             }
         }
     }
-
-    private void SetUpActionButtons()
-    {
-        _actionButtons = new List<TextureButton>();
-        
-        foreach (Node child in ActionMenuContainer.GetChildren())
-        {
-            if (child is TextureButton button) _actionButtons.Add(button);
-        }
-    }
+    
     
     private void GetTargetMenuPosition()
     {
@@ -343,18 +324,18 @@ public partial class BattleMenu : Control
     
     private void SetupActionMenuFocusNeighbors()
     {
-        if (_actionButtons.Count < 2) return;
+        if (_actionMenuButtons.Count < 2) return;
         
-        _actionButtons.Sort((a,b) => a.GlobalPosition.X.CompareTo(b.GlobalPosition.X));
+        _actionMenuButtons.Sort((a,b) => a.GlobalPosition.X.CompareTo(b.GlobalPosition.X));
         
-        for (int i = 0; i < _actionButtons.Count; i++)
+        for (int i = 0; i < _actionMenuButtons.Count; i++)
         {
-            TextureButton button = _actionButtons[i];
-            int leftIndex = WrapIndex(i - 1, _actionButtons.Count);
-            int rightIndex = WrapIndex(i + 1, _actionButtons.Count);
+            TextureButton button = _actionMenuButtons[i];
+            int leftIndex = WrapIndex(i - 1, _actionMenuButtons.Count);
+            int rightIndex = WrapIndex(i + 1, _actionMenuButtons.Count);
             
-            button.FocusNeighborLeft  = _actionButtons[leftIndex].GetPath();
-            button.FocusNeighborRight = _actionButtons[rightIndex].GetPath();
+            button.FocusNeighborLeft  = _actionMenuButtons[leftIndex].GetPath();
+            button.FocusNeighborRight = _actionMenuButtons[rightIndex].GetPath();
             
             // ignore this
             button.FocusNeighborTop   = button.GetPath();
@@ -364,7 +345,7 @@ public partial class BattleMenu : Control
     
     private static int WrapIndex(int index, int count) => (index + count) % count;
     
-    private TextureButton GetFocusedButton() => _actionButtons.FirstOrDefault(button => button.HasFocus());
+    private TextureButton GetFocusedButton() => _actionMenuButtons.FirstOrDefault(button => button.HasFocus());
 
     #endregion
 
