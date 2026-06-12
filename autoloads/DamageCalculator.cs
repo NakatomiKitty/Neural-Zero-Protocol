@@ -11,6 +11,7 @@ namespace NeuralZeroProtocol.Autoloads;
 /// All methods are static, this means THIS IS STRICTLY A MATH FUNCTION CLASS!
 /// </summary>
 
+// TODO: REMOVE FROM AUTOLOAD AND MAKE THIS A STATIC CLASS
 public partial class DamageCalculator : Node
 {
     private static readonly Random Random = new();

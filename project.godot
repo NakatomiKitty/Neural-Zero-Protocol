@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="Neural Zero: Protocol"
-run/main_scene="uid://csskkm0o5fsuy"
+run/main_scene="uid://cdk27rxcby8ld"
 config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 DamageCalculator="*uid://bedk7yh6f4dkd"
+SceneTimer="*uid://w1giwgd75n4s"
 
 [display]
 

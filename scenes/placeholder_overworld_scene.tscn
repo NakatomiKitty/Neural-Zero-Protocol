@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cdk27rxcby8ld"]
+
+[ext_resource type="Script" uid="uid://ct5o3oda3jur8" path="res://scripts/placeholder/PlaceholderOverworldButton.cs" id="1_wsk6a"]
+
+[node name="Button" type="Button" unique_id=150017861]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -68.0
+offset_right = 192.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Go To Battle"
+script = ExtResource("1_wsk6a")
