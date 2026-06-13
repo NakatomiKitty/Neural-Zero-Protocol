@@ -34,12 +34,6 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
         public override void _Ready()
         {
-            float designWidth = 1152f;
-            
-            float scale = GetViewport().GetVisibleRect().Size.X / designWidth;
-            
-            Scale = new Vector2(scale, scale);
-            
             CardSelectionController.SelectionChanged += OnSelectionChanged;
             CardSelectionController.KeyboardHoveredCardChanged += OnKeyboardHoveredCardReceived;
             CardSelectionController.CurrentSelectedCardChanged += OnCurrentSelectedCardChanged;
@@ -91,7 +85,6 @@ namespace NeuralZeroProtocol.Scripts.Cards
         {
             CardHoverController.ExitCardSelection();
             CardHoverController.ClearKeyboardHover();
-            
         }
         
         private void OnSelectionChanged(Card oldCard, Card newCard)
@@ -140,6 +133,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
         }
         public override void _ExitTree()
         {
+            _ = ClearCardRegistry();
             CardSelectionController.SelectionChanged -= OnSelectionChanged;
             CardSelectionController.SwappingStateChanged -= CardHoverController.OnSwappingStateChanged;
             CardSelectionController.KeyboardHoveredCardChanged -= OnKeyboardHoveredCardReceived;

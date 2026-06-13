@@ -99,7 +99,7 @@ public partial class CardHoverController : Node
 		if (_isSwapping) return;
 		if (card == _keyboardHoveredCard) return;
 		if (card == _selectedCard) return;   // Never hover the selected card
-
+		
 		_cardsUnderMouse.Add(card);
 		UpdateHoverEffect();
 	}

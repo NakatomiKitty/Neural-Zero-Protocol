@@ -128,8 +128,8 @@ public sealed partial class CardSelectionController : Node2D
     {
         ApplyVisualState(_centerCard, false);
     }
-    
-    public void DeselectCard()
+
+    private void DeselectCard()
     {
         if (_selectedCard == null) return;
 
@@ -152,8 +152,7 @@ public sealed partial class CardSelectionController : Node2D
                 SwappingStateChanged?.Invoke(true);
                 break;
             default:
-                if (_state != CardSelectionState.SwapTheCards)
-                    SwappingStateChanged?.Invoke(false);
+                if (_state != CardSelectionState.SwapTheCards) SwappingStateChanged?.Invoke(false);
                 break;
         }
     }
