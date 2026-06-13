@@ -13,8 +13,9 @@ public enum MenuState { PlayerTurnStart, BattleCommandMenu, Swapping, ActionMenu
 public partial class BattleMenu : Control
 {
     [Signal] public delegate void ActionSelectedEventHandler(int actionType);
-    public event Action<bool> ActionMenuState;
-    public event Action MoveToCardSystem;
+    public event Action<bool> ActionMenuStateChanged;
+    public event Action RequestingCardBorderRemoval;
+    public event Action MovingToCardSystem;
     
     [Export] public Control BattleCommandMenuContainer;
     [Export] public Control ActionMenuContainer;
@@ -183,7 +184,7 @@ public partial class BattleMenu : Control
         Vector2 battleCommandMenuPos = BattleCommandMenuContainer.Position;
         Vector2 actionMenuPos = ActionMenuContainer.Position;
         
-        if (_targetMenuState == MenuState.BattleCommandMenu) ActionMenuState?.Invoke(false);
+        if (_targetMenuState == MenuState.BattleCommandMenu) ActionMenuStateChanged?.Invoke(false);
         
         BattleCommandMenuContainer.Visible = true;
         ActionMenuContainer.Visible = true;
@@ -205,7 +206,7 @@ public partial class BattleMenu : Control
         if (_currentMenuState != MenuState.Swapping) return;
         if (_targetMenuState == MenuState.ActionMenu)
         {
-            ActionMenuState?.Invoke(true);
+            ActionMenuStateChanged?.Invoke(true);
         }
 
         (BattleCommandMenuContainer.ZIndex, ActionMenuContainer.ZIndex) =
@@ -228,7 +229,8 @@ public partial class BattleMenu : Control
                 _targetMenuState = MenuState.ActionMenu;
                 ChangeState(MenuState.Swapping);
                 break;
-            case MenuState.ActionMenu when action == ActionType.Block:
+            case MenuState.ActionMenu when action == ActionType.Block: // TODO: ADD PROPER BACK BUTTON 
+                RequestingCardBorderRemoval?.Invoke();
                 _targetMenuState = MenuState.BattleCommandMenu;
                 ChangeState(MenuState.Swapping);
                 break;
@@ -380,19 +382,24 @@ public partial class BattleMenu : Control
         if (uiSelection == UiSelection.Up)
         {
             SetMenuButtonsEnabled(ActionMenuContainer, false);
-            MoveToCardSystem?.Invoke();
+            MovingToCardSystem?.Invoke();
             return;
         }
 
-        if (!_isActionMenuKeyboardMode)
-        {
-            FocusOnAttackButton();
-        }
+        if (!_isActionMenuKeyboardMode) FocusOnAttackButton();
         
         if (uiSelection == UiSelection.Confirm && GetFocusedButton() is { } focused)
         {
             focused.EmitSignal(BaseButton.SignalName.Pressed);
         }
+
+        if (uiSelection == UiSelection.Cancel && GetFocusedButton() is { })
+        {
+            RequestingCardBorderRemoval?.Invoke();
+            _targetMenuState = MenuState.BattleCommandMenu;
+            ChangeState(MenuState.Swapping);
+        }
+
     }
 
     #endregion

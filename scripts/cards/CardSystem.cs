@@ -87,7 +87,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
         private void OnCurrentSelectedCardChanged(Card centerCard) => _centerCard = centerCard;
         private void OnKeyboardHoveredCardReceived(Card card) => CardHoverController.KeyboardHover(card);
         
-        private void OnKeyboardModeDeactivated()
+        public void OnKeyboardModeDeactivated()
         {
             CardHoverController.ExitCardSelection();
             CardHoverController.ClearKeyboardHover();

@@ -38,8 +38,9 @@ public partial class BattleScene : Node2D
         
         CardSystem.Visible = false;
         TurnManager.StartBattle += OnBattleStart;
-        BattleMenu.ActionMenuState += OnActionMenuState;
-        BattleMenu.MoveToCardSystem += CardSystem.OnMoveToCardSystem;
+        BattleMenu.RequestingCardBorderRemoval += CardSystem.OnKeyboardModeDeactivated;
+        BattleMenu.ActionMenuStateChanged += OnActionMenuStateChanged;
+        BattleMenu.MovingToCardSystem += CardSystem.OnMoveToCardSystem;
         
         CardSystem.CardSelectionController.CurrentSelectedCardChanged += CombatStateMachine.CharacterAttackHandler.SetCurrentSelectedCard;
         CardSystem.CardSelectionController.KeyboardModeCancelled += BattleMenu.OnKeyboardModeCancelled;
@@ -67,7 +68,7 @@ public partial class BattleScene : Node2D
         CombatStateMachine.StartBattle();
     }
 
-    private void OnActionMenuState(bool isTrue)
+    private void OnActionMenuStateChanged(bool isTrue)
     {
         float offset = isTrue ? -32 : 32;
         if (!isTrue) CardSystem.CardSelectionController.DeselectCenterCard();
@@ -114,7 +115,7 @@ public partial class BattleScene : Node2D
     {
         // Removes the border
         CardSystem.CardHoverController.ExitCardSelection();
-        OnActionMenuState(false);
+        OnActionMenuStateChanged(false);
         BattleMenu.ChangeState(MenuState.PlayerTurnEnd);
         
         Card clonedCenterCard = CardSystem.DuplicateCenterCard();
@@ -157,8 +158,8 @@ public partial class BattleScene : Node2D
     public override void _ExitTree()
     {
         TurnManager.StartBattle -= OnBattleStart;
-        BattleMenu.ActionMenuState -= OnActionMenuState;
-        BattleMenu.MoveToCardSystem -= CardSystem.OnMoveToCardSystem;
+        BattleMenu.ActionMenuStateChanged -= OnActionMenuStateChanged;
+        BattleMenu.MovingToCardSystem -= CardSystem.OnMoveToCardSystem;
         
         CardSystem.CardSelectionController.CurrentSelectedCardChanged -= CombatStateMachine.CharacterAttackHandler.SetCurrentSelectedCard;
         CardSystem.CardSelectionController.KeyboardModeCancelled -= BattleMenu.OnKeyboardModeCancelled;
