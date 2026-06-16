@@ -4,152 +4,146 @@ using Godot;
 using Godot.Collections;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
-// ReSharper disable All
 
-namespace NeuralZeroProtocol.Scripts.Cards
+namespace NeuralZeroProtocol.Scripts.Cards;
+
+/// <summary>
+/// Main hub for everything card related
+/// I really need to name things better
+/// </summary>
+[Scene]
+public partial class CardSystem : Node2D
 {
-    /// <summary>
-    /// Main hub for everything card related
-    /// I really need to name things better
-    /// </summary>
+    private static readonly PackedScene Card = GD.Load<PackedScene>("res://scenes/card.tscn");
+    public const int HoverZ = 11;
+    public const int SelectedZ = 10;
     
-    [Scene]
-    public partial class CardSystem : Node2D
+    [Node] public CardHand CardHand;
+    [Node] public CardHoverController CardHoverController;
+    [Node] public CardSelectionController CardSelectionController;
+    [Node] public CardBorderController CardBorderController;
+    
+    private Dictionary<Card, int> _originalZIndexes = new();
+    private Dictionary<Card, Vector2> _cardBasePositions = new();
+    private Card _centerCard;
+    
+    public override void _Notification(int what)
     {
-        private static readonly PackedScene Card = GD.Load<PackedScene>("res://scenes/card.tscn");
+        if (what == NotificationSceneInstantiated) WireNodes();
+    }
+
+    public override void _Ready()
+    {
+        CardSelectionController.SelectionChanged += OnSelectionChanged;
+        CardSelectionController.KeyboardHoveredCardChanged += OnKeyboardHoveredCardReceived;
+        CardSelectionController.CurrentSelectedCardChanged += OnCurrentSelectedCardChanged;
+        CardSelectionController.SwappingStateChanged += CardHoverController.OnSwappingStateChanged;
+        CardSelectionController.KeyboardModeDeactivated += OnKeyboardModeDeactivated;
         
-        public const int HoverZ = 11;
-        public const int SelectedZ = 10;
+        CardHoverController.EnterCardSelection += CardBorderController.OnEnterCardSelection;
+        CardHoverController.ExitCardSelection += CardBorderController.OnExitCardSelection;
+        CardHoverController.ApplyBorderEffect += CardBorderController.OnApplyBorderEffect;
         
-        [Node] public CardHand CardHand;
-        [Node] public CardHoverController CardHoverController;
-        [Node] public CardSelectionController CardSelectionController;
-        [Node] public CardBorderController CardBorderController;
+        CardHand.CardAdded += ConnectCardSignals;
+    }
 
-        private Dictionary<Card, int> _originalZIndexes = new();
-        private Dictionary<Card, Vector2> _cardBasePositions = new();
-        private Card _centerCard;
-        public override void _Notification(int what)
-        {
-            if (what == NotificationSceneInstantiated) WireNodes();
-        }
+    public override void _ExitTree()
+    {
+        _ = ClearCardRegistry();
 
-        public override void _Ready()
-        {
-            CardSelectionController.SelectionChanged += OnSelectionChanged;
-            CardSelectionController.KeyboardHoveredCardChanged += OnKeyboardHoveredCardReceived;
-            CardSelectionController.CurrentSelectedCardChanged += OnCurrentSelectedCardChanged;
-            CardSelectionController.SwappingStateChanged += CardHoverController.OnSwappingStateChanged;
-            CardSelectionController.KeyboardModeDeactivated += OnKeyboardModeDeactivated;
-            
-            CardHoverController.EnterCardSelection += CardBorderController.OnEnterCardSelection;
-            CardHoverController.ExitCardSelection += CardBorderController.OnExitCardSelection;
-            CardHoverController.ApplyBorderEffect += CardBorderController.OnApplyBorderEffect;
-            
-            CardHand.CardAdded += ConnectCardSignals;
-        }
+        CardSelectionController.SelectionChanged -= OnSelectionChanged;
+        CardSelectionController.SwappingStateChanged -= CardHoverController.OnSwappingStateChanged;
+        CardSelectionController.KeyboardHoveredCardChanged -= OnKeyboardHoveredCardReceived;
+        CardSelectionController.KeyboardModeDeactivated -= OnKeyboardModeDeactivated;
 
-        public async Task CreateHandFromMoves(Array<MoveResource> moves)
-        {
-            // First, clears any remaining cards 
-            await ClearCardRegistry();
-            
-            // TODO: ADD A SYSTEM IN THE FUTURE WHERE YOU CAN INCREASE YOUR HAND SIZE
-            // Create the deck while passing down the array
-            Array<Card> cards = CardHand.CreateHandFromCurve(5, Card, moves);
-            
-            foreach (Card card in cards)
-            {
-                _cardBasePositions[card] = card.Position;   // store position after layout
-                _originalZIndexes[card] = card.ZIndex;      // store ZIndex after assignment
-            }
-
-            CardHoverController.OriginalZIndexes = _originalZIndexes;
-            CardSelectionController.OriginalZIndexes = _originalZIndexes;
-            CardSelectionController.CardBasePositions = _cardBasePositions;
-            
-            _centerCard = cards[cards.Count / 2];
-            
-            CardSelectionController.SetCenterCard(_centerCard);
-            CardBorderController.SetCenterCard(_centerCard);
-            
-            CardSelectionController.SetCardHand(CardHand.GetChildren());
-        }
-
-        public void OnMoveToCardSystem()
-        {
-            CardHoverController.OnActionMenuClosed();
-            CardSelectionController.MoveToCardSystem();
-        }
-
-        private void ConnectCardSignals(Card card) => ConnectCard(card);
-        
-        private void OnCurrentSelectedCardChanged(Card centerCard) => _centerCard = centerCard;
-        private void OnKeyboardHoveredCardReceived(Card card) => CardHoverController.KeyboardHover(card);
-        
-        public void OnKeyboardModeDeactivated()
-        {
-            CardHoverController.OnActionMenuOpened();
-            CardHoverController.ClearKeyboardHover();
-        }
-        
-        private void OnSelectionChanged(Card oldCard, Card newCard)
-        {
-            if (oldCard != null)
-                CardHoverController.OnCardDeselected();
+        CardHoverController.EnterCardSelection -= CardBorderController.OnEnterCardSelection;
+        CardHoverController.ExitCardSelection -= CardBorderController.OnExitCardSelection;
+        CardHoverController.ApplyBorderEffect -= CardBorderController.OnApplyBorderEffect;
+    }
     
-            if (newCard != null)
-                CardHoverController.OnCardSelected(newCard);
-        }
+    public async Task CreateHandFromMoves(Array<MoveResource> moves)
+    {
+        await ClearCardRegistry();
 
-        private void ConnectCard(Card card)
-		{
-			card.Hovered += CardHoverController.OnHoveredOverCard;
-    		card.NotHovered += CardHoverController.OnHoveredOffCard;
-            card.Clicked += CardSelectionController.OnCardClicked;
-		}
+        Array<Card> cards = CardHand.CreateHandFromCurve(5, Card, moves);
 
-        private async Task ClearCardRegistry()
+        foreach (Card card in cards)
         {
-            Node[] children = CardHand.GetChildren().ToArray();
-            foreach (Card card in children) 
-            {
-                card.Hovered -= CardHoverController.OnHoveredOverCard;
-                card.NotHovered -= CardHoverController.OnHoveredOffCard;
-                card.Clicked -= CardSelectionController.OnCardClicked;
-                card.QueueFree();
-            }
-
-            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            _cardBasePositions[card] = card.Position;
+            _originalZIndexes[card] = card.ZIndex;
         }
 
-        public Card DuplicateCenterCard()
+        CardHoverController.OriginalZIndexes = _originalZIndexes;
+        CardSelectionController.OriginalZIndexes = _originalZIndexes;
+        CardSelectionController.CardBasePositions = _cardBasePositions;
+
+        _centerCard = cards[cards.Count / 2];
+
+        CardSelectionController.SetCenterCard(_centerCard);
+        CardBorderController.SetCenterCard(_centerCard);
+        CardSelectionController.SetCardHand(CardHand.GetChildren());
+    }
+
+    public void OnMoveToCardSystem()
+    {
+        CardHoverController.OnActionMenuClosed();
+        CardSelectionController.MoveToCardSystem();
+    }
+
+    public void OnKeyboardModeDeactivated()
+    {
+        CardHoverController.OnActionMenuOpened();
+        CardHoverController.ClearKeyboardHover();
+    }
+
+    public Card DuplicateCenterCard()
+    {
+        Vector2 clonedCenterGlobalPosition = _centerCard.GlobalPosition;
+        Vector2 clonedCenterGlobalScale = _centerCard.GlobalScale;
+        float clonedCenterRotation = _centerCard.GlobalRotation;
+
+        Card clonedCenterCard = (Card)_centerCard.Duplicate();
+        clonedCenterCard.GlobalPosition = clonedCenterGlobalPosition;
+        clonedCenterCard.GlobalScale = clonedCenterGlobalScale;
+        clonedCenterCard.GlobalRotation = clonedCenterRotation;
+
+        _centerCard.QueueFree();
+        return clonedCenterCard;
+    }
+    
+    private void ConnectCardSignals(Card card) => ConnectCard(card);
+
+    private void ConnectCard(Card card)
+    {
+        card.Hovered += CardHoverController.OnHoveredOverCard;
+        card.NotHovered += CardHoverController.OnHoveredOffCard;
+        card.Clicked += CardSelectionController.OnCardClicked;
+    }
+
+    private async Task ClearCardRegistry()
+    {
+        Node[] children = CardHand.GetChildren().ToArray();
+        foreach (Card card in children)
         {
-            Vector2 clonedCenterGlobalPosition = _centerCard.GlobalPosition;
-            Vector2 clonedCenterGlobalScale = _centerCard.GlobalScale;
-            float clonedCenterRotation = _centerCard.GlobalRotation;
-            
-            Card clonedCenterCard = (Card)_centerCard.Duplicate();
-            
-            clonedCenterCard.GlobalPosition = clonedCenterGlobalPosition;
-            clonedCenterCard.GlobalScale = clonedCenterGlobalScale;
-            clonedCenterCard.GlobalRotation = clonedCenterRotation;
-            
-            _centerCard.QueueFree();
-            
-            return clonedCenterCard;
+            card.Hovered -= CardHoverController.OnHoveredOverCard;
+            card.NotHovered -= CardHoverController.OnHoveredOffCard;
+            card.Clicked -= CardSelectionController.OnCardClicked;
+            card.QueueFree();
         }
-        public override void _ExitTree()
-        {
-            _ = ClearCardRegistry();
-            CardSelectionController.SelectionChanged -= OnSelectionChanged;
-            CardSelectionController.SwappingStateChanged -= CardHoverController.OnSwappingStateChanged;
-            CardSelectionController.KeyboardHoveredCardChanged -= OnKeyboardHoveredCardReceived;
-            CardSelectionController.KeyboardModeDeactivated -= OnKeyboardModeDeactivated;
-            
-            CardHoverController.EnterCardSelection -= CardBorderController.OnEnterCardSelection;
-            CardHoverController.ExitCardSelection -= CardBorderController.OnExitCardSelection;
-            CardHoverController.ApplyBorderEffect -= CardBorderController.OnApplyBorderEffect;
-        }
+
+        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+    }
+    
+    private void OnCurrentSelectedCardChanged(Card centerCard) => _centerCard = centerCard;
+
+    private void OnKeyboardHoveredCardReceived(Card card) => CardHoverController.KeyboardHover(card);
+
+    private void OnSelectionChanged(Card oldCard, Card newCard)
+    {
+        if (oldCard != null)
+            CardHoverController.OnCardDeselected();
+
+        if (newCard != null)
+            CardHoverController.OnCardSelected(newCard);
     }
 }
