@@ -7,10 +7,6 @@ using NeuralZeroProtocol.Scripts.Resources.MoveData;
 
 namespace NeuralZeroProtocol.Scripts.Cards;
 
-/// <summary>
-/// Main hub for everything card related
-/// I really need to name things better
-/// </summary>
 [Scene]
 public partial class CardSystem : Node2D
 {

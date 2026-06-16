@@ -4,10 +4,6 @@ using System.Collections.Generic;
 
 namespace NeuralZeroProtocol.Scripts.Cards;
 
-/// <summary>
-/// Manages hover effects (scale tweening + ZIndex changes) for the cards.
-/// Only the topmost unselected card under the mouse gets the effect.
-/// </summary>
 public partial class CardHoverController : Node
 {
     // State machines

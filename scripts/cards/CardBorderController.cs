@@ -1,7 +1,7 @@
 using Godot;
 using GodotUtilities;
-using NeuralZeroProtocol.Scripts.Cards;
 
+namespace NeuralZeroProtocol.Scripts.Cards;
 [Scene]
 public partial class CardBorderController : Node
 {
