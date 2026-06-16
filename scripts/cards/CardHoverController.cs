@@ -23,7 +23,6 @@ public partial class CardHoverController : Node
     public event Action ExitCardSelection;
     public event Action<Card, Vector2> ApplyBorderEffect; // Card card, Vector2 cardScale
     
-    
     private readonly HashSet<Card> _cardsUnderMouse = new();
     private Card _keyboardHoveredCard;
     private Card _mouseHoveredCard;
@@ -76,7 +75,7 @@ public partial class CardHoverController : Node
         
         // Exit old phase
         if (_currentCardHoverPhase ==  CardHoverPhase.CardSelection)
-        {
+        { 
             ChangeHoverMode(HoverMode.None);
         }
 
@@ -87,6 +86,7 @@ public partial class CardHoverController : Node
     {
         if (_currentHoverMode == newMode) return;
         
+        GD.Print($"[CardHoverController] HoverMode changed: {_currentHoverMode} → {newMode}");
         // Exit old mode
         switch (_currentHoverMode)
         {
@@ -116,7 +116,7 @@ public partial class CardHoverController : Node
     {
         if (_currentCardHoverPhase != CardHoverPhase.CardSelection) return;
         if (_currentHoverMode == HoverMode.Keyboard) return;
-
+        
         ChangeHoverMode(HoverMode.Mouse);
         _cardsUnderMouse.Add(card);
         UpdateHoverEffect();
