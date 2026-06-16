@@ -30,3 +30,5 @@ script = ExtResource("2_vn21b")
 
 [node name="CardSelectionController" type="Node2D" parent="." unique_id=1813170449]
 script = ExtResource("4_rf4ta")
+
+[node name="Node" type="Node" parent="." unique_id=890994755]

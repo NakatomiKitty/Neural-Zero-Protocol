@@ -4,6 +4,7 @@ using Godot;
 using Godot.Collections;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Resources.MoveData;
+// ReSharper disable All
 
 namespace NeuralZeroProtocol.Scripts.Cards
 {
@@ -72,7 +73,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
 
         public void OnMoveToCardSystem()
         {
-            CardHoverController.EnteredCardSelection();
+            CardHoverController.OnActionMenuClosed();
             CardSelectionController.MoveToCardSystem();
         }
 
@@ -83,15 +84,17 @@ namespace NeuralZeroProtocol.Scripts.Cards
         
         public void OnKeyboardModeDeactivated()
         {
-            CardHoverController.ExitCardSelection();
+            CardHoverController.OnActionMenuOpened();
             CardHoverController.ClearKeyboardHover();
         }
         
         private void OnSelectionChanged(Card oldCard, Card newCard)
         {
-            CardHoverController.OnCardDeselected();
-
-            if (newCard != null) CardHoverController.OnCardSelected(newCard);
+            if (oldCard != null)
+                CardHoverController.OnCardDeselected();
+    
+            if (newCard != null)
+                CardHoverController.OnCardSelected(newCard);
         }
 
         private void ConnectCard(Card card)

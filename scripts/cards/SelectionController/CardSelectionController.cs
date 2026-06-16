@@ -10,14 +10,6 @@ namespace NeuralZeroProtocol.Scripts.Cards;
 /// When selection changes, emits a signal to notify other controllers.
 /// </summary>
 
-public enum CardSelectionState
-{
-    Idle,
-    KeyboardMode,
-    MouseMode,
-    SwapTheCards
-}
-
 public sealed partial class CardSelectionController : Node2D
 {
     private const float MouseMovementThreshold = 5.0f;
@@ -37,7 +29,9 @@ public sealed partial class CardSelectionController : Node2D
     public event Action<bool> KeyboardModeCancelled; // bool isCancelled
     
     private Dictionary<Card, Tween> _activePositionTweens = new();
-    private CardSelectionState _state;
+    
+    private enum CardSelectionState { Idle, KeyboardMode, MouseMode, SwapTheCards }
+    private CardSelectionState _currentState;
     
     private Tween _swapCardTween;
         
@@ -71,7 +65,7 @@ public sealed partial class CardSelectionController : Node2D
     {
         switch (@event)
         {
-            case InputEventMouseMotion motion when _state == CardSelectionState.KeyboardMode:
+            case InputEventMouseMotion motion when _currentState == CardSelectionState.KeyboardMode:
                 if (!_ignoreMouseMotion && _activationMousePos.DistanceTo(motion.GlobalPosition) < MouseMovementThreshold)
                 {
                     return;   
@@ -85,7 +79,7 @@ public sealed partial class CardSelectionController : Node2D
             case InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true }:
             {
                 // If we're in a state that allows deselection (e.g., not swapping)
-                if (_state != CardSelectionState.SwapTheCards)
+                if (_currentState != CardSelectionState.SwapTheCards)
                 {
                     if (!IsAnyCardUnderMouse())
                     {
@@ -145,15 +139,16 @@ public sealed partial class CardSelectionController : Node2D
     
     private void ChangeState(CardSelectionState newState)
     {
-        _state = newState;
-        switch (_state)
+        _currentState = newState;
+
+        if (_currentState == CardSelectionState.SwapTheCards)
         {
-            case CardSelectionState.SwapTheCards:
-                SwappingStateChanged?.Invoke(true);
-                break;
-            default:
-                if (_state != CardSelectionState.SwapTheCards) SwappingStateChanged?.Invoke(false);
-                break;
+            SwappingStateChanged?.Invoke(true);
+        }
+        
+        else if (_currentState != CardSelectionState.SwapTheCards)
+        {
+            SwappingStateChanged?.Invoke(false);
         }
     }
 }

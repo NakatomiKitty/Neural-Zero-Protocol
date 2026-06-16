@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace NeuralZeroProtocol.Scripts.Ui;
 
-public enum MenuState { PlayerTurnStart, BattleCommandMenu, Swapping, ActionMenu, PlayerTurnEnd }
 
 public partial class BattleMenu : Control
 {
@@ -30,6 +29,7 @@ public partial class BattleMenu : Control
     private const string InitialFocusButton = "MovesButton";
     private const string ActionMenuDefaultFocus = "AttackButton";
     
+    public enum MenuState { PlayerTurnStart, BattleCommandMenu, Swapping, ActionMenu, PlayerTurnEnd }
     private MenuState _currentMenuState;
     private MenuState _targetMenuState;
     
@@ -377,6 +377,8 @@ public partial class BattleMenu : Control
     
     private void HandleActionMenuInput(UiSelection uiSelection)
     {
+        var focusedOwner = GetViewport().GuiGetFocusOwner();
+        
         if (_isCardKeyboardMode) return;
     
         if (uiSelection == UiSelection.Up)
@@ -388,18 +390,17 @@ public partial class BattleMenu : Control
 
         if (!_isActionMenuKeyboardMode) FocusOnAttackButton();
         
-        if (uiSelection == UiSelection.Confirm && GetFocusedButton() is { } focused)
+        if (uiSelection == UiSelection.Confirm && focusedOwner is TextureButton focusedButton && ActionMenuContainer.IsAncestorOf(focusedButton))
         {
-            focused.EmitSignal(BaseButton.SignalName.Pressed);
+            focusedButton.EmitSignal(BaseButton.SignalName.Pressed);
         }
 
-        if (uiSelection == UiSelection.Cancel && GetFocusedButton() is { })
+        if (uiSelection == UiSelection.Cancel && focusedOwner is Control focusedControl && ActionMenuContainer.IsAncestorOf(focusedControl))
         {
             RequestingCardBorderRemoval?.Invoke();
             _targetMenuState = MenuState.BattleCommandMenu;
             ChangeState(MenuState.Swapping);
         }
-
     }
 
     #endregion

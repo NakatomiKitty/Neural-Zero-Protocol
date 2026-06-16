@@ -4,7 +4,7 @@ public partial class CardSelectionController
 {
     public void OnCardClicked(Card clickedCard)
     {
-        if (_state == CardSelectionState.SwapTheCards) return;
+        if (_currentState == CardSelectionState.SwapTheCards) return;
         if (!IsTopmostCard(clickedCard)) return;
         
         // Swap with center card

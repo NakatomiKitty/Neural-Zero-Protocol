@@ -7,13 +7,13 @@ public partial class CardSelectionController
 {
     public void GetUiInput(UiSelection uiSelection)
     {
-        if (_state == CardSelectionState.SwapTheCards) return;
+        if (_currentState == CardSelectionState.SwapTheCards) return;
         
         if (_isInActionMenu) return;
 
         if (uiSelection is UiSelection.Left or UiSelection.Right)
         {
-            if (_state != CardSelectionState.KeyboardMode) ActivateKeyboardMode();
+            if (_currentState != CardSelectionState.KeyboardMode) ActivateKeyboardMode();
             
             if (uiSelection == UiSelection.Left) KeyboardMoveLeft();
             
@@ -28,14 +28,14 @@ public partial class CardSelectionController
         }
         else if (uiSelection is UiSelection.Confirm)
         {
-            if (_state != CardSelectionState.KeyboardMode) return;
+            if (_currentState != CardSelectionState.KeyboardMode) return;
             ConfirmCard();
         }
     }
 
     public void MoveToCardSystem()
     {
-        if (_state == CardSelectionState.KeyboardMode) return;
+        if (_currentState == CardSelectionState.KeyboardMode) return;
         
         _isInActionMenu = false;
         ActivateKeyboardMode();
@@ -67,7 +67,7 @@ public partial class CardSelectionController
 
     private void ConfirmCard()
     {
-        if (_state != CardSelectionState.KeyboardMode) return;
+        if (_currentState != CardSelectionState.KeyboardMode) return;
         if (_cardHand == null || _cardHand.Count == 0) return;
         if (_keyboardHoveredCard == null) return; 
         if (_keyboardHoveredCard == _centerCard) return;
@@ -96,7 +96,7 @@ public partial class CardSelectionController
     
     private void DeactivateKeyboardMode()
     {
-        if (_state != CardSelectionState.KeyboardMode) return;
+        if (_currentState != CardSelectionState.KeyboardMode) return;
         
         KeyboardModeDeactivated?.Invoke();
         

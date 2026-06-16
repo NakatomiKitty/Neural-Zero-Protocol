@@ -8,7 +8,7 @@ public partial class CardSelectionController
 {
     private void SwapWithCenter(Card clickedCard)
     {
-        if (_state == CardSelectionState.SwapTheCards) return;
+        if (_currentState == CardSelectionState.SwapTheCards) return;
         ChangeState(CardSelectionState.SwapTheCards);
 
         _swapCardTween?.Kill();
@@ -40,7 +40,7 @@ public partial class CardSelectionController
 
     private void OnSwapCardTweenFinished(Card clickedCard, Card oldCenter, Vector2 clickedBase, Vector2 centerBase)
     {
-        if (_state != CardSelectionState.SwapTheCards) return;
+        if (_currentState != CardSelectionState.SwapTheCards) return;
 
         // Swap base positions
         (CardBasePositions[clickedCard], CardBasePositions[oldCenter]) =

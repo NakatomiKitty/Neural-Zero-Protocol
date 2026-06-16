@@ -39,6 +39,7 @@ public partial class BattleScene : Node2D
         CardSystem.Visible = false;
         TurnManager.StartBattle += OnBattleStart;
         BattleMenu.RequestingCardBorderRemoval += CardSystem.OnKeyboardModeDeactivated;
+        BattleMenu.ActionMenuStateChanged += OnActionMenuStateChangedForHover;
         BattleMenu.ActionMenuStateChanged += OnActionMenuStateChanged;
         BattleMenu.MovingToCardSystem += CardSystem.OnMoveToCardSystem;
         
@@ -61,6 +62,18 @@ public partial class BattleScene : Node2D
         BattleMenu.GetUiInput(UiSelectionController.GetUiSelect());
     }
 
+    private void OnActionMenuStateChangedForHover(bool isOpen)
+    {
+        if (isOpen)
+        {
+            CardSystem.CardHoverController.OnActionMenuOpened();
+        }
+        else
+        {
+            CardSystem.CardHoverController.OnActionMenuClosed();
+        }
+    }
+    
     private void OnBattleStart()
     {
         Character firstUnit = TurnManager.GetCurrentUnit();
@@ -116,7 +129,7 @@ public partial class BattleScene : Node2D
         // Removes the border
         CardSystem.CardHoverController.ExitCardSelection();
         OnActionMenuStateChanged(false);
-        BattleMenu.ChangeState(MenuState.PlayerTurnEnd);
+        BattleMenu.ChangeState(BattleMenu.MenuState.PlayerTurnEnd);
         
         Card clonedCenterCard = CardSystem.DuplicateCenterCard();
         AddChild(clonedCenterCard);
@@ -158,6 +171,7 @@ public partial class BattleScene : Node2D
     public override void _ExitTree()
     {
         TurnManager.StartBattle -= OnBattleStart;
+        BattleMenu.ActionMenuStateChanged -= OnActionMenuStateChangedForHover;
         BattleMenu.ActionMenuStateChanged -= OnActionMenuStateChanged;
         BattleMenu.MovingToCardSystem -= CardSystem.OnMoveToCardSystem;
         
