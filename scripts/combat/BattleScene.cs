@@ -127,7 +127,7 @@ public partial class BattleScene : Node2D
     private void OnAttackTriggeredPlayMenuSequence()
     {
         // Removes the border
-        CardSystem.CardHoverController.ExitCardSelection();
+        CardSystem.CardBorderController.OnExitCardSelection();
         OnActionMenuStateChanged(false);
         BattleMenu.ChangeState(BattleMenu.MenuState.PlayerTurnEnd);
         

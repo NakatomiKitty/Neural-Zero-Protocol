@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dcgxd6801qs5y"]
+
+[ext_resource type="Script" uid="uid://xdjwsmrhsbl6" path="res://scripts/cards/CardBorderController.cs" id="1_tpmfb"]
+[ext_resource type="Texture2D" uid="uid://cgwfgeu5vepr6" path="res://assets/sprites/card_highlight_border.png" id="2_bq72e"]
+
+[node name="CardBorderController" type="Node" unique_id=1449077860]
+script = ExtResource("1_tpmfb")
+
+[node name="CardBorder" type="Sprite2D" parent="." unique_id=1620352603]
+modulate = Color(1, 1, 1, 0)
+z_index = 12
+position = Vector2(0, -0.85)
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("2_bq72e")

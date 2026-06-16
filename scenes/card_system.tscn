@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" uid="uid://ckl3r5sn55yqu" path="res://scripts/cards/CardSystem.cs" id="1_vn21b"]
 [ext_resource type="Script" uid="uid://cdu00buuwu2iw" path="res://scripts/cards/CardHand.cs" id="2_vn21b"]
-[ext_resource type="PackedScene" uid="uid://b81nfw40hqnfs" path="res://scenes/card_hover_controller.tscn" id="3_rf4ta"]
+[ext_resource type="Script" uid="uid://dnn8ivmiktpyd" path="res://scripts/cards/CardHoverController.cs" id="3_cpdn2"]
 [ext_resource type="Script" uid="uid://t3ph6jyvpvyx" path="res://scripts/cards/SelectionController/CardSelectionController.cs" id="4_rf4ta"]
+[ext_resource type="PackedScene" uid="uid://dcgxd6801qs5y" path="res://scenes/card_border_controller.tscn" id="5_cpdn2"]
 
 [sub_resource type="Curve2D" id="Curve2D_gagc2"]
 _data = {
@@ -26,9 +27,10 @@ rotation = -1.1302636
 [node name="CardHand" type="Node2D" parent="." unique_id=237884205]
 script = ExtResource("2_vn21b")
 
-[node name="CardHoverController" parent="." unique_id=1494080637 instance=ExtResource("3_rf4ta")]
+[node name="CardHoverController" type="Node" parent="." unique_id=1761649734]
+script = ExtResource("3_cpdn2")
+
+[node name="CardBorderController" parent="." unique_id=1449077860 instance=ExtResource("5_cpdn2")]
 
 [node name="CardSelectionController" type="Node2D" parent="." unique_id=1813170449]
 script = ExtResource("4_rf4ta")
-
-[node name="Node" type="Node" parent="." unique_id=890994755]

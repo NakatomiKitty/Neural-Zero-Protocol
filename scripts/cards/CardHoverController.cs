@@ -1,5 +1,5 @@
+using System;
 using Godot;
-using GodotUtilities;
 using System.Collections.Generic;
 
 namespace NeuralZeroProtocol.Scripts.Cards;
@@ -8,7 +8,6 @@ namespace NeuralZeroProtocol.Scripts.Cards;
 /// Manages hover effects (scale tweening + ZIndex changes) for the cards.
 /// Only the topmost unselected card under the mouse gets the effect.
 /// </summary>
-[Scene]
 public partial class CardHoverController : Node
 {
     // State machines
@@ -17,43 +16,26 @@ public partial class CardHoverController : Node
 
     private CardHoverPhase _currentCardHoverPhase = CardHoverPhase.Inactive;
     private HoverMode _currentHoverMode = HoverMode.None;
-    
-    [Node("CardBorder")] private Sprite2D _cardBorder;
 
     private readonly Dictionary<Card, Tween> _activeHoverTweens = new();
     private const float HoverTweenDuration = 0.4f;
-
     private static readonly Vector2 CardHoveredScale = new(1.1f, 1.1f);
-    private const float MaxCardScale = 0.45f;
-
-    private static readonly Vector2 CardBorderSubtract = new(.7f, .7f);
-    private const float CardBorderTweenDuration = 0.15f;
-    private const float CardBorderFadeDuration = 0.10f;
-
-    private Vector2 _cardBorderOriginalScale;
 
     private CardSystem _cardSystem;
 
+    public event Action<Card> EnterCardSelection; // Card selectedCard
+    public event Action ExitCardSelection;
+    public event Action<Card, Vector2> ApplyBorderEffect; // Card card, Vector2 cardScale
+    
+    
     private readonly HashSet<Card> _cardsUnderMouse = new();
     private Card _keyboardHoveredCard;
     private Card _mouseHoveredCard;
     private Card _selectedCard;
 
     public Godot.Collections.Dictionary<Card, int> OriginalZIndexes = new();
-
-    public override void _Notification(int what)
-    {
-        if (what == NotificationSceneInstantiated) WireNodes();
-    }
-
-    public override void _Ready()
-    {
-        _cardSystem = GetNode<CardSystem>("..");
-        _cardBorder.Visible = true;
-        _cardBorderOriginalScale = _cardBorder.Scale;
-    }
-
-    public void SetCenterCard(Card centerCard) => _cardBorder.GlobalPosition = centerCard.GlobalPosition;
+    
+    public override void _Ready() => _cardSystem = GetNode<CardSystem>("..");
 
     #region State Transitions
 
@@ -70,9 +52,6 @@ public partial class CardHoverController : Node
         _selectedCard = card;
         ChangeCardHoverPhase(CardHoverPhase.CardSelection);
         UpdateHoverEffect();
-        
-        if (_currentCardHoverPhase == CardHoverPhase.CardSelection)
-             EnteredCardSelection();
     }
 
     public void OnCardDeselected()
@@ -83,14 +62,14 @@ public partial class CardHoverController : Node
 
     public void OnActionMenuOpened()
     {
-        ExitCardSelection();
+        ExitCardSelection?.Invoke();
         ChangeCardHoverPhase(CardHoverPhase.ActionMenu);
     }
     
     public void OnActionMenuClosed()
     {
         ChangeCardHoverPhase(CardHoverPhase.CardSelection);
-        EnteredCardSelection();
+        EnterCardSelection?.Invoke(_selectedCard);
     }
 
     private void ChangeCardHoverPhase(CardHoverPhase newPhase)
@@ -112,7 +91,7 @@ public partial class CardHoverController : Node
     {
         if (_currentHoverMode == newMode) return;
         
-        // Clean up previous mode
+        // Exit old mode
         switch (_currentHoverMode)
         {
             case HoverMode.Mouse:
@@ -208,7 +187,7 @@ public partial class CardHoverController : Node
 
         if (card == _selectedCard)
         {
-            ApplyBorderEffect(card, card.Scale);
+            ApplyBorderEffect?.Invoke(card, card.Scale);
             return;
         }
 
@@ -241,50 +220,12 @@ public partial class CardHoverController : Node
             .SetTrans(Tween.TransitionType.Elastic)
             .SetEase(Tween.EaseType.Out);
 
-        if (isFromKeyboardMode) ApplyBorderEffect(card, CardHoveredScale);
+        if (isFromKeyboardMode) ApplyBorderEffect?.Invoke(card, CardHoveredScale);
 
         AddTween(card, tween);
 
         card.ZIndex = isHovered ? CardSystem.HoverZ : OriginalZIndexes[card];
         card.UpdatePriority();
-    }
-
-    #endregion
-
-    #region CardBorder-Related Functions
-
-    public async void EnteredCardSelection()
-    {
-        await ToSignal(GetTree().CreateTimer(0.1f), SceneTreeTimer.SignalName.Timeout);
-        
-        Tween tween = CreateTween().SetParallel();
-        tween.TweenProperty(_cardBorder, "modulate:a", 1.0f, CardBorderFadeDuration);
-
-        ApplyBorderEffect(_selectedCard, _selectedCard.Scale);
-    }
-
-    public void ExitCardSelection()
-    {
-        Tween tween = CreateTween().SetParallel();
-        tween.TweenProperty(_cardBorder, "modulate:a", 0.0f, CardBorderFadeDuration);
-    }
-
-    private void ApplyBorderEffect(Card card, Vector2 cardScale)
-    {
-        Vector2 newCardBorderScale = cardScale - CardBorderSubtract;
-
-        float cardBorderClampedX = Mathf.Clamp(newCardBorderScale.X, _cardBorderOriginalScale.X, MaxCardScale);
-        float cardBorderClampedY = Mathf.Clamp(newCardBorderScale.Y, _cardBorderOriginalScale.Y, MaxCardScale);
-
-        Tween tween = CreateTween().SetParallel();
-
-        tween.TweenProperty(_cardBorder, "global_rotation", card.GlobalRotation, CardBorderTweenDuration);
-
-        tween.TweenProperty(_cardBorder, "global_position", card.GlobalPosition, CardBorderTweenDuration)
-            .SetTrans(Tween.TransitionType.Quint)
-            .SetEase(Tween.EaseType.Out);
-
-        tween.TweenProperty(_cardBorder, "scale", new Vector2(cardBorderClampedX, cardBorderClampedY), CardBorderTweenDuration);
     }
 
     #endregion

@@ -24,6 +24,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
         [Node] public CardHand CardHand;
         [Node] public CardHoverController CardHoverController;
         [Node] public CardSelectionController CardSelectionController;
+        [Node] public CardBorderController CardBorderController;
 
         private Dictionary<Card, int> _originalZIndexes = new();
         private Dictionary<Card, Vector2> _cardBasePositions = new();
@@ -40,6 +41,10 @@ namespace NeuralZeroProtocol.Scripts.Cards
             CardSelectionController.CurrentSelectedCardChanged += OnCurrentSelectedCardChanged;
             CardSelectionController.SwappingStateChanged += CardHoverController.OnSwappingStateChanged;
             CardSelectionController.KeyboardModeDeactivated += OnKeyboardModeDeactivated;
+            
+            CardHoverController.EnterCardSelection += CardBorderController.OnEnterCardSelection;
+            CardHoverController.ExitCardSelection += CardBorderController.OnExitCardSelection;
+            CardHoverController.ApplyBorderEffect += CardBorderController.OnApplyBorderEffect;
             
             CardHand.CardAdded += ConnectCardSignals;
         }
@@ -66,7 +71,7 @@ namespace NeuralZeroProtocol.Scripts.Cards
             _centerCard = cards[cards.Count / 2];
             
             CardSelectionController.SetCenterCard(_centerCard);
-            CardHoverController.SetCenterCard(_centerCard);
+            CardBorderController.SetCenterCard(_centerCard);
             
             CardSelectionController.SetCardHand(CardHand.GetChildren());
         }
@@ -141,6 +146,10 @@ namespace NeuralZeroProtocol.Scripts.Cards
             CardSelectionController.SwappingStateChanged -= CardHoverController.OnSwappingStateChanged;
             CardSelectionController.KeyboardHoveredCardChanged -= OnKeyboardHoveredCardReceived;
             CardSelectionController.KeyboardModeDeactivated -= OnKeyboardModeDeactivated;
+            
+            CardHoverController.EnterCardSelection -= CardBorderController.OnEnterCardSelection;
+            CardHoverController.ExitCardSelection -= CardBorderController.OnExitCardSelection;
+            CardHoverController.ApplyBorderEffect -= CardBorderController.OnApplyBorderEffect;
         }
     }
 }
