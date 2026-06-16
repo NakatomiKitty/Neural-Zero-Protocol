@@ -20,11 +20,12 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -566.0
-offset_top = 136.0
+offset_top = 168.0
 offset_right = 586.0
 offset_bottom = 313.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 script = ExtResource("3_luyfx")
 BattleCommandMenuContainer = NodePath("BattleCommandButtonContainer")
 ActionMenuContainer = NodePath("ActionMenuButtonContainer")
@@ -42,6 +43,7 @@ offset_right = 336.0
 offset_bottom = -0.9998474
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="BackgroundPanel" type="Panel" parent="BattleMenu/BattleCommandButtonContainer" unique_id=468300506]
 self_modulate = Color(1, 1, 1, 0)
@@ -57,6 +59,7 @@ offset_right = 342.0
 offset_bottom = -1.0001526
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="BackgroundPanelTexture" type="TextureRect" parent="BattleMenu/BattleCommandButtonContainer/BackgroundPanel" unique_id=1110789496]
 layout_mode = 1
@@ -66,6 +69,7 @@ anchor_bottom = 1.0
 offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("1_dx6n2")
 expand_mode = 1
 stretch_mode = 4
@@ -82,6 +86,7 @@ offset_right = 24.0
 offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("1_j6r35")
 expand_mode = 1
 stretch_mode = 4
@@ -211,6 +216,7 @@ offset_right = 336.0
 offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="BackgroundPanel" type="Panel" parent="BattleMenu/ActionMenuButtonContainer" unique_id=564868484]
 self_modulate = Color(1, 1, 1, 0)
@@ -226,6 +232,7 @@ offset_right = 342.0
 offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="BackgroundPanelTexture" type="TextureRect" parent="BattleMenu/ActionMenuButtonContainer/BackgroundPanel" unique_id=1387349911]
 layout_mode = 1
@@ -235,6 +242,7 @@ anchor_bottom = 1.0
 offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("1_dx6n2")
 expand_mode = 1
 stretch_mode = 4
@@ -251,6 +259,7 @@ offset_right = 24.0
 offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("1_j6r35")
 expand_mode = 1
 stretch_mode = 4

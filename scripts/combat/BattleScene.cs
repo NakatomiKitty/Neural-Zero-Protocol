@@ -100,8 +100,7 @@ public partial class BattleScene : Node2D
         // Convert to CardSystem's parent local coordinates
         Node2D parent = CardSystem.GetParent<Node2D>();
         float targetLocalY = parent.ToLocal(new Vector2(0, targetGlobalY)).Y;
-    
-        // Apply the position
+
         Vector2 newCardSystemPosition = new(CardSystem.Position.X, targetLocalY);
         CardSystemTween(newCardSystemPosition, isTrue);
     }

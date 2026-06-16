@@ -42,6 +42,13 @@ public partial class CardHoverController : Node
     public void OnCardSelected(Card card)
     {
         _cardsUnderMouse.Remove(card);
+
+        if (_mouseHoveredCard == card)
+        {
+            ApplyHoverEffect(card, false, false);
+            _mouseHoveredCard = null;
+        }
+        
         KillAndRemoveTween(card);
         
         _selectedCard = card;
@@ -87,6 +94,7 @@ public partial class CardHoverController : Node
         if (_currentHoverMode == newMode) return;
         
         GD.Print($"[CardHoverController] HoverMode changed: {_currentHoverMode} → {newMode}");
+        
         // Exit old mode
         switch (_currentHoverMode)
         {
@@ -115,7 +123,6 @@ public partial class CardHoverController : Node
     public void OnHoveredOverCard(Card card)
     {
         if (_currentCardHoverPhase != CardHoverPhase.CardSelection) return;
-        if (_currentHoverMode == HoverMode.Keyboard) return;
         
         ChangeHoverMode(HoverMode.Mouse);
         _cardsUnderMouse.Add(card);
