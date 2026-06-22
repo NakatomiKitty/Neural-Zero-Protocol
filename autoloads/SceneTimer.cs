@@ -1,7 +1,9 @@
 using Godot;
 
 namespace NeuralZeroProtocol.Autoloads;
-
+/// <summary>
+/// For debug purposes, reports the time between scene changes
+/// </summary>
 public partial class SceneTimer : Node
 {
 	private float _startTime;

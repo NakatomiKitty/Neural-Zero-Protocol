@@ -78,7 +78,6 @@ public sealed partial class CardSelectionController : Node2D
                 break;
             case InputEventMouseButton { ButtonIndex: MouseButton.Left, Pressed: true }:
             {
-                // If we're in a state that allows deselection (e.g., not swapping)
                 if (_currentState != CardSelectionState.SwapTheCards)
                 {
                     if (!IsAnyCardUnderMouse())

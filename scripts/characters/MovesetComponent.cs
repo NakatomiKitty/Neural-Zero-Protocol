@@ -15,11 +15,6 @@ public partial class MovesetComponent : Node
     public override void _Ready() 
     {
         _character = GetNode<Character>("..");
-        
-		if (_character == null)
-		{
-			GD.PushError($"Character is not loaded in!");
-		}
 	}
     
     public Array<MoveResource> GetMoves() => Moves;

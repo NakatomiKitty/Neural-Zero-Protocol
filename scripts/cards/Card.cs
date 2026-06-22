@@ -12,6 +12,7 @@ public partial class Card : Node2D
     public event Action<Card> Hovered;
     public event Action<Card> NotHovered;
     public event Action<Card> Clicked;
+    
     [Node] private Area2D _area2D;
     [Node("CardImage")] private Sprite2D _cardImage;
     
@@ -49,7 +50,6 @@ public partial class Card : Node2D
     {
         if (@event is InputEventMouseButton mouseButton && mouseButton.ButtonIndex == MouseButton.Left && mouseButton.IsPressed())
         {
-            // Passes itself to the signal
             Clicked?.Invoke(this);
         }
     }

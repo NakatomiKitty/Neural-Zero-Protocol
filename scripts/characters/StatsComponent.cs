@@ -13,9 +13,7 @@ namespace NeuralZeroProtocol.Scripts.Characters;
 [GlobalClass]
 public partial class StatsComponent : Node
 {
-	// Declaration of events
-
-	// TODO: THIS IS FOR CHECKING STATS INGAME
+	// TODO: THIS IS FOR CHECKING STATS INGAME ↓
 	public event Action<int, int> StatChanged; // int stat, int currentValue 
 	public event Action<int> StatZeroed; // int stat
 	public event Action<int> StatRecovered; 

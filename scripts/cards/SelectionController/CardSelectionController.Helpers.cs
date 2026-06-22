@@ -45,7 +45,6 @@ public partial class CardSelectionController
             }
         }
         
-        
         return highestCard == clickedCard;
     }
     

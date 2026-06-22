@@ -17,7 +17,6 @@ public partial class CardSelectionController
         if (clickedCard != _selectedCard) SelectCard(clickedCard);
     }
     
-    // Makes the given card the selected one. Deselects any previous selection.
     private void SelectCard(Card card)
     {
         // Deselect previous card if there is one

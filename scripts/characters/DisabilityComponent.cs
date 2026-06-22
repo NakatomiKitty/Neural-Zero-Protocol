@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 namespace NeuralZeroProtocol.Scripts.Characters;
 
-// DisabilityComponent handles the Disability logic after a stat reached it's DeadZone
+// DisabilityComponent handles the Disability logic after a stat reached it's DeadZone (0)
+
 public enum DisabilityTypes
 {
 	Fragile,

@@ -22,7 +22,7 @@ public enum BattleState
 [Scene]
 public partial class CombatStateMachine : Node
 {
-    public event Action<BattleState> StateChanged; // newState
+    public event Action<BattleState> StateChanged;
     public event Action AttackTriggered;
     
     [Node("ConfirmAttackHandler")]public ConfirmAttackHandler CharacterAttackHandler; 
@@ -82,7 +82,7 @@ public partial class CombatStateMachine : Node
 
     private async void PlayerTurn()
     {
-        // Reminder: Decouple this shit later, Placeholder
+        // Reminder: Decouple this shit later
         PlayerCharacter playerCharacter = (PlayerCharacter)_battleScene.TurnManager.GetCurrentUnit();
 
         EnemyCharacter frontEnemyCharacter = (EnemyCharacter)_battleScene.TurnManager.EnemyCharacters[0];
@@ -125,7 +125,8 @@ public partial class CombatStateMachine : Node
                 GD.Print("EvadeStance!");
                 break;
         }
-
+        
+        // W.I.P, WILL HAVE IT MAKE IT GO TO TurnEnd AFTER A MENU ACTION
         // After a valid action, check battle outcome and end turn
         // if (BattleOutcomeState()) return;
         // await ChangeState(BattleState.TurnEnd);
@@ -147,6 +148,7 @@ public partial class CombatStateMachine : Node
     {
         GD.Print($"{_currentCharacter.Name} ended it's turn!");
 
+        // Decouple this shit later
         _currentCharacter = _battleScene.TurnManager.AdvanceToNextUnit();
 
         await CurrentCharacterTurn(_currentCharacter);
@@ -176,6 +178,7 @@ public partial class CombatStateMachine : Node
 
     public void OnCharacterDied(Character deadCharacter)
 	{
+        // DECOUPLE A LOT OF THIS!
 		GD.Print(deadCharacter.Name);
 
 		if (_battleScene.TurnManager.TurnOrder.Contains(deadCharacter))
@@ -210,6 +213,7 @@ public partial class CombatStateMachine : Node
     // Helper Functions
     private bool BattleOutcomeState()
     {
+        // Good lord so many decoupling to be done
         if (!_battleScene.TurnManager.PlayerCharacters.Any())
         {
             _ = ChangeState(BattleState.Defeat);

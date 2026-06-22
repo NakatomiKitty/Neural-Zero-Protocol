@@ -6,7 +6,7 @@ namespace NeuralZeroProtocol.Scripts.Characters;
 [GlobalClass]
 public partial class HealthComponent : Node
 {
-    // TODO: USED FOR HEALTHBAR!
+    // TODO: USED FOR HEALTHBAR ↓!
     public event Action<int, int> HealthChanged; // int currentHealth, int maxHealth
     public event Action<Character> Died; // Character parent
 

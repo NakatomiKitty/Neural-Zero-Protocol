@@ -3,6 +3,7 @@ using NeuralZeroProtocol.Scripts.Resources.MoveData;
 
 namespace NeuralZeroProtocol.Scripts.Characters;
 
+// This will be used in CombatStateMachine via it's PlayerCharacter Parent.
 [GlobalClass]
 public partial class ActionValidatorComponent : Node
 {
