@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using GodotUtilities;
 using NeuralZeroProtocol.Autoloads;
 using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 using System;
@@ -14,13 +15,13 @@ namespace NeuralZeroProtocol.Scripts.Characters;
 /// Then stores the current values in a dictionary
 /// It also acts as the main hub for the components
 /// </summary>
-[GlobalClass]
+[Scene]
 public partial class Character : Node2D
 {
-    public StatsComponent StatsComponent;
-    public DisabilityComponent DisabilityComponent;
-    public HealthComponent HealthComponent;
-	public MovesetComponent MovesetComponent;
+    [Node] public StatsComponent StatsComponent;
+    [Node] public DisabilityComponent DisabilityComponent;
+    [Node] public HealthComponent HealthComponent;
+    [Node] public MovesetComponent MovesetComponent;
 
     [Export] private CharacterStatResource _characterStatsResources;
 
@@ -29,30 +30,23 @@ public partial class Character : Node2D
 	public ElementType PrimaryElement => _characterStatsResources.PrimaryElement;
 	public ElementType SecondaryElement => _characterStatsResources.SecondaryElement;
 	
-	public override void _EnterTree()
+	public override void _Notification(int what)
 	{
-		GD.Print(PrimaryElement);
-		GD.Print(SecondaryElement);
-		Initialize();
-		InitializeStats(_characterStatsResources);
-	} 
+		if (what == NotificationSceneInstantiated) WireNodes();
+	}
 
 	public override void _Ready() 
 	{
+		InitializeStats(_characterStatsResources);
+		StatsComponent.Initialize(this);
+		MovesetComponent.Initialize(this);
+		
 		int maxHp = StatsComponent.GetStat(StatType.Hp);
 
 		HealthComponent.InitializeHealth(maxHp);
 
 		StatsComponent.StatZeroed += DisabilityComponent.OnStatZeroed;
 		StatsComponent.StatRecovered += DisabilityComponent.OnStatRecovered;
-	}
-
-	private void Initialize()
-	{
-		StatsComponent = GetNode<StatsComponent>("StatsComponent");
-		DisabilityComponent = GetNode<DisabilityComponent>("DisabilityComponent");
-		HealthComponent = GetNode<HealthComponent>("HealthComponent");
-		MovesetComponent = GetNode<MovesetComponent>("MovesetComponent");
 	}
 	
     private void InitializeStats(CharacterStatResource resource)

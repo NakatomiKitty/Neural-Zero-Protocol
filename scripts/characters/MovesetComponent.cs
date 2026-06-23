@@ -12,10 +12,7 @@ public partial class MovesetComponent : Node
     
     private Character _character;
 
-    public override void _Ready() 
-    {
-        _character = GetNode<Character>("..");
-	}
+    public void Initialize(Character character) => _character = character;
     
     public Array<MoveResource> GetMoves() => Moves;
 

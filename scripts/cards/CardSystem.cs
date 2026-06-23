@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
@@ -18,6 +19,7 @@ public partial class CardSystem : Node2D
     [Node] public CardHoverController CardHoverController;
     [Node] public CardSelectionController CardSelectionController;
     [Node] public CardBorderController CardBorderController;
+    [Node] public Path2D Path2D;
     
     private Dictionary<Card, int> _originalZIndexes = new();
     private Dictionary<Card, Vector2> _cardBasePositions = new();
@@ -36,10 +38,12 @@ public partial class CardSystem : Node2D
         CardSelectionController.SwappingStateChanged += CardHoverController.OnSwappingStateChanged;
         CardSelectionController.KeyboardModeDeactivated += OnKeyboardModeDeactivated;
         
+        CardHoverController.Initialize(this);
         CardHoverController.EnterCardSelection += CardBorderController.OnEnterCardSelection;
         CardHoverController.ExitCardSelection += CardBorderController.OnExitCardSelection;
         CardHoverController.ApplyBorderEffect += CardBorderController.OnApplyBorderEffect;
         
+        CardHand.Initialize(Path2D);
         CardHand.CardAdded += ConnectCardSignals;
     }
 

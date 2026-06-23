@@ -12,7 +12,7 @@ public partial class PlayerCharacter : Character
         base._Ready();
         
         ActionValidatorComponent = GetNode<ActionValidatorComponent>("ActionValidatorComponent");
-        AddToGroup("PlayerCharacters");
+        ActionValidatorComponent.Initialize(this);
     }
 }
 

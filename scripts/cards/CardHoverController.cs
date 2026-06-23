@@ -29,8 +29,8 @@ public partial class CardHoverController : Node
     private Card _selectedCard;
 
     public Godot.Collections.Dictionary<Card, int> OriginalZIndexes = new();
-    
-    public override void _Ready() => _cardSystem = GetNode<CardSystem>("..");
+
+    public void Initialize(CardSystem cardSystem) => _cardSystem = cardSystem;
 
     #region State Transitions
 

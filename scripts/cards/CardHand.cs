@@ -11,7 +11,7 @@ public partial class CardHand : Node2D
 
     private Path2D _path2D;
 
-    public override void _Ready() => _path2D = GetNode<Path2D>("../Path2D");
+    public void Initialize(Path2D path2D) => _path2D = path2D;
 
     public Array<Card> CreateHandFromCurve(int cardCount, PackedScene cardScene, Array<MoveResource> moves)
 	{

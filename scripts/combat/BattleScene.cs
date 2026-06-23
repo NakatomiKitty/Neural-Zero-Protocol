@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Cards;
 using NeuralZeroProtocol.Scripts.Characters;
@@ -48,10 +49,12 @@ public partial class BattleScene : Node2D
         CardSystem.CardSelectionController.KeyboardModeActivated += BattleMenu.OnCardKeyboardModeActivated;
         CardSystem.CardSelectionController.KeyboardModeDeactivated += BattleMenu.OnCardKeyboardModeDeactivated;
 
+        CombatStateMachine.Initialize(this);
         CombatStateMachine.AttackTriggered += OnAttackTriggeredPlayMenuSequence;
         
         // Passes the array to CardSystem so it can be used to update the card skins
-        _ = CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromCurrentChar());
+        Array<MoveResource> moves = BattleManager.GetSelectedMovesFromCurrentChar(TurnManager.PlayerCharacters);
+        _ = CardSystem.CreateHandFromMoves(moves);
         
         TurnManager.StartBattleSequence();
     }

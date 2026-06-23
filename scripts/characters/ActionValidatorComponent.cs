@@ -9,15 +9,7 @@ public partial class ActionValidatorComponent : Node
 {
 	private Character _character;
 
-	public override void _Ready() 
-	{
-		_character = GetNode<Character>("..");
-
-		if (_character == null)
-		{
-			GD.PushError($"Character is not loaded in!");
-		}
-	}
+	public void Initialize(Character character) => _character = character;
 
 	public bool IsExhausted() => 
 		!_character.DisabilityComponent.HasDisability(DisabilityTypes.Exhausted);
