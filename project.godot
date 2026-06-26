@@ -33,7 +33,7 @@ project/assembly_name="Neural Zero- Protocol"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/rider-plugin/plugin.cfg")
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg", "res://addons/rider-plugin/plugin.cfg")
 
 [gui]
 
