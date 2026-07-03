@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites id="2026-07-03" name="report_1" tests="8" failures="0" skipped="0" flaky="0" time="0.000">
+	<testsuite id="0" name="TestStatsComponent" package="test/scripts/characters" timestamp="2026-07-03T08:49:00" hostname="localhost" tests="8" failures="0" errors="0" skipped="0" flaky="0" time="0.261">
+		<testcase name="ModifyStat_StatIncreasesValueCorrectly" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestStatsComponent" time="0.083">
+		</testcase>
+		<testcase name="ModifyStat_StatDecreasesValueCorrectly" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestStatsComponent" time="0.007">
+		</testcase>
+		<testcase name="ModifyStat_StatClampsToZeroCorrectly" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestStatsComponent" time="0.012">
+		</testcase>
+		<testcase name="ModifyStat_FiresStatZeroed_WhenStatReachesZero" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestStatsComponent" time="0.012">
+		</testcase>
+		<testcase name="ModifyStat_DoesNotFireStatZeroed_WhenStatStaysAboveZero" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestStatsComponent" time="0.012">
+		</testcase>
+		<testcase name="ModifyStat_FiresStatRecovered_WhenStatRisesAboveZero" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestStatsComponent" time="0.012">
+		</testcase>
+		<testcase name="ModifyStat_DoesNotFireStatRecovered_WhenStatWasAlreadyAboveZero" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestStatsComponent" time="0.013">
+		</testcase>
+		<testcase name="GetStat_ReturnsDefaultValue_WhenStatNotPresent" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestStatsComponent" time="0.012">
+		</testcase>
+	</testsuite>
+</testsuites>

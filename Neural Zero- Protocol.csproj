@@ -7,6 +7,17 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Firebelley.GodotUtilities" Version="6.2.0" />
+    <PackageReference Include="gdUnit4.analyzers" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="gdUnit4.api" Version="5.1.0-rc5" />
+    <PackageReference Include="gdUnit4.test.adapter" Version="3.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="tests\scripts\cards\" />
+    <Folder Include="tests\scripts\combat\" />
+    <Folder Include="tests\scripts\resources\" />
+    <Folder Include="tests\scripts\ui\" />
   </ItemGroup>
 </Project>

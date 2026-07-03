@@ -24,7 +24,7 @@ public partial class StatsComponent : Node
 	
 	public int GetStat(StatType stat)
 	{
-		return _character.CurrentStats.GetValueOrDefault(stat, 5);
+		return _character.CurrentStats.GetValueOrDefault(stat, 0);
 	}
 
 	public void ModifyStat(StatType stat, int changeValue)
