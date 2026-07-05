@@ -34,12 +34,12 @@
 		<div class="report-container">
 			<h1>Testsuite Report</h1>
 			<div>
-				<span class="label">res://test/scripts/characters/TestStatsComponent.cs</span>
+				<span class="label">res://test/scripts/characters/TestDisabilityComponent.cs</span>
 			</div>
 			<div class="summary">
 				<div class="summary-item">
 					<span class="label">Tests</span>
-					<span class="value">8</span>
+					<span class="value">16</span>
 				</div>
 				<div class="summary-item">
 					<span class="label">Skipped</span>
@@ -59,7 +59,7 @@
 				</div>
 				<div class="summary-item">
 					<span class="label">Duration</span>
-					<span class="value">122ms</span>
+					<span class="value">239ms</span>
 				</div>
 				<div class="success-rate">
 					<div class="check-icon status-passed">✓</div>
@@ -73,7 +73,7 @@
 		<div class="breadcrumb">
 			<a href="../index.html"><span>All</span></a>
 			<a href="../path/test.scripts.characters.html"><span>test/scripts/characters</span></a>
-			<a class="active" href="#"><span>TestStatsComponent</span></a>
+			<a class="active" href="#"><span>TestDisabilityComponent</span></a>
 		</div>
 	</header>
 
@@ -94,7 +94,35 @@
 					<tbody>
 						
 								<tr class="testcase-group">
-									<td>ModifyStat_StatIncreasesValueCorrectly</td>
+									<td>VerifyZeroDisabilitiesOnStartup</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>12ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>OnStatZeroed_FragileIsActivated:0 (1)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>20ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>OnStatZeroed_BrokenIsActivated:1 (2)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -108,7 +136,7 @@
 
 
 								<tr class="testcase-group">
-									<td>ModifyStat_StatDecreasesValueCorrectly</td>
+									<td>OnStatZeroed_StiffIsActivated:2 (3)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -122,7 +150,7 @@
 
 
 								<tr class="testcase-group">
-									<td>ModifyStat_StatClampsToZeroCorrectly</td>
+									<td>OnStatZeroed_MindlessIsActivated:3 (4)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -136,7 +164,7 @@
 
 
 								<tr class="testcase-group">
-									<td>ModifyStat_FiresStatZeroed_WhenStatReachesZero</td>
+									<td>OnStatZeroed_CursedIsActivated:4 (5)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -150,7 +178,7 @@
 
 
 								<tr class="testcase-group">
-									<td>ModifyStat_DoesNotFireStatZeroed_WhenStatStaysAboveZero</td>
+									<td>OnStatZeroed_ExhaustedIsActivated:5 (6)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -164,7 +192,7 @@
 
 
 								<tr class="testcase-group">
-									<td>ModifyStat_FiresStatRecovered_WhenStatRisesAboveZero</td>
+									<td>OnStatZeroed_DisabilityIdempotencyCheck</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -178,7 +206,7 @@
 
 
 								<tr class="testcase-group">
-									<td>ModifyStat_DoesNotFireStatRecovered_WhenStatWasAlreadyAboveZero</td>
+									<td>OnStatRecovered_FragileIsDeactivated:0 (1)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -192,7 +220,91 @@
 
 
 								<tr class="testcase-group">
-									<td>GetStat_ReturnsDefaultValue_WhenStatNotPresent</td>
+									<td>OnStatRecovered_BrokenIsDeactivated:1 (2)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>OnStatRecovered_StiffIsDeactivated:2 (3)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>OnStatRecovered_MindlessIsDeactivated:3 (4)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>12ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>OnStatRecovered_CursedIsDeactivated:4 (5)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>OnStatRecovered_ExhaustedIsDeactivated:5 (6)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>OnStatRecovered_RecoveryWithoutActivation</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>OnStatZeroedAndRecovered_VerifyDisabilitiesAreTrackedIndependently</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
