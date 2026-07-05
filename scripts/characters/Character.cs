@@ -27,6 +27,7 @@ public partial class Character : Node2D
 
 	public Dictionary<StatType, int> CurrentStats = new();
 
+	public void SetTestResource(CharacterStatResource resource) => _characterStatsResources = resource;
 	public ElementType PrimaryElement => _characterStatsResources.PrimaryElement;
 	public ElementType SecondaryElement => _characterStatsResources.SecondaryElement;
 	

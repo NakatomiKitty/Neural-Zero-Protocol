@@ -34,12 +34,12 @@
 		<div class="report-container">
 			<h1>Testsuite Report</h1>
 			<div>
-				<span class="label">res://test/scripts/characters/TestStatsComponent.cs</span>
+				<span class="label">res://test/autoloads/TestDamageCalculator.cs</span>
 			</div>
 			<div class="summary">
 				<div class="summary-item">
 					<span class="label">Tests</span>
-					<span class="value">8</span>
+					<span class="value">25</span>
 				</div>
 				<div class="summary-item">
 					<span class="label">Skipped</span>
@@ -59,7 +59,7 @@
 				</div>
 				<div class="summary-item">
 					<span class="label">Duration</span>
-					<span class="value">121ms</span>
+					<span class="value">466ms</span>
 				</div>
 				<div class="success-rate">
 					<div class="check-icon status-passed">✓</div>
@@ -72,8 +72,8 @@
 		</div>
 		<div class="breadcrumb">
 			<a href="../index.html"><span>All</span></a>
-			<a href="../path/test.scripts.characters.html"><span>test/scripts/characters</span></a>
-			<a class="active" href="#"><span>TestStatsComponent</span></a>
+			<a href="../path/test.autoloads.html"><span>test/autoloads</span></a>
+			<a class="active" href="#"><span>TestDamageCalculator</span></a>
 		</div>
 	</header>
 
@@ -94,7 +94,21 @@
 					<tbody>
 						
 								<tr class="testcase-group">
-									<td>ModifyStat_StatIncreasesValueCorrectly</td>
+									<td>CalculateDamage_BaseSingle1xDamage_NullVsNull:0 (8, 8, 35)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>62ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>CalculateDamage_BaseSingle0.75xDamage_FireVsNature:1 (0, 1, 26)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -108,7 +122,7 @@
 
 
 								<tr class="testcase-group">
-									<td>ModifyStat_StatDecreasesValueCorrectly</td>
+									<td>CalculateDamage_BaseSingle1.5xDamage_FireVsWater:2 (0, 5, 52)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -122,7 +136,49 @@
 
 
 								<tr class="testcase-group">
-									<td>ModifyStat_StatClampsToZeroCorrectly</td>
+									<td>CalculateDamage_BaseSingle2xDamage_FireVsWind:3 (0, 3, 70)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>CalculateDamage_Immune</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>CalculateDamage_BaseDual0.5675xDamage_FireNatureVsNature:0 (0, 1, 1, 19)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>CalculateDamage_BaseDual1.125xDamage_FireGroundVsNature:1 (0, 2, 1, 39)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -136,7 +192,7 @@
 
 
 								<tr class="testcase-group">
-									<td>ModifyStat_FiresStatZeroed_WhenStatReachesZero</td>
+									<td>CalculateDamage_BaseDual1.5xDamage_FireIceVsNature:2 (0, 4, 1, 52)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -150,7 +206,35 @@
 
 
 								<tr class="testcase-group">
-									<td>ModifyStat_DoesNotFireStatZeroed_WhenStatStaysAboveZero</td>
+									<td>CalculateDamage_BaseDual2.25xDamage_IceNatureVsFire:3 (4, 1, 0, 78)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>20ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>CalculateDamage_BaseDual3xDamage_IceWindVsFire:4 (4, 3, 0, 105)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>19ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>CalculateDamage_CritSingle1xDamage_NullVsNull:0 (8, 8, 72)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -164,7 +248,7 @@
 
 
 								<tr class="testcase-group">
-									<td>ModifyStat_FiresStatRecovered_WhenStatRisesAboveZero</td>
+									<td>CalculateDamage_CritSingle0.75xDamage_FireVsNature:1 (0, 1, 54)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -178,7 +262,7 @@
 
 
 								<tr class="testcase-group">
-									<td>ModifyStat_DoesNotFireStatRecovered_WhenStatWasAlreadyAboveZero</td>
+									<td>CalculateDamage_CritSingle1.5xDamage_FireVsWater:2 (0, 5, 108)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -192,11 +276,165 @@
 
 
 								<tr class="testcase-group">
-									<td>GetStat_ReturnsDefaultValue_WhenStatNotPresent</td>
+									<td>CalculateDamage_CritSingle2xDamage_FireVsWind:3 (0, 3, 144)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>CalculateDamage_CritDual0.5675xDamage_FireNatureVsNature:0 (0, 1, 1, 40)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>CalculateDamage_CritDual1.125xDamage_FireGroundVsNature:1 (0, 2, 1, 81)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>CalculateDamage_CritDual1.5xDamage_FireIceVsNature:2 (0, 4, 1, 108)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>CalculateDamage_CritDual2.25xDamage_IceNatureVsFire:3 (4, 1, 0, 162)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>CalculateDamage_CritDual3xDamage_IceWindVsFire:4 (4, 3, 0, 216)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>EqualStats_Gives0.50MissChance:0 (20, 20, 0,5)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
 									<td>12ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>DexZero_Gives0.05MissChance:1 (20, 0, 0,05)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>AttackZero_Gives0.70%MissChance:2 (0, 10, 0,7)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>12ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>MassiveEqualStats_Gives0.50%MissChance:3 (100000, 100000, 0,5)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>ExtremelySmallStats_Gives0.05%MissChance:4 (-50, -50, 0,05)</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>CalculateDamage_DefenderStiffCheck</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
 									<td class="report-column">
 										<pre>
 

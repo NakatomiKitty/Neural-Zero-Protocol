@@ -32,11 +32,6 @@ public partial class DamageCalculator : Node
     
     public static (bool dodged, bool immuned, bool isCrit, int damage) CalculateDamage(Character attacker, Character defender, MoveResource move)
     {
-        if (move == null)
-        {
-            GD.PushWarning("No move selected lmao");
-        }
-        
         bool defenderDodged =  DefenderEvasionCheck(attacker, defender);
         if (defenderDodged) return (true, false, false, 0);
         
@@ -65,11 +60,29 @@ public partial class DamageCalculator : Node
         return (false, false, isCrit, (int)damage);
     }
     
-    // if attackerAtk < defenderDex + defenderLck, defender will dodge the attack
+    public static float CalculateMissChance(Character attacker, Character defender)
+    {
+        const float minMissChance = 0.05f;
+        const float maxMissChance = 0.70f;
+    
+        // Stiff defenders cannot dodge
+        if (IsDefenderStiff(defender)) return 0f;
+    
+        float evasion = defender.StatsComponent.GetStat(StatType.Dex);
+        float accuracy = attacker.StatsComponent.GetStat(StatType.Atk);
+    
+        // If the defender's evasion is huge, the miss chance will be higher, capping at 70%.
+        float missChance = evasion / (evasion + accuracy + float.Epsilon);
+        return Math.Clamp(missChance, minMissChance, maxMissChance);
+    }
+    
     private static bool DefenderEvasionCheck(Character attacker, Character defender)
     {
-        return GetStatValue(attacker, StatType.Atk) <
-               GetStatValue(defender, StatType.Dex) + GetStatValue(defender, StatType.Lck) * 1.25f;
+        float missChance = CalculateMissChance(attacker, defender);
+        
+        int roll = Random.Next(0, 100);
+        
+        return roll < missChance * 100;
     }
         
 
@@ -89,7 +102,7 @@ public partial class DamageCalculator : Node
         
         if (move == null || !move.CanCrit) return false;
         
-        if (attacker.DisabilityComponent.HasDisability(DisabilityTypes.Cursed)) return false;
+        if (IsAttackerMindless(attacker)) return false;
         
         float critChance = GetStatValue(attacker, StatType.Lck) * 1.25f;
         
@@ -103,6 +116,8 @@ public partial class DamageCalculator : Node
     // Private Helper Functions
 
     private static bool IsDefenderBroken(Character defender) => defender.DisabilityComponent.HasDisability(DisabilityTypes.Broken);
+    private static bool IsDefenderStiff(Character defender) => defender.DisabilityComponent.HasDisability(DisabilityTypes.Stiff);
+    private static bool IsAttackerMindless(Character attacker) => attacker.DisabilityComponent.HasDisability(DisabilityTypes.Mindless);
     private static int GetStatValue(Character character, StatType stat) => character.StatsComponent.GetStat(stat);
 
     // Get mult (for all characters)

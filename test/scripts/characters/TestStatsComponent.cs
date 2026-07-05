@@ -1,5 +1,4 @@
-﻿using Godot;
-using GdUnit4;
+﻿using GdUnit4;
 using static GdUnit4.Assertions;
 using NeuralZeroProtocol.Scripts.Characters;
 using NeuralZeroProtocol.Scripts.Resources.CharacterData;
@@ -16,6 +15,7 @@ public class TestStatsComponent
     [BeforeTest]
     public void Setup()
     {
+        
         _character = AutoFree(new Character());
         
         SetCharacterStatBase(StatType.Hp, 500);

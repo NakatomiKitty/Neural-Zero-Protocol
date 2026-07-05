@@ -38,14 +38,14 @@ public partial class DisabilityComponent : Node
 
 	public void OnStatZeroed(int statInt)
 	{
-		var disability = ToDisability((StatType)statInt);
+		DisabilityTypes disability = ToDisability((StatType)statInt);
 		GD.Print($"{disability} ACTIVATED!");
 		_currentDisabilities.Add(disability);
 	}
 
 	public void OnStatRecovered(int statInt)
 	{
-		var disability = ToDisability((StatType)statInt);
+		DisabilityTypes disability = ToDisability((StatType)statInt);
 		GD.Print($"{disability} Deactivated!");
 		_currentDisabilities.Remove(disability);
 	}
