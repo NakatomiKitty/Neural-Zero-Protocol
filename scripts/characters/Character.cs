@@ -24,13 +24,13 @@ public partial class Character : Node2D
     [Node] public MovesetComponent MovesetComponent;
     [Node] public ActionValidatorComponent ActionValidatorComponent;
 
-    [Export] private CharacterStatResource _characterStatsResources;
+    [Export] private CharacterStatResource _characterStatResource;
 
 	public Dictionary<StatType, int> CurrentStats = new();
 
-	public void SetTestResource(CharacterStatResource resource) => _characterStatsResources = resource;
-	public ElementType PrimaryElement => _characterStatsResources.PrimaryElement;
-	public ElementType SecondaryElement => _characterStatsResources.SecondaryElement;
+	public void SetTestResource(CharacterStatResource resource) => _characterStatResource = resource;
+	public ElementType PrimaryElement => _characterStatResource.PrimaryElement;
+	public ElementType SecondaryElement => _characterStatResource.SecondaryElement;
 	
 	public override void _Notification(int what)
 	{
@@ -39,7 +39,7 @@ public partial class Character : Node2D
 
 	public override void _Ready() 
 	{
-		InitializeStats(_characterStatsResources);
+		InitializeStats(_characterStatResource);
 		StatsComponent.Initialize(this);
 		HealthComponent.Initialize(this);
 		MovesetComponent.Initialize(this);
@@ -49,7 +49,7 @@ public partial class Character : Node2D
 		StatsComponent.StatRecovered += DisabilityComponent.OnStatRecovered;
 	}
 	
-    private void InitializeStats(CharacterStatResource resource)
+    public void InitializeStats(CharacterStatResource resource)
 	{
 		CurrentStats.Clear();
 		

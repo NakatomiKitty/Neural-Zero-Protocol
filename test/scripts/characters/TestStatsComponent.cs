@@ -53,7 +53,7 @@ public class TestStatsComponent
     
     // Event Tests
     [TestCase]
-    public void ModifyStat_FiresStatZeroed_WhenStatReachesZero()
+    public void FireStatZeroed_WhenStatReachesZero()
     {
         bool zeroedFired = false;
         int firedStat = -1;
@@ -71,7 +71,7 @@ public class TestStatsComponent
     }
     
     [TestCase]
-    public void ModifyStat_DoesNotFireStatZeroed_WhenStatStaysAboveZero()
+    public void DoNotFireStatZeroed_WhenStatStaysAboveZero()
     {
         bool zeroedFired = false;
 
@@ -83,7 +83,7 @@ public class TestStatsComponent
     }
     
     [TestCase]
-    public void ModifyStat_FiresStatRecovered_WhenStatRisesAboveZero()
+    public void FireStatRecovered_WhenStatRisesAboveZero()
     {
         // Force Def to Zero first
         _statsComponent.ModifyStat(StatType.Def, -20);
@@ -105,7 +105,7 @@ public class TestStatsComponent
     }
     
     [TestCase]
-    public void ModifyStat_DoesNotFireStatRecovered_WhenStatWasAlreadyAboveZero()
+    public void DoNotFireStatRecovered_WhenStatWasAlreadyAboveZero()
     {
         bool recoveredFired = false;
 

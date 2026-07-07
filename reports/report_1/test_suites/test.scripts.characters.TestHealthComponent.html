@@ -34,12 +34,12 @@
 		<div class="report-container">
 			<h1>Testsuite Report</h1>
 			<div>
-				<span class="label">res://test/scripts/characters/TestDisabilityComponent.cs</span>
+				<span class="label">res://test/scripts/characters/TestHealthComponent.cs</span>
 			</div>
 			<div class="summary">
 				<div class="summary-item">
 					<span class="label">Tests</span>
-					<span class="value">16</span>
+					<span class="value">9</span>
 				</div>
 				<div class="summary-item">
 					<span class="label">Skipped</span>
@@ -51,7 +51,7 @@
 				</div>
 				<div class="summary-item">
 					<span class="label">Failures</span>
-					<span class="value">0</span>
+					<span class="value">2</span>
 				</div>
 				<div class="summary-item">
 					<span class="label">Orphans</span>
@@ -59,13 +59,13 @@
 				</div>
 				<div class="summary-item">
 					<span class="label">Duration</span>
-					<span class="value">239ms</span>
+					<span class="value">149ms</span>
 				</div>
 				<div class="success-rate">
-					<div class="check-icon status-passed">✓</div>
+					<div class="check-icon status-failed">✓</div>
 					<div class="rate-text">
 						<span class="label">Success Rate</span>
-						<span class="value">100%</span>
+						<span class="value">77%</span>
 					</div>
 				</div>
 			</div>
@@ -73,7 +73,7 @@
 		<div class="breadcrumb">
 			<a href="../index.html"><span>All</span></a>
 			<a href="../path/test.scripts.characters.html"><span>test/scripts/characters</span></a>
-			<a class="active" href="#"><span>TestDisabilityComponent</span></a>
+			<a class="active" href="#"><span>TestHealthComponent</span></a>
 		</div>
 	</header>
 
@@ -94,7 +94,63 @@
 					<tbody>
 						
 								<tr class="testcase-group">
-									<td>VerifyZeroDisabilitiesOnStartup</td>
+									<td>TakeDamage_ReducesHealthCorrectly</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>11ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>TakeDamage_ClampsToZero</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>HealHealth_IncreasesHealthCorrectly</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>HealHealth_ClampsToMaxHealth</td>
+									<td><span class="status status-passed">PASSED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>13ms</td>
+									<td class="report-column">
+										<pre>
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>HealHealth_DoesNothingWhenDead</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -108,105 +164,7 @@
 
 
 								<tr class="testcase-group">
-									<td>OnStatZeroed_FragileIsActivated:0 (1)</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>20ms</td>
-									<td class="report-column">
-										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>OnStatZeroed_BrokenIsActivated:1 (2)</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>13ms</td>
-									<td class="report-column">
-										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>OnStatZeroed_StiffIsActivated:2 (3)</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>13ms</td>
-									<td class="report-column">
-										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>OnStatZeroed_MindlessIsActivated:3 (4)</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>13ms</td>
-									<td class="report-column">
-										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>OnStatZeroed_CursedIsActivated:4 (5)</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>13ms</td>
-									<td class="report-column">
-										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>OnStatZeroed_ExhaustedIsActivated:5 (6)</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>13ms</td>
-									<td class="report-column">
-										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>OnStatZeroed_DisabilityIdempotencyCheck</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>13ms</td>
-									<td class="report-column">
-										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>OnStatRecovered_FragileIsDeactivated:0 (1)</td>
+									<td>FireDiedEvent_WhenHealthReachesZero</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -220,49 +178,7 @@
 
 
 								<tr class="testcase-group">
-									<td>OnStatRecovered_BrokenIsDeactivated:1 (2)</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>13ms</td>
-									<td class="report-column">
-										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>OnStatRecovered_StiffIsDeactivated:2 (3)</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>13ms</td>
-									<td class="report-column">
-										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>OnStatRecovered_MindlessIsDeactivated:3 (4)</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>13ms</td>
-									<td class="report-column">
-										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>OnStatRecovered_CursedIsDeactivated:4 (5)</td>
+									<td>FireHealthChanged_WhenTakingDamage</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -276,13 +192,15 @@
 
 
 								<tr class="testcase-group">
-									<td>OnStatRecovered_ExhaustedIsDeactivated:5 (6)</td>
-									<td><span class="status status-passed">PASSED</span></td>
+									<td>FireHealthChanged_WhenHealing</td>
+									<td><span class="status status-failed">FAILED</span></td>
 									<td>0</td>
 									<td>0</td>
-									<td>13ms</td>
+									<td>25ms</td>
 									<td class="report-column">
 										<pre>
+line 132: Expecting be equal:
+    '500' but is '400'
 
 										</pre>
 									</td>
@@ -290,27 +208,15 @@
 
 
 								<tr class="testcase-group">
-									<td>OnStatRecovered_RecoveryWithoutActivation</td>
-									<td><span class="status status-passed">PASSED</span></td>
+									<td>FireHealthChanged_OnInitialization</td>
+									<td><span class="status status-failed">FAILED</span></td>
 									<td>0</td>
 									<td>0</td>
-									<td>13ms</td>
+									<td>16ms</td>
 									<td class="report-column">
 										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>OnStatZeroedAndRecovered_VerifyDisabilitiesAreTrackedIndependently</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>13ms</td>
-									<td class="report-column">
-										<pre>
+line 150: Expecting be equal:
+    '500' but is '0'
 
 										</pre>
 									</td>
