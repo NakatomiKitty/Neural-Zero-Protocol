@@ -22,6 +22,7 @@ public partial class Character : Node2D
     [Node] public DisabilityComponent DisabilityComponent;
     [Node] public HealthComponent HealthComponent;
     [Node] public MovesetComponent MovesetComponent;
+    [Node] public ActionValidatorComponent ActionValidatorComponent;
 
     [Export] private CharacterStatResource _characterStatsResources;
 
@@ -41,6 +42,7 @@ public partial class Character : Node2D
 		InitializeStats(_characterStatsResources);
 		StatsComponent.Initialize(this);
 		MovesetComponent.Initialize(this);
+		ActionValidatorComponent.Initialize(this);
 		
 		int maxHp = StatsComponent.GetStat(StatType.Hp);
 
@@ -60,7 +62,7 @@ public partial class Character : Node2D
 		{
 			int baseValue = resource.GetBaseValues(stat); 
 			
-			// Makes Lck's value constant (2) AND makes Nrg either 5 or 10 depending on it's tier of rarity
+			// Makes Lck's value constant (1) AND makes Nrg either 5 or 10 depending on it's tier of rarity
 			if (stat is StatType.Lck or StatType.Nrg) 
 			{
 				if (stat == StatType.Nrg && resource.IsHighTierRarity())

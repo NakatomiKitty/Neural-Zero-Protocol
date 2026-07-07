@@ -6,14 +6,6 @@ namespace NeuralZeroProtocol.Scripts.Characters;
 public partial class PlayerCharacter : Character
 {
     public ActionValidatorComponent ActionValidatorComponent;
-
-    public override void _Ready()
-    {
-        base._Ready();
-        
-        ActionValidatorComponent = GetNode<ActionValidatorComponent>("ActionValidatorComponent");
-        ActionValidatorComponent.Initialize(this);
-    }
 }
 
 
