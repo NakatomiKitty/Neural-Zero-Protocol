@@ -40,7 +40,7 @@ public partial class StatsComponent : Node
 		StatChanged?.Invoke((int)stat, currentValue);
 
 		// Enter DeadZone
-		if (stat != StatType.Hp && oldValue > 0 && currentValue == 0) 
+		if (oldValue > 0 && currentValue == 0) 
 		{   
 			GD.Print($"{stat} reached zero! Activating disability!");
 			StatZeroed?.Invoke((int)stat);

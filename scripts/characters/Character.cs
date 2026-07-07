@@ -41,13 +41,10 @@ public partial class Character : Node2D
 	{
 		InitializeStats(_characterStatsResources);
 		StatsComponent.Initialize(this);
+		HealthComponent.Initialize(this);
 		MovesetComponent.Initialize(this);
 		ActionValidatorComponent.Initialize(this);
 		
-		int maxHp = StatsComponent.GetStat(StatType.Hp);
-
-		HealthComponent.InitializeHealth(maxHp);
-
 		StatsComponent.StatZeroed += DisabilityComponent.OnStatZeroed;
 		StatsComponent.StatRecovered += DisabilityComponent.OnStatRecovered;
 	}
@@ -76,6 +73,12 @@ public partial class Character : Node2D
 			}
 			
 			float finalValue = MathF.Ceiling(baseValue * mult); // Applies the Rarity Multiplier
+			
+			if (stat is StatType.Hp)
+			{
+				HealthComponent.InitializeHealth((int)finalValue);
+				continue;
+			}
 			CurrentStats[stat] = (int)finalValue;
 		}
 

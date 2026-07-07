@@ -15,10 +15,8 @@ public class TestStatsComponent
     [BeforeTest]
     public void Setup()
     {
-        
         _character = AutoFree(new Character());
-        
-        SetCharacterStatBase(StatType.Hp, 500);
+
         SetCharacterStatBase(StatType.Atk, 20);
         SetCharacterStatBase(StatType.Def, 20);
         SetCharacterStatBase(StatType.Dex, 10);
@@ -35,8 +33,8 @@ public class TestStatsComponent
     [TestCase]
     public void ModifyStat_StatIncreasesValueCorrectly()
     {
-        _statsComponent.ModifyStat(StatType.Hp, 50);
-        AssertThat(_character.CurrentStats[StatType.Hp]).IsEqual(550);
+        _statsComponent.ModifyStat(StatType.Atk, 5);
+        AssertThat(_character.CurrentStats[StatType.Atk]).IsEqual(25);
     }
     
     [TestCase]

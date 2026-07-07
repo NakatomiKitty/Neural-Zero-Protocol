@@ -10,10 +10,11 @@ public partial class HealthComponent : Node
     public event Action<int, int> HealthChanged; // int currentHealth, int maxHealth
     public event Action<Character> Died; // Character parent
 
+    private Character _character;
     private int _maxHealth;
     private int _currentHealth;
 
-
+    public void Initialize(Character character) => _character = character;
     public void InitializeHealth(int maxHealth)
     {
         _maxHealth = maxHealth;
@@ -35,7 +36,7 @@ public partial class HealthComponent : Node
         {
             GD.Print("Health reached zero! You died!");
             
-            Died?.Invoke((Character)GetParent());
+            Died?.Invoke(_character);
         }
     }
 
