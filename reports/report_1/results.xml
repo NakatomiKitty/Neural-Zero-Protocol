@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites id="2026-07-05" name="report_1" tests="49" failures="0" skipped="0" flaky="0" time="0.000">
-	<testsuite id="0" name="TestDamageCalculator" package="test/autoloads" timestamp="2026-07-05T14:55:13" hostname="localhost" tests="25" failures="0" errors="0" skipped="0" flaky="0" time="0.463">
-		<testcase name="CalculateDamage_BaseSingle1xDamage_NullVsNull:0 (8, 8, 35)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.064">
+<testsuites id="2026-07-07" name="report_1" tests="56" failures="0" skipped="0" flaky="0" time="0.000">
+	<testsuite id="0" name="TestDamageCalculator" package="test/autoloads" timestamp="2026-07-07T13:48:00" hostname="localhost" tests="25" failures="0" errors="0" skipped="0" flaky="0" time="0.446">
+		<testcase name="CalculateDamage_BaseSingle1xDamage_NullVsNull:0 (8, 8, 35)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.061">
 		</testcase>
-		<testcase name="CalculateDamage_BaseSingle0.75xDamage_FireVsNature:1 (0, 1, 26)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.012">
+		<testcase name="CalculateDamage_BaseSingle0.75xDamage_FireVsNature:1 (0, 1, 26)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.006">
 		</testcase>
 		<testcase name="CalculateDamage_BaseSingle1.5xDamage_FireVsWater:2 (0, 5, 52)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
 		<testcase name="CalculateDamage_BaseSingle2xDamage_FireVsWind:3 (0, 3, 70)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
-		<testcase name="CalculateDamage_Immune" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.020">
+		<testcase name="CalculateDamage_Immune" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
 		<testcase name="CalculateDamage_BaseDual0.5675xDamage_FireNatureVsNature:0 (0, 1, 1, 19)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
@@ -21,7 +21,7 @@
 		</testcase>
 		<testcase name="CalculateDamage_BaseDual3xDamage_IceWindVsFire:4 (4, 3, 0, 105)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
-		<testcase name="CalculateDamage_CritSingle1xDamage_NullVsNull:0 (8, 8, 72)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.020">
+		<testcase name="CalculateDamage_CritSingle1xDamage_NullVsNull:0 (8, 8, 72)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
 		<testcase name="CalculateDamage_CritSingle0.75xDamage_FireVsNature:1 (0, 1, 54)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
@@ -31,15 +31,15 @@
 		</testcase>
 		<testcase name="CalculateDamage_CritDual0.5675xDamage_FireNatureVsNature:0 (0, 1, 1, 40)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
-		<testcase name="CalculateDamage_CritDual1.125xDamage_FireGroundVsNature:1 (0, 2, 1, 81)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.012">
+		<testcase name="CalculateDamage_CritDual1.125xDamage_FireGroundVsNature:1 (0, 2, 1, 81)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
 		<testcase name="CalculateDamage_CritDual1.5xDamage_FireIceVsNature:2 (0, 4, 1, 108)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
 		<testcase name="CalculateDamage_CritDual2.25xDamage_IceNatureVsFire:3 (4, 1, 0, 162)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
-		<testcase name="CalculateDamage_CritDual3xDamage_IceWindVsFire:4 (4, 3, 0, 216)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.012">
+		<testcase name="CalculateDamage_CritDual3xDamage_IceWindVsFire:4 (4, 3, 0, 216)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
-		<testcase name="EqualStats_Gives0.50MissChance:0 (20, 20, 0,5)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.020">
+		<testcase name="EqualStats_Gives0.50MissChance:0 (20, 20, 0,5)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
 		<testcase name="DexZero_Gives0.05MissChance:1 (20, 0, 0,05)" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
@@ -52,7 +52,23 @@
 		<testcase name="CalculateDamage_DefenderStiffCheck" classname="NeuralZeroProtocol.Tests.Autoloads.TestDamageCalculator" time="0.013">
 		</testcase>
 	</testsuite>
-	<testsuite id="1" name="TestDisabilityComponent" package="test/scripts/characters" timestamp="2026-07-05T14:55:13" hostname="localhost" tests="16" failures="0" errors="0" skipped="0" flaky="0" time="0.239">
+	<testsuite id="1" name="TestActionValidatorComponent" package="test/scripts/characters" timestamp="2026-07-07T13:48:01" hostname="localhost" tests="7" failures="0" errors="0" skipped="0" flaky="0" time="0.104">
+		<testcase name="CanSkip_ConfirmIsAlwaysTrue" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestActionValidatorComponent" time="0.013">
+		</testcase>
+		<testcase name="CanDefend_ConfirmIsAlwaysTrue" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestActionValidatorComponent" time="0.013">
+		</testcase>
+		<testcase name="IsNotExhausted_FlagChangesToTrue:0 (True)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestActionValidatorComponent" time="0.013">
+		</testcase>
+		<testcase name="IsNotExhausted_FlagChangesToFalse:1 (False)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestActionValidatorComponent" time="0.013">
+		</testcase>
+		<testcase name="CanUseMove_MoveCostIsLessThanCharacterNrg_False:0 (1, False)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestActionValidatorComponent" time="0.013">
+		</testcase>
+		<testcase name="CanUseMove_MoveCostIsEqualToCharacterNrg_True:1 (5, True)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestActionValidatorComponent" time="0.013">
+		</testcase>
+		<testcase name="CanUseMove_MoveCostIsMoreThanCharacterNrg_False:2 (6, False)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestActionValidatorComponent" time="0.013">
+		</testcase>
+	</testsuite>
+	<testsuite id="2" name="TestDisabilityComponent" package="test/scripts/characters" timestamp="2026-07-07T13:48:01" hostname="localhost" tests="16" failures="0" errors="0" skipped="0" flaky="0" time="0.246">
 		<testcase name="VerifyZeroDisabilitiesOnStartup" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.012">
 		</testcase>
 		<testcase name="OnStatZeroed_FragileIsActivated:0 (1)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.020">
@@ -63,21 +79,21 @@
 		</testcase>
 		<testcase name="OnStatZeroed_MindlessIsActivated:3 (4)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.013">
 		</testcase>
-		<testcase name="OnStatZeroed_CursedIsActivated:4 (5)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.013">
+		<testcase name="OnStatZeroed_CursedIsActivated:4 (5)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.012">
 		</testcase>
 		<testcase name="OnStatZeroed_ExhaustedIsActivated:5 (6)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.013">
 		</testcase>
 		<testcase name="OnStatZeroed_DisabilityIdempotencyCheck" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.013">
 		</testcase>
-		<testcase name="OnStatRecovered_FragileIsDeactivated:0 (1)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.013">
+		<testcase name="OnStatRecovered_FragileIsDeactivated:0 (1)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.012">
 		</testcase>
 		<testcase name="OnStatRecovered_BrokenIsDeactivated:1 (2)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.013">
 		</testcase>
-		<testcase name="OnStatRecovered_StiffIsDeactivated:2 (3)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.013">
+		<testcase name="OnStatRecovered_StiffIsDeactivated:2 (3)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.012">
 		</testcase>
-		<testcase name="OnStatRecovered_MindlessIsDeactivated:3 (4)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.012">
+		<testcase name="OnStatRecovered_MindlessIsDeactivated:3 (4)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.019">
 		</testcase>
-		<testcase name="OnStatRecovered_CursedIsDeactivated:4 (5)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.013">
+		<testcase name="OnStatRecovered_CursedIsDeactivated:4 (5)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.012">
 		</testcase>
 		<testcase name="OnStatRecovered_ExhaustedIsDeactivated:5 (6)" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.013">
 		</testcase>
@@ -86,10 +102,10 @@
 		<testcase name="OnStatZeroedAndRecovered_VerifyDisabilitiesAreTrackedIndependently" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestDisabilityComponent" time="0.013">
 		</testcase>
 	</testsuite>
-	<testsuite id="2" name="TestStatsComponent" package="test/scripts/characters" timestamp="2026-07-05T14:55:13" hostname="localhost" tests="8" failures="0" errors="0" skipped="0" flaky="0" time="0.122">
+	<testsuite id="3" name="TestStatsComponent" package="test/scripts/characters" timestamp="2026-07-07T13:48:01" hostname="localhost" tests="8" failures="0" errors="0" skipped="0" flaky="0" time="0.121">
 		<testcase name="ModifyStat_StatIncreasesValueCorrectly" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestStatsComponent" time="0.013">
 		</testcase>
-		<testcase name="ModifyStat_StatDecreasesValueCorrectly" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestStatsComponent" time="0.013">
+		<testcase name="ModifyStat_StatDecreasesValueCorrectly" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestStatsComponent" time="0.012">
 		</testcase>
 		<testcase name="ModifyStat_StatClampsToZeroCorrectly" classname="NeuralZeroProtocol.Tests.Scripts.Characters.TestStatsComponent" time="0.013">
 		</testcase>
