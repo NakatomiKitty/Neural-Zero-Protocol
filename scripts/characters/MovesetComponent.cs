@@ -16,11 +16,15 @@ public partial class MovesetComponent : Node
     
     public Array<MoveResource> GetMoves() => Moves;
 
-    public bool CheckNrg(MoveResource move) => _character.StatsComponent.GetStat(StatType.Nrg) >= move.Cost;
+    public bool HasEnoughNrg(MoveResource move) => _character.StatsComponent.GetStat(StatType.Nrg) >= move.Cost;
     
     public void SpendNrg(MoveResource move)
     {
-        if (CheckNrg(move)) _character.StatsComponent.ModifyStat(StatType.Nrg, -move.Cost);
+        if (HasEnoughNrg(move))
+        {
+            _character.StatsComponent.ModifyStat(StatType.Nrg, -move.Cost);
+        }
     }
 }
 
+ 
