@@ -15,7 +15,7 @@ public class TestCharacterStatResource
     {
         _characterStatResource = AutoFree(new CharacterStatResource());
     }
-
+    
     [TestCase(Rarity.Scrap, 1.0f, TestName = "GetStatMultiplier_ReturnsScrapMultiplier")]
     [TestCase(Rarity.Common, 1.15f, TestName = "GetStatMultiplier_ReturnsCommonMultiplier")]
     [TestCase(Rarity.Uncommon, 1.4375f, TestName = "GetStatMultiplier_ReturnsUncommonMultiplier")] 
