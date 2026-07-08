@@ -34,12 +34,12 @@
 		<div class="report-container">
 			<h1>Testsuite Report</h1>
 			<div>
-				<span class="label">res://test/scripts/characters/TestActionValidatorComponent.cs</span>
+				<span class="label">res://test/scripts/resources/character_data/TestCharacterStatResource.cs</span>
 			</div>
 			<div class="summary">
 				<div class="summary-item">
 					<span class="label">Tests</span>
-					<span class="value">7</span>
+					<span class="value">6</span>
 				</div>
 				<div class="summary-item">
 					<span class="label">Skipped</span>
@@ -51,7 +51,7 @@
 				</div>
 				<div class="summary-item">
 					<span class="label">Failures</span>
-					<span class="value">0</span>
+					<span class="value">5</span>
 				</div>
 				<div class="summary-item">
 					<span class="label">Orphans</span>
@@ -59,21 +59,21 @@
 				</div>
 				<div class="summary-item">
 					<span class="label">Duration</span>
-					<span class="value">121ms</span>
+					<span class="value">139ms</span>
 				</div>
 				<div class="success-rate">
-					<div class="check-icon status-passed">✓</div>
+					<div class="check-icon status-failed">✓</div>
 					<div class="rate-text">
 						<span class="label">Success Rate</span>
-						<span class="value">100%</span>
+						<span class="value">16%</span>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="breadcrumb">
 			<a href="../index.html"><span>All</span></a>
-			<a href="../path/test.scripts.characters.html"><span>test/scripts/characters</span></a>
-			<a class="active" href="#"><span>TestActionValidatorComponent</span></a>
+			<a href="../path/test.scripts.resources.character_data.html"><span>test/scripts/resources/character_data</span></a>
+			<a class="active" href="#"><span>TestCharacterStatResource</span></a>
 		</div>
 	</header>
 
@@ -94,21 +94,7 @@
 					<tbody>
 						
 								<tr class="testcase-group">
-									<td>CanSkip_ConfirmIsAlwaysTrue</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>12ms</td>
-									<td class="report-column">
-										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>CanDefend_ConfirmIsAlwaysTrue</td>
+									<td>GetStatMultiplier_ReturnsScrapMultiplier:0 (0, 1)</td>
 									<td><span class="status status-passed">PASSED</span></td>
 									<td>0</td>
 									<td>0</td>
@@ -122,13 +108,47 @@
 
 
 								<tr class="testcase-group">
-									<td>IsNotExhausted_NoDisability_ReturnsTrue</td>
-									<td><span class="status status-passed">PASSED</span></td>
+									<td>GetStatMultiplier_ReturnsCommonMultiplier:1 (1, 1,15)</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>59ms</td>
+									<td class="report-column">
+										<pre>
+line 29: Expecting be equal:
+    '1' but is '1.15'
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>GetStatMultiplier_ReturnsUncommonMultiplier:2 (2, 1,4375)</td>
+									<td><span class="status status-failed">FAILED</span></td>
+									<td>0</td>
+									<td>0</td>
+									<td>9ms</td>
+									<td class="report-column">
+										<pre>
+line 29: Expecting be equal:
+    '1' but is '1.4375'
+
+										</pre>
+									</td>
+								</tr>
+
+
+								<tr class="testcase-group">
+									<td>GetStatMultiplier_ReturnsRareMultiplier:3 (3, 1,796875)</td>
+									<td><span class="status status-failed">FAILED</span></td>
 									<td>0</td>
 									<td>0</td>
 									<td>13ms</td>
 									<td class="report-column">
 										<pre>
+line 29: Expecting be equal:
+    '1' but is '1.796875'
 
 										</pre>
 									</td>
@@ -136,13 +156,15 @@
 
 
 								<tr class="testcase-group">
-									<td>IsNotExhausted_ExhaustedDisability_ReturnsFalse</td>
-									<td><span class="status status-passed">PASSED</span></td>
+									<td>GetStatMultiplier_ReturnsSuperRareMultiplier:4 (4, 2,6953125)</td>
+									<td><span class="status status-failed">FAILED</span></td>
 									<td>0</td>
 									<td>0</td>
 									<td>13ms</td>
 									<td class="report-column">
 										<pre>
+line 29: Expecting be equal:
+    '1' but is '2.6953125'
 
 										</pre>
 									</td>
@@ -150,41 +172,15 @@
 
 
 								<tr class="testcase-group">
-									<td>CanUseMove_MoveCostIsLessThanCharacterNrg_True:0 (1, True)</td>
-									<td><span class="status status-passed">PASSED</span></td>
+									<td>GetStatMultiplier_ReturnsUltraRareMultiplier:5 (5, 4,0429688)</td>
+									<td><span class="status status-failed">FAILED</span></td>
 									<td>0</td>
 									<td>0</td>
-									<td>20ms</td>
+									<td>13ms</td>
 									<td class="report-column">
 										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>CanUseMove_MoveCostIsEqualToCharacterNrg_True:1 (5, True)</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>12ms</td>
-									<td class="report-column">
-										<pre>
-
-										</pre>
-									</td>
-								</tr>
-
-
-								<tr class="testcase-group">
-									<td>CanUseMove_MoveCostIsMoreThanCharacterNrg_False:2 (6, False)</td>
-									<td><span class="status status-passed">PASSED</span></td>
-									<td>0</td>
-									<td>0</td>
-									<td>19ms</td>
-									<td class="report-column">
-										<pre>
+line 29: Expecting be equal:
+    '1' but is '4.0429688'
 
 										</pre>
 									</td>
