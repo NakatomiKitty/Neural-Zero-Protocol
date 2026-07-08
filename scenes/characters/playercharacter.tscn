@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://eob2rikglte3"]
 
 [ext_resource type="Script" uid="uid://bmlt0oqug2cy0" path="res://scripts/characters/PlayerCharacter.cs" id="1_gipb7"]
+[ext_resource type="Resource" uid="uid://b5qdo4spmy8m1" path="res://scripts/resources/character_data/TestPlayer.tres" id="2_rj3md"]
 [ext_resource type="PackedScene" uid="uid://kq5mlbqthrd4" path="res://scenes/disability_component.tscn" id="2_t75uv"]
 [ext_resource type="PackedScene" uid="uid://8ynpcmop3vxi" path="res://scenes/health_component.tscn" id="3_rkwct"]
 [ext_resource type="PackedScene" uid="uid://dtukkkjtf20no" path="res://scenes/action_validator_component.tscn" id="4_n2haq"]
@@ -20,6 +21,7 @@
 
 [node name="PlayerCharacter" type="Node2D" unique_id=674946849]
 script = ExtResource("1_gipb7")
+_characterStatResource = ExtResource("2_rj3md")
 
 [node name="DisabilityComponent" parent="." unique_id=2131075981 instance=ExtResource("2_t75uv")]
 
