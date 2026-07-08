@@ -53,7 +53,7 @@ public partial class BattleScene : Node2D
         CombatStateMachine.AttackTriggered += OnAttackTriggeredPlayMenuSequence;
         
         // Passes the array to CardSystem so it can be used to update the card skins
-        Array<MoveResource> moves = BattleManager.GetSelectedMovesFromCurrentChar(TurnManager.PlayerCharacters);
+        Array<MoveResource> moves = BattleManager.GetSelectedMovesFromCurrentChar((PlayerCharacter)TurnManager.GetCurrentUnit());
         _ = CardSystem.CreateHandFromMoves(moves);
         
         TurnManager.StartBattleSequence();
