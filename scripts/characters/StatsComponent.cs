@@ -20,22 +20,11 @@ public partial class StatsComponent : Node
 
 	private Character _character;
 
-	public override void _Ready() 
-	{
-		_character = GetNode<Character>("..");
-		
-		if (_character == null)
-		{
-			GD.PushWarning($"Character is not loaded in!");
-		}
-		
-		// DebugPrintAllStats();
-        // if you want to debug, put ModifyStat(StatTypes.Key, value)
-	}
+	public void Initialize(Character character) => _character = character;
 	
 	public int GetStat(StatType stat)
 	{
-		return _character.CurrentStats.GetValueOrDefault(stat, 5);
+		return _character.CurrentStats.GetValueOrDefault(stat, 0);
 	}
 
 	public void ModifyStat(StatType stat, int changeValue)
@@ -51,7 +40,7 @@ public partial class StatsComponent : Node
 		StatChanged?.Invoke((int)stat, currentValue);
 
 		// Enter DeadZone
-		if (stat != StatType.Hp && oldValue > 0 && currentValue == 0) 
+		if (oldValue > 0 && currentValue == 0) 
 		{   
 			GD.Print($"{stat} reached zero! Activating disability!");
 			StatZeroed?.Invoke((int)stat);

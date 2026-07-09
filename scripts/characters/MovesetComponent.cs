@@ -12,18 +12,19 @@ public partial class MovesetComponent : Node
     
     private Character _character;
 
-    public override void _Ready() 
-    {
-        _character = GetNode<Character>("..");
-	}
+    public void Initialize(Character character) => _character = character;
     
     public Array<MoveResource> GetMoves() => Moves;
 
-    public bool CheckNrg(MoveResource move) => _character.StatsComponent.GetStat(StatType.Nrg) >= move.Cost;
+    public bool HasEnoughNrg(MoveResource move) => _character.StatsComponent.GetStat(StatType.Nrg) >= move.Cost;
     
     public void SpendNrg(MoveResource move)
     {
-        if (CheckNrg(move)) _character.StatsComponent.ModifyStat(StatType.Nrg, -move.Cost);
+        if (HasEnoughNrg(move))
+        {
+            _character.StatsComponent.ModifyStat(StatType.Nrg, -move.Cost);
+        }
     }
 }
 
+ 

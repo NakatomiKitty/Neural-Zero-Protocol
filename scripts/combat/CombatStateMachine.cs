@@ -36,7 +36,7 @@ public partial class CombatStateMachine : Node
         if (what == NotificationSceneInstantiated) WireNodes();
     }
     
-    public override void _Ready() => _battleScene = GetNode<BattleScene>("..");
+    public void Initialize(BattleScene battleScene) => _battleScene = battleScene;
 
     public async void StartBattle() => await ChangeState(BattleState.Initializing);
     

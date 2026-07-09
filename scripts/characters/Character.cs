@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using GodotUtilities;
 using NeuralZeroProtocol.Autoloads;
 using NeuralZeroProtocol.Scripts.Resources.CharacterData;
 using System;
@@ -14,48 +15,41 @@ namespace NeuralZeroProtocol.Scripts.Characters;
 /// Then stores the current values in a dictionary
 /// It also acts as the main hub for the components
 /// </summary>
-[GlobalClass]
+[Scene]
 public partial class Character : Node2D
 {
-    public StatsComponent StatsComponent;
-    public DisabilityComponent DisabilityComponent;
-    public HealthComponent HealthComponent;
-	public MovesetComponent MovesetComponent;
+    [Node] public StatsComponent StatsComponent;
+    [Node] public DisabilityComponent DisabilityComponent;
+    [Node] public HealthComponent HealthComponent;
+    [Node] public MovesetComponent MovesetComponent;
+    [Node] public ActionValidatorComponent ActionValidatorComponent;
 
-    [Export] private CharacterStatResource _characterStatsResources;
+    [Export] private CharacterStatResource _characterStatResource;
 
 	public Dictionary<StatType, int> CurrentStats = new();
 
-	public ElementType PrimaryElement => _characterStatsResources.PrimaryElement;
-	public ElementType SecondaryElement => _characterStatsResources.SecondaryElement;
+	public void SetTestResource(CharacterStatResource resource) => _characterStatResource = resource;
+	public ElementType PrimaryElement => _characterStatResource.PrimaryElement;
+	public ElementType SecondaryElement => _characterStatResource.SecondaryElement;
 	
-	public override void _EnterTree()
+	public override void _Notification(int what)
 	{
-		GD.Print(PrimaryElement);
-		GD.Print(SecondaryElement);
-		Initialize();
-		InitializeStats(_characterStatsResources);
-	} 
+		if (what == NotificationSceneInstantiated) WireNodes();
+	}
 
 	public override void _Ready() 
 	{
-		int maxHp = StatsComponent.GetStat(StatType.Hp);
-
-		HealthComponent.InitializeHealth(maxHp);
-
+		InitializeStats(_characterStatResource);
+		StatsComponent.Initialize(this);
+		HealthComponent.Initialize(this);
+		MovesetComponent.Initialize(this);
+		ActionValidatorComponent.Initialize(this);
+		
 		StatsComponent.StatZeroed += DisabilityComponent.OnStatZeroed;
 		StatsComponent.StatRecovered += DisabilityComponent.OnStatRecovered;
 	}
-
-	private void Initialize()
-	{
-		StatsComponent = GetNode<StatsComponent>("StatsComponent");
-		DisabilityComponent = GetNode<DisabilityComponent>("DisabilityComponent");
-		HealthComponent = GetNode<HealthComponent>("HealthComponent");
-		MovesetComponent = GetNode<MovesetComponent>("MovesetComponent");
-	}
 	
-    private void InitializeStats(CharacterStatResource resource)
+    public void InitializeStats(CharacterStatResource resource)
 	{
 		CurrentStats.Clear();
 		
@@ -65,7 +59,7 @@ public partial class Character : Node2D
 		{
 			int baseValue = resource.GetBaseValues(stat); 
 			
-			// Makes Lck's value constant (2) AND makes Nrg either 5 or 10 depending on it's tier of rarity
+			// Makes Lck's value constant (1) AND makes Nrg either 5 or 10 depending on it's tier of rarity
 			if (stat is StatType.Lck or StatType.Nrg) 
 			{
 				if (stat == StatType.Nrg && resource.IsHighTierRarity())
@@ -79,6 +73,12 @@ public partial class Character : Node2D
 			}
 			
 			float finalValue = MathF.Ceiling(baseValue * mult); // Applies the Rarity Multiplier
+			
+			if (stat is StatType.Hp)
+			{
+				HealthComponent.InitializeHealth((int)finalValue);
+				continue;
+			}
 			CurrentStats[stat] = (int)finalValue;
 		}
 

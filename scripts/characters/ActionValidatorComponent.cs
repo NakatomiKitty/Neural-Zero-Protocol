@@ -9,34 +9,17 @@ public partial class ActionValidatorComponent : Node
 {
 	private Character _character;
 
-	public override void _Ready() 
-	{
-		_character = GetNode<Character>("..");
+	public void Initialize(Character character) => _character = character;
 
-		if (_character == null)
-		{
-			GD.PushError($"Character is not loaded in!");
-		}
-	}
-
-	public bool IsExhausted() => 
+	public bool IsNotExhausted() => 
 		!_character.DisabilityComponent.HasDisability(DisabilityTypes.Exhausted);
 	
 	public bool CanUseMove(MoveResource move) => 
-		IsExhausted() && !_character.MovesetComponent.CheckNrg(move);
-
-    public bool CanAttack() => 
-		IsExhausted() && !_character.DisabilityComponent.HasDisability(DisabilityTypes.Fragile);
-
-    public bool CanDodge() => 
-		IsExhausted() && !_character.DisabilityComponent.HasDisability(DisabilityTypes.Stiff);
-
-    public bool CanCrit() =>  
-		IsExhausted() && !_character.DisabilityComponent.HasDisability(DisabilityTypes.Mindless);
+		IsNotExhausted() && _character.MovesetComponent.HasEnoughNrg(move);
 
     // Can always dodge or block, regardless if Exhausted
-    public static bool CanDefend() => true;
+    public bool CanDefend() => true;
 
-    public static bool CanSkip() => true;
+    public bool CanSkip() => true;
 }
 

@@ -21,11 +21,9 @@ public partial class TurnManager : Node
 	public List<Character> AllUnits => PlayerCharacters.Concat(EnemyCharacters).ToList();
 
 	public int CurrentUnitIndex;
-
-
+	
 	public override void _Ready()
 	{
-		// Assign All units to their respective team
 		PlayerCharacters = PlayerTeam.GetChildren().Cast<Character>().ToList();
 		EnemyCharacters = EnemyTeam.GetChildren().Cast<Character>().ToList();
 	}

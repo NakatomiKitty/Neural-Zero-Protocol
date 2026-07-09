@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using GodotUtilities;
 using NeuralZeroProtocol.Scripts.Cards;
 using NeuralZeroProtocol.Scripts.Characters;
@@ -48,10 +49,8 @@ public partial class BattleScene : Node2D
         CardSystem.CardSelectionController.KeyboardModeActivated += BattleMenu.OnCardKeyboardModeActivated;
         CardSystem.CardSelectionController.KeyboardModeDeactivated += BattleMenu.OnCardKeyboardModeDeactivated;
 
+        CombatStateMachine.Initialize(this);
         CombatStateMachine.AttackTriggered += OnAttackTriggeredPlayMenuSequence;
-        
-        // Passes the array to CardSystem so it can be used to update the card skins
-        _ = CardSystem.CreateHandFromMoves(BattleManager.GetSelectedMovesFromCurrentChar());
         
         TurnManager.StartBattleSequence();
     }
@@ -79,6 +78,10 @@ public partial class BattleScene : Node2D
         Character firstUnit = TurnManager.GetCurrentUnit();
         CombatStateMachine.SetCurrentCharacter(firstUnit);
         CombatStateMachine.StartBattle();
+        
+        // Passes the array to CardSystem so it can be used to update the card skins
+        Array<MoveResource> moves = BattleManager.GetSelectedMovesFromCurrentChar((PlayerCharacter)TurnManager.GetCurrentUnit());
+        _ = CardSystem.CreateHandFromMoves(moves);
     }
 
     private void OnActionMenuStateChanged(bool isTrue)
