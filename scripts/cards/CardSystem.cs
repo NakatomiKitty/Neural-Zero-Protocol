@@ -65,7 +65,7 @@ public partial class CardSystem : Node2D
     {
         await ClearCardRegistry();
 
-        Array<Card> cards = CardHand.CreateHandFromCurve(5, Card, moves);
+        Array<Card> cards = CardHand.CreateHandFromCurve(Card, moves);
 
         foreach (Card card in cards)
         {

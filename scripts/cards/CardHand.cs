@@ -6,6 +6,7 @@ using NeuralZeroProtocol.Scripts.Resources.MoveData;
 
 namespace NeuralZeroProtocol.Scripts.Cards;
 
+// TODO: ADD A DISCARD POOL AND MAKE IT SO WHEN MOVES ARE ABOUT TO BE LESS THAN 5, IT TAKES FROM THE DISCARD POOL
 public readonly record struct CardLayoutData(Vector2 LocalPosition, float Rotation, int ZIndex, MoveResource Move);
 
 public partial class CardHand : Node2D
@@ -15,33 +16,33 @@ public partial class CardHand : Node2D
 
     public void Initialize(Path2D path2D) => _path2D = path2D;
 
-    public List<CardLayoutData> CalculateCardLayout(Curve2D curve, int cardCount, Array<MoveResource> moves)
+    public List<CardLayoutData> CalculateCardLayout(Curve2D curve, Array<MoveResource> moves)
     {
+        int moveCount = Mathf.Min(moves.Count, 5);
+        
         float totalLength = curve.GetBakedLength();
         
         float spread = 0.7f;
         float totalSpan = totalLength * spread;
-        float spacing = (cardCount > 1) ? totalSpan / (cardCount - 1) : 0;
+        float spacing = (moveCount > 1) ? totalSpan / (moveCount - 1) : 0;
         float centerOffset = totalLength / 2f;
-
-        int moveCount = moves.Count;
+        
 
         List<CardLayoutData> layoutData = new();
         
-        int centerIndex = cardCount / 2;
+        int centerIndex = moveCount / 2;
         int maxZ = 5;
 
         for (int i = 0; i < moveCount; i++)
         {
             // Math for the positions of the cards
-            float indexOffset = i - (cardCount - 1) / 2f;
+            float indexOffset = i - (moveCount - 1) / 2f;
             float offset = centerOffset + indexOffset * spacing;
-            offset = Mathf.Clamp(offset, 0, totalLength);
             Vector2 localOnCurve = curve.SampleBaked(offset);
             
             // Math for the rotations of the cards
             float maxRotation = Mathf.DegToRad(10f);
-            float normalized = indexOffset / ((cardCount - 1) / 2f);
+            float normalized = indexOffset / ((moveCount - 1) / 2f);
             float rotation = normalized * maxRotation;
             
             // Math for the Z-Indices of the cards. Should be 3, 4, 5, 4, 3
@@ -54,9 +55,9 @@ public partial class CardHand : Node2D
         return layoutData;
     }
     
-    public Array<Card> CreateHandFromCurve(int cardCount, PackedScene cardScene, Array<MoveResource> moves)
+    public Array<Card> CreateHandFromCurve(PackedScene cardScene, Array<MoveResource> moves)
     {
-        List<CardLayoutData> layout = CalculateCardLayout(_path2D.Curve, cardCount, moves);
+        List<CardLayoutData> layout = CalculateCardLayout(_path2D.Curve, moves);
         
         Array<Card> cards = new();
 
